@@ -17,9 +17,15 @@ namespace MonoGameTry
 
         private Matrix world = Matrix.CreateTranslation(new Vector3(0, 0, 0));
         private Matrix view = Matrix.CreateLookAt(new Vector3(0, 0, 20), new Vector3(0, 0, 0), Vector3.UnitY);
+        private Matrix viewFromTop = Matrix.CreateLookAt(new Vector3(0, 4, -6), new Vector3(0, 0, -6), -Vector3.UnitZ);
+        private Matrix projectionFromTop = Matrix.CreateOrthographic(3, 15, 0.1f, 500f);
         private Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.1f, 500f);
+
         private Texture2D texture;
         private Effect effect;
+
+        private Viewport viewPort1;
+        private Viewport viewPortFromTop;
         BasicEffect quadEffect;
 
         private Quad quad;
@@ -40,6 +46,21 @@ namespace MonoGameTry
         /// </summary>
         protected override void Initialize()
         {
+            viewPort1 = new Viewport();
+            viewPort1.X = 0;
+            viewPort1.Y = 0;
+            viewPort1.Width = 600;
+            viewPort1.Height = 480;
+            viewPort1.MinDepth = 0;
+            viewPort1.MaxDepth = 1;
+
+            viewPortFromTop = new Viewport();
+            viewPortFromTop.X = 600;
+            viewPortFromTop.Y = 0;
+            viewPortFromTop.Width = 200;
+            viewPortFromTop.Height = 480;
+            viewPortFromTop.MinDepth = 0;
+            viewPortFromTop.MaxDepth = 1;
             // TODO: Add your initialization logic here
 
             base.Initialize();
@@ -111,16 +132,31 @@ namespace MonoGameTry
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            Viewport original = graphics.GraphicsDevice.Viewport;
+            graphics.GraphicsDevice.Viewport = viewPort1;
+            Draw(gameTime, view, projection);
+
+            graphics.GraphicsDevice.Viewport = viewPortFromTop;
+            Draw(gameTime, viewFromTop, projectionFromTop);
+
+            graphics.GraphicsDevice.Viewport = original;
+
+            base.Draw(gameTime);
+        }
+
+        private void Draw(GameTime gameTime, Matrix view, Matrix projection)
+        {
+
+
             for (int i = 0; i < 100; i++)
             {
-                world = Matrix.CreateTranslation(new Vector3(0, 0, -i*2));
+                world = Matrix.CreateTranslation(new Vector3(0, 0, -i * 2));
                 // DrawModel(model, world, view, projection);
                 DrawQuad(world, view, projection);
             }
 
             player.Draw(gameTime.ElapsedGameTime, view, projection);
 
-            base.Draw(gameTime);
         }
 
         private void DrawQuad(Matrix cworld, Matrix view, Matrix projection)
