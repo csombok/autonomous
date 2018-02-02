@@ -1,4 +1,5 @@
-﻿using System.Net.Configuration;
+﻿using System.Collections.Generic;
+using System.Net.Configuration;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,19 +15,12 @@ namespace MonoGameTry
         GraphicsDeviceManager graphics;
         private Model model;
 
-        private Matrix view = Matrix.CreateLookAt(new Vector3(0, 0, 20), new Vector3(0, 0, 0), Vector3.UnitY);
-        private Matrix viewFromTop = Matrix.CreateLookAt(new Vector3(0, 4, -6), new Vector3(0, 0, -6), -Vector3.UnitZ);
-        private Matrix projectionFromTop = Matrix.CreateOrthographic(3, 15, 0.1f, 500f);
-        private Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.1f, 500f);
-
         private Texture2D texture;
-        private Effect effect;
 
-        private Viewport viewPort1;
-        private Viewport viewPortFromTop;
-
+        private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
         private Car player;
         private Road road;
+        private Texture2D metal;
 
 
         public Game1()
@@ -43,31 +37,9 @@ namespace MonoGameTry
         /// </summary>
         protected override void Initialize()
         {
-            viewPort1 = new Viewport();
-            viewPort1.X = 0;
-            viewPort1.Y = 0;
-            viewPort1.Width = 600;
-            viewPort1.Height = 480;
-            viewPort1.MinDepth = 0;
-            viewPort1.MaxDepth = 1;
-
-            viewPortFromTop = new Viewport();
-            viewPortFromTop.X = 600;
-            viewPortFromTop.Y = 0;
-            viewPortFromTop.Width = 200;
-            viewPortFromTop.Height = 480;
-            viewPortFromTop.MinDepth = 0;
-            viewPortFromTop.MaxDepth = 1;
-            // TODO: Add your initialization logic here
-
-            road = new Road();
-
             base.Initialize();
         }
 
-        VertexDeclaration quadVertexDecl;
-        private VertexDeclaration vertexDeclaration;
-        private Texture2D metal;
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -78,8 +50,23 @@ namespace MonoGameTry
 
             model = Content.Load<Model>("Low-Poly-Racing-Car");
             metal = Content.Load<Texture2D>("red_metal");
-            player = new Car(model, metal);
             Road.LoadContent(Content, graphics);
+
+            player = new Car(model, metal);
+
+            int numViewports = 3;
+            int width = graphics.PreferredBackBufferWidth / numViewports;
+            int height = graphics.PreferredBackBufferHeight;
+            int x = 0;
+
+            viewports.Add(new GameObjectViewport(x, 0, width, height, player));
+            x += width;
+            viewports.Add(new GameObjectViewport(x, 0, width, height, player));
+            x += width;
+            viewports.Add(new BirdsEyeViewport(x, 0, width, height));
+
+            road = new Road();
+
         }
 
         /// <summary>
@@ -102,8 +89,9 @@ namespace MonoGameTry
                 Exit();
 
             player.Update(gameTime.ElapsedGameTime);
-            view = Matrix.CreateLookAt(new Vector3(player.X, 0.2f, -player.Y+1), new Vector3(0, 0, -99999), Vector3.UnitY);
             road.Update(gameTime.ElapsedGameTime);
+
+            viewports.ForEach(vp => vp.Update());
             base.Update(gameTime);
         }
 
@@ -116,11 +104,12 @@ namespace MonoGameTry
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             Viewport original = graphics.GraphicsDevice.Viewport;
-            graphics.GraphicsDevice.Viewport = viewPort1;
-            Draw(gameTime, view, projection);
 
-            graphics.GraphicsDevice.Viewport = viewPortFromTop;
-            Draw(gameTime, viewFromTop, projectionFromTop);
+            foreach (var viewport in viewports)
+            {
+                graphics.GraphicsDevice.Viewport = viewport.Viewport;
+                Draw(gameTime, viewport.View, viewport.Projection);
+            }
 
             graphics.GraphicsDevice.Viewport = original;
 
@@ -129,10 +118,8 @@ namespace MonoGameTry
 
         private void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
-
             road.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
             player.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
-
         }
             
     }

@@ -45,9 +45,12 @@
     <Compile Include="GameObjects\Car.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Road.cs" />
+    <Compile Include="Viewport\BirdsEyeViewport.cs" />
+    <Compile Include="Viewport\GameObjectViewport.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quad.cs" />
+    <Compile Include="Viewport\ViewportWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
