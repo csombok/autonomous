@@ -48,22 +48,22 @@ namespace MonoGameTry
         protected override void LoadContent()
         {
 
-            model = Content.Load<Model>("Low-Poly-Racing-Car");
+            model = Content.Load<Model>("Low-Poly-Racing-Car");            
             metal = Content.Load<Texture2D>("red_metal");
             Road.LoadContent(Content, graphics);
 
             player = new Car(model, metal);
 
-            int numViewports = 3;
+            int numViewports = 1;
             int width = graphics.PreferredBackBufferWidth / numViewports;
             int height = graphics.PreferredBackBufferHeight;
             int x = 0;
 
             viewports.Add(new GameObjectViewport(x, 0, width, height, player));
-            x += width;
-            viewports.Add(new GameObjectViewport(x, 0, width, height, player));
-            x += width;
-            viewports.Add(new BirdsEyeViewport(x, 0, width, height));
+            //x += width;
+            //viewports.Add(new GameObjectViewport(x, 0, width, height, player));
+            //x += width;
+            //viewports.Add(new BirdsEyeViewport(x, 0, width, height));
 
             road = new Road();
 
