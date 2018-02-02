@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGameTry.GameObjects
 {
@@ -15,6 +16,6 @@ namespace MonoGameTry.GameObjects
         public float VX { get; protected set; }
 
         public abstract void Update(TimeSpan elapsed);
-        public abstract void Draw(TimeSpan elapsed, Matrix view, Matrix projection);
+        public abstract void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device);
     }
 }

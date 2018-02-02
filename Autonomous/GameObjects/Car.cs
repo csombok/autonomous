@@ -22,7 +22,7 @@ namespace MonoGameTry.GameObjects
             _texture = texture;            
         }
 
-        public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection)
+        public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
             var carWorld = Matrix.CreateRotationY(MathHelper.ToRadians(25)) * Matrix.CreateScale(0.001f) * Matrix.CreateTranslation(new Vector3(X, -0.01f, - Y));
             DrawModel(_model, carWorld, view, projection, Color.Olive);

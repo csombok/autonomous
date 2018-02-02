@@ -12,10 +12,8 @@ namespace MonoGameTry
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
         private Model model;
 
-        private Matrix world = Matrix.CreateTranslation(new Vector3(0, 0, 0));
         private Matrix view = Matrix.CreateLookAt(new Vector3(0, 0, 20), new Vector3(0, 0, 0), Vector3.UnitY);
         private Matrix viewFromTop = Matrix.CreateLookAt(new Vector3(0, 4, -6), new Vector3(0, 0, -6), -Vector3.UnitZ);
         private Matrix projectionFromTop = Matrix.CreateOrthographic(3, 15, 0.1f, 500f);
@@ -26,10 +24,9 @@ namespace MonoGameTry
 
         private Viewport viewPort1;
         private Viewport viewPortFromTop;
-        BasicEffect quadEffect;
 
-        private Quad quad;
         private Car player;
+        private Road road;
 
 
         public Game1()
@@ -63,6 +60,8 @@ namespace MonoGameTry
             viewPortFromTop.MaxDepth = 1;
             // TODO: Add your initialization logic here
 
+            road = new Road();
+
             base.Initialize();
         }
 
@@ -76,27 +75,11 @@ namespace MonoGameTry
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             model = Content.Load<Model>("Low-Poly-Racing-Car");
-            texture = Content.Load<Texture2D>("road_t");
             metal = Content.Load<Texture2D>("red_metal");
             player = new Car(model, metal);
-            // effect = Content.Load<Effect>("Effects/Ambient");
-            // TODO: use this.Content to load your game content here
-
-            quadEffect = new BasicEffect(graphics.GraphicsDevice);
-            quadEffect.EnableDefaultLighting();
-
-            //quadEffect.World = Matrix.Identity;
-            //quadEffect.View = View;
-            //quadEffect.Projection = Projection;
-            quadEffect.TextureEnabled = true;
-            quadEffect.Texture = texture;
-            quadEffect.EnableDefaultLighting();
-
-            quad = new Quad(Vector3.Zero, Vector3.Up, Vector3.Backward, 1 , 2);
+            Road.LoadContent(Content, graphics);
         }
 
         /// <summary>
@@ -120,7 +103,7 @@ namespace MonoGameTry
 
             player.Update(gameTime.ElapsedGameTime);
             view = Matrix.CreateLookAt(new Vector3(player.X, 0.2f, -player.Y+1), new Vector3(0, 0, -99999), Vector3.UnitY);
-
+            road.Update(gameTime.ElapsedGameTime);
             base.Update(gameTime);
         }
 
@@ -147,36 +130,9 @@ namespace MonoGameTry
         private void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
 
+            road.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
+            player.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
 
-            for (int i = 0; i < 100; i++)
-            {
-                world = Matrix.CreateTranslation(new Vector3(0, 0, -i * 2));
-                // DrawModel(model, world, view, projection);
-                DrawQuad(world, view, projection);
-            }
-
-            player.Draw(gameTime.ElapsedGameTime, view, projection);
-
-        }
-
-        private void DrawQuad(Matrix cworld, Matrix view, Matrix projection)
-        {
-            // graphics.GraphicsDevice.VertexDeclaration = quadVertexDecl;
-            quadEffect.World = cworld;
-            quadEffect.View = view;
-            quadEffect.Projection = projection;
-            quadEffect.FogEnabled = true;
-            quadEffect.FogStart = 0;
-            quadEffect.FogEnd = 10;
-            foreach (EffectPass pass in quadEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                GraphicsDevice.DrawUserIndexedPrimitives
-                    <VertexPositionNormalTexture>(
-                        PrimitiveType.TriangleList,
-                        quad.Vertices, 0, 4,
-                        quad.Indices, 0, 2);
-            }
         }
             
     }
