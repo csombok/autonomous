@@ -11,21 +11,22 @@ namespace MonoGameTry.GameObjects
 {
     public class VanAgent : GameObject
     {
-        private readonly Model _model;
         private float acceleration = 0.001f;
         private float VXMax = 0.01f;
 
         public VanAgent(Model model, float vy = 0.01f)
         {
-            _model = model;
+            Model = model;
             VY = vy;
             X = 0.32f;
+            Width = 2f;
+            ModelRotate = 90;
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
-            var carWorld = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(0.06f) * Matrix.CreateTranslation(new Vector3(X, -0.01f, - Y));
-            DrawModel(_model, carWorld, view, projection);
+            var carWorld = this.TransformModelToWorld();
+            DrawModel(Model, carWorld, view, projection);
         }
 
         public override void Update(TimeSpan elapsed)

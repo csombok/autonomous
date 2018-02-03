@@ -67,6 +67,8 @@ namespace MonoGameTry
             road = new Road();
             gameObjects = new List<GameObject>() { road, player, van, bus };
 
+            gameObjects.ForEach(go => go.Initialize());
+
             int numViewports = 1;
             int width = graphics.PreferredBackBufferWidth / numViewports;
             int height = graphics.PreferredBackBufferHeight;

@@ -11,21 +11,22 @@ namespace MonoGameTry.GameObjects
 {
     public class Car : GameObject
     {
-        private readonly Model _model;
         private readonly Texture2D _texture;
         private float acceleration = 0.001f;
         private float VXMax = 0.01f;
 
         public Car(Model model, Texture2D texture)
         {
-            _model = model;
-            _texture = texture;            
+            Model = model;
+            _texture = texture;
+            Width = 1.85f;
+            ModelRotate = 25;
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
-            var carWorld = Matrix.CreateRotationY(MathHelper.ToRadians(25)) * Matrix.CreateScale(0.001f) * Matrix.CreateTranslation(new Vector3(X, -0.01f, - Y));
-            DrawModel(_model, carWorld, view, projection, Color.Olive);
+            var carWorld = this.TransformModelToWorld();
+            DrawModel(Model, carWorld, view, projection, Color.Olive);
         }
 
         public override void Update(TimeSpan elapsed)
