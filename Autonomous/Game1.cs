@@ -20,6 +20,7 @@ namespace MonoGameTry
         private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
         private Car player;
         private VanAgent van;
+        private BusAgent bus;
         private Road road;
         private Texture2D metal;
 
@@ -59,6 +60,9 @@ namespace MonoGameTry
             var vanModel = Content.Load<Model>("kendo");
             van = new VanAgent(vanModel);
 
+            var busModel = Content.Load<Model>("bus");
+            bus = new BusAgent(busModel);
+
             int numViewports = 1;
             int width = graphics.PreferredBackBufferWidth / numViewports;
             int height = graphics.PreferredBackBufferHeight;
@@ -96,6 +100,7 @@ namespace MonoGameTry
             player.Update(gameTime.ElapsedGameTime);
             van.Update(gameTime.ElapsedGameTime);
             road.Update(gameTime.ElapsedGameTime);
+            bus.Update(gameTime.ElapsedGameTime);
 
             viewports.ForEach(vp => vp.Update());
             base.Update(gameTime);
@@ -127,6 +132,7 @@ namespace MonoGameTry
             road.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
             player.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
             van.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
+            bus.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
         }
             
     }
