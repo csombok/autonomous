@@ -18,6 +18,7 @@ namespace MonoGameTry
         private Texture2D texture;
 
         private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
+        private List<GameObject> gameObjects = new List<GameObject>();
         private Car player;
         private VanAgent van;
         private BusAgent bus;
@@ -63,6 +64,9 @@ namespace MonoGameTry
             var busModel = Content.Load<Model>("bus");
             bus = new BusAgent(busModel);
 
+            road = new Road();
+            gameObjects = new List<GameObject>() { road, player, van, bus };
+
             int numViewports = 1;
             int width = graphics.PreferredBackBufferWidth / numViewports;
             int height = graphics.PreferredBackBufferHeight;
@@ -73,9 +77,6 @@ namespace MonoGameTry
             //viewports.Add(new GameObjectViewport(x, 0, width, height, player));
             //x += width;
             //viewports.Add(new BirdsEyeViewport(x, 0, width, height));
-
-            road = new Road();
-
         }
 
         /// <summary>
@@ -97,11 +98,7 @@ namespace MonoGameTry
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            player.Update(gameTime.ElapsedGameTime);
-            van.Update(gameTime.ElapsedGameTime);
-            road.Update(gameTime.ElapsedGameTime);
-            bus.Update(gameTime.ElapsedGameTime);
-
+            gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
             viewports.ForEach(vp => vp.Update());
             base.Update(gameTime);
         }
@@ -129,10 +126,7 @@ namespace MonoGameTry
 
         private void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
-            road.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
-            player.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
-            van.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
-            bus.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice);
+            gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice));
         }
             
     }
