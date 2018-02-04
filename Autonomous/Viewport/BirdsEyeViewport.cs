@@ -10,16 +10,19 @@ namespace MonoGameTry
 {
     class BirdsEyeViewport : ViewportWrapper
     {
+        private GameObject _gameObject;
 
-        public BirdsEyeViewport(int x, int y, int width, int height) : base(x, y, width, height)
+        public BirdsEyeViewport(int x, int y, int width, int height, GameObject gameObject) : base(x, y, width, height)
         {
-            Projection = Matrix.CreateOrthographic(3, 15, 0.1f, 500f);
+            _gameObject = gameObject;
+            float w = 20f;
+            Projection = Matrix.CreateOrthographic(w, w*height/width, 0.1f, 500f);
         }
 
         protected override void UpdateCore()
         {
-            CameraPosition = new Vector3(0, 4, -6);
-            LookAt = new Vector3(0, 0, -6);
+            CameraPosition = new Vector3(0, 40, -_gameObject.Y-18);
+            LookAt = new Vector3(0, 0, -_gameObject.Y-18);
             CameraOrientation = -Vector3.UnitZ;
         }
     }
