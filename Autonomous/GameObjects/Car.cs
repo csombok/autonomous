@@ -11,11 +11,6 @@ namespace MonoGameTry.GameObjects
 {
     public class Car : GameObject
     {
-        private readonly Texture2D _texture;
-        private float acceleration = 10f;
-        private float breakAcceleration = -20f;
-        private float VXMax = 3f;
-
         public Car(Model model)
         {
             Model = model;

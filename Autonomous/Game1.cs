@@ -16,8 +16,6 @@ namespace MonoGameTry
         GraphicsDeviceManager graphics;
         private Model model;
 
-        private Texture2D texture;
-
         private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
         private List<GameObject> gameObjects = new List<GameObject>();
         private Car player;
