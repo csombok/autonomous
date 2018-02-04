@@ -18,7 +18,7 @@ namespace MonoGameTry.GameObjects
         {
             Model = model;
             VY = vy;
-            X = 0.32f;
+            X = 3.5f;
             Width = 2f;
             ModelRotate = 90;
         }

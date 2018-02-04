@@ -19,7 +19,7 @@ namespace MonoGameTry.GameObjects
         {
             Model = model;
             _texture = texture;
-            Width = 1.85f;
+            Width = 2.3f;
             ModelRotate = 25;
         }
 

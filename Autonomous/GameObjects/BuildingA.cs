@@ -10,20 +10,19 @@ namespace MonoGameTry.GameObjects
 {
     public class BuildingA : GameObject
     {
-        private readonly Model model_;
 
         public BuildingA(Model model_, float x, float y)
         {
-            this.model_ = model_;
+            this.Model = model_;
             X = x;
             Y = y;
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
-            var world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(0.03f) * Matrix.CreateTranslation(new Vector3(X, -0.01f, -Y));
+            var world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(0.3f) * Matrix.CreateTranslation(new Vector3(X, -0.01f, -Y));
 
-            foreach (ModelMesh mesh in model_.Meshes)
+            foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {

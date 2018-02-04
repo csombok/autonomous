@@ -68,16 +68,26 @@ namespace MonoGameTry
             road = new Road();
 
             var buildingModel = Content.Load<Model>("BuildingA");
-            BuildingA[] buildings ={ new BuildingA(buildingModel, 0.8f, 1.0f),
-                    new BuildingA(buildingModel, 0.8f, 3.0f),
-                    new BuildingA(buildingModel, 0.8f, 5.0f),
-                    new BuildingA(buildingModel, 0.8f, 10.0f),
-                    new BuildingA(buildingModel, 0.8f, 12.0f),
+            BuildingA[] buildings = {
+                    new BuildingA(buildingModel, 8f, 30f),
+                    new BuildingA(buildingModel, 10f, 60f),
+                    new BuildingA(buildingModel, 8f, 70f),
+                    new BuildingA(buildingModel, 10f, 90f),
+                    new BuildingA(buildingModel, 10f, 100f),
+                    new BuildingA(buildingModel, 10f, 120f),
+                    new BuildingA(buildingModel, 8f, 130f),
+                    new BuildingA(buildingModel, 10f, 145f),
+                    new BuildingA(buildingModel, 8f, 150f),
 
-                    new BuildingA(buildingModel, -0.8f, 3.0f),
-                    new BuildingA(buildingModel, -0.8f, 5.0f),
-                    new BuildingA(buildingModel, -0.8f, 10.0f),
-                    new BuildingA(buildingModel, -0.8f, 12.0f),
+                    new BuildingA(buildingModel, -8f, 30f),
+                    new BuildingA(buildingModel, -10f, 60f),
+                    new BuildingA(buildingModel, -8f, 70f),
+                    new BuildingA(buildingModel, -10f, 90f),
+                    new BuildingA(buildingModel, -10f, 100f),
+                    new BuildingA(buildingModel, -10f, 120f),
+                    new BuildingA(buildingModel, -8f, 130f),
+                    new BuildingA(buildingModel, -10f, 145f),
+                    new BuildingA(buildingModel, -8f, 150f),
 
             };
 
