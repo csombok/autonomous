@@ -11,11 +11,12 @@ namespace MonoGameTry.GameObjects
 {
     public class CarAgent : GameObject
     {
-        public CarAgent(Model model, float modelRotate, float width)
+        public CarAgent(Model model, float modelRotate, float width, bool opposite)
         {
             Model = model;
             ModelRotate = modelRotate;
             Width = width;
+            OppositeDirection = opposite;
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)

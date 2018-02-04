@@ -60,7 +60,7 @@ namespace MonoGameTry
             player = new Car(model, metal);
 
             var vanModel = Content.Load<Model>("kendo");
-            van = new CarAgent(vanModel, 90, 2f)
+            van = new CarAgent(vanModel, 90, 2f, false)
             {
                 VY = 50f / 3.6f,
                 MaxVY = 120f / 3.6f,
@@ -69,7 +69,7 @@ namespace MonoGameTry
 
 
         var busModel = Content.Load<Model>("bus");
-            bus = new CarAgent(busModel, 180f, 2.6f)
+            bus = new CarAgent(busModel, 180f, 2.6f, true)
                 {
                     VY = 50f / 3.6f,
                     MaxVY = 100f / 3.6f,

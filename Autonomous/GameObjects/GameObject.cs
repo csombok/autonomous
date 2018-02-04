@@ -21,6 +21,8 @@ namespace MonoGameTry.GameObjects
 
         public float Width { get; protected set; }
 
+        public bool OppositeDirection { get; protected set; }
+
 
         public float AccelerationY { get; protected set; }
 
@@ -49,8 +51,16 @@ namespace MonoGameTry.GameObjects
             if (VY > MaxVY)
                 VY = MaxVY;
 
-            Y += VY * elapsedSeconds;
-            X += VX * elapsedSeconds;
+            if (!OppositeDirection)
+            {
+                Y += VY * elapsedSeconds;
+                X += VX * elapsedSeconds;
+            }
+            else
+            {
+                Y -= VY * elapsedSeconds;
+                X -= VX * elapsedSeconds;
+            }
         }
 
         public abstract void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device);
@@ -67,7 +77,8 @@ namespace MonoGameTry.GameObjects
             float scaleX = Width / (boundingBox.Max.X - boundingBox.Min.X) ;
             float translateZ = (boundingBox.Min.Y);
 
-            var worldToView = Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate)) *  Matrix.CreateScale(scaleX) * Matrix.CreateTranslation(new Vector3(X, -translateZ * scaleX, -Y));
+            float rotate = OppositeDirection ? 180 : 0;
+            var worldToView = Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate+rotate)) *  Matrix.CreateScale(scaleX) * Matrix.CreateTranslation(new Vector3(X, -translateZ * scaleX, -Y));
             return worldToView;
         }
 
