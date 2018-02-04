@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,6 +17,10 @@ namespace MonoGameTry.GameObjects
         public float VY { get; protected set; }
         public float VX { get; protected set; }
 
+        public float MaxVY { get; protected set; }
+
+        public float AccelerationY { get; protected set; }
+
         protected BoundingBox boundingBox { get; set; }
         public float Width { get; protected set; }
 
@@ -28,8 +33,24 @@ namespace MonoGameTry.GameObjects
         public GameObject()
         {
             ModelRotate = 0;
+            MaxVY = 50f / 3.6f;
+            VX = 0;
+            VY = 0;
         }
-        public abstract void Update(TimeSpan elapsed);
+
+        public virtual void Update(TimeSpan elapsed)
+        {
+            float elapsedSeconds = (float)elapsed.TotalMilliseconds / 1000f;
+            VY += AccelerationY * elapsedSeconds;
+            if (VY < 0)
+                VY = 0;
+            if (VY > MaxVY)
+                VY = MaxVY;
+
+            Y += VY * elapsedSeconds;
+            X += VX * elapsedSeconds;
+        }
+
         public abstract void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device);
 
         public virtual void Initialize()

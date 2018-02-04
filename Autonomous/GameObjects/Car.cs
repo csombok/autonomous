@@ -12,8 +12,9 @@ namespace MonoGameTry.GameObjects
     public class Car : GameObject
     {
         private readonly Texture2D _texture;
-        private float acceleration = 0.001f;
-        private float VXMax = 0.01f;
+        private float acceleration = 5f;
+        private float breakAcceleration = -10f;
+        private float VXMax = 2f;
 
         public Car(Model model, Texture2D texture)
         {
@@ -21,6 +22,7 @@ namespace MonoGameTry.GameObjects
             _texture = texture;
             Width = 2.3f;
             ModelRotate = 25;
+            MaxVY = 180 / 3.6f;
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
@@ -31,11 +33,11 @@ namespace MonoGameTry.GameObjects
 
         public override void Update(TimeSpan elapsed)
         {
-
+            AccelerationY = 0;
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                VY += acceleration;
+                AccelerationY = acceleration;
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                VY -= acceleration;
+                AccelerationY = breakAcceleration;
 
             VX = 0;
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
@@ -43,8 +45,7 @@ namespace MonoGameTry.GameObjects
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 VX += VXMax;
 
-            Y += VY;
-            X += VX;
+            base.Update(elapsed);
         }
 
         private void DrawModel(Model model, Matrix world, Matrix view, Matrix projection, Color color)

@@ -11,10 +11,7 @@ namespace MonoGameTry.GameObjects
 {
     public class VanAgent : GameObject
     {
-        private float acceleration = 0.001f;
-        private float VXMax = 0.01f;
-
-        public VanAgent(Model model, float vy = 0.01f)
+        public VanAgent(Model model, float vy = 50f/3.6f)
         {
             Model = model;
             VY = vy;
@@ -29,12 +26,6 @@ namespace MonoGameTry.GameObjects
             DrawModel(Model, carWorld, view, projection);
         }
 
-        public override void Update(TimeSpan elapsed)
-        {
-
-            Y += VY;
-            X += VX;
-        }
 
         private void DrawModel(Model model, Matrix world, Matrix view, Matrix projection)
         {

@@ -14,7 +14,7 @@ namespace MonoGameTry.GameObjects
         private float acceleration = 0.001f;
         private float VXMax = 0.01f;
 
-        public BusAgent(Model model, float vy = 0.01f)
+        public BusAgent(Model model, float vy = 50f / 3.6f)
         {
             Model = model;
             VY = vy;
@@ -28,13 +28,6 @@ namespace MonoGameTry.GameObjects
         {
             var carWorld = this.TransformModelToWorld();
             DrawModel(Model, carWorld, view, projection);
-        }
-
-        public override void Update(TimeSpan elapsed)
-        {
-
-            Y += VY;
-            X += VX;
         }
 
         private void DrawModel(Model model, Matrix world, Matrix view, Matrix projection)
