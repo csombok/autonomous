@@ -63,6 +63,7 @@ namespace MonoGameTry
   
             gameObjects = new List<GameObject>() { road, player };
             gameObjects.AddRange(GenerateBuildings());
+            gameObjects.AddRange(GenerateTrees());
             gameObjects.AddRange(GenerateInitialCarAgents());
 
             gameObjects.ForEach(go => go.Initialize());
@@ -78,6 +79,20 @@ namespace MonoGameTry
             viewports.Add(new BirdsEyeViewport(x, 0, width2, height, player));
         }
 
+        private IEnumerable<Tree> GenerateTrees()
+        {
+            var model = Content.Load<Model>("Tree\\fir");
+
+            for (int i = 0; i < 200; i++)
+            {
+                float x = i % 4 == 0 ? 8 : 9;
+                float scaleLeft = i % 2 == 0 ? 0.8f : 1.3f;
+                float scaleRight = i % 3 == 0 ? 0.9f : 1.3f;
+                yield return new Tree(model, x, i * 20f + 10,  scaleLeft);
+                yield return new Tree(model, -x, i * 20f + 10,  scaleRight);
+            }
+        }
+
         private IEnumerable<BuildingA> GenerateBuildings()
         {
             var buildingModel = Content.Load<Model>("BuildingA");
@@ -87,7 +102,7 @@ namespace MonoGameTry
                 float roatationRight = i % 2 == 0 ? 90 : 180;
                 float x = i % 4 == 0 ? 10 : 12;
                 float scaleLeft = i % 2 == 0 ? 0.3f : 0.4f;
-                float scaleRight = i % 2 == 0 ? 0.3f : 0.5f;
+                float scaleRight = i % 3 == 0 ? 0.3f : 0.5f;
                 yield return new BuildingA(buildingModel, x, i * 20f, roatationLeft, scaleLeft);
                 yield return new BuildingA(buildingModel, -x, i * 20f, roatationRight, scaleRight);
             }
