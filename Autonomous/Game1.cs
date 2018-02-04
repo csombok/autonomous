@@ -52,12 +52,11 @@ namespace MonoGameTry
         /// </summary>
         protected override void LoadContent()
         {
-            model = Content.Load<Model>("Low-Poly-Racing-Car");
-            metal = Content.Load<Texture2D>("red_metal");
+            model = Content.Load<Model>("Cars/Porshe/carrgt");
 
             Road.LoadContent(Content, graphics);
 
-            player = new Car(model, metal);
+            player = new Car(model);
 
             road = new Road();          
   
@@ -101,8 +100,8 @@ namespace MonoGameTry
                 float roatationLeft = i % 3 == 0 ? 90 : 180;
                 float roatationRight = i % 2 == 0 ? 90 : 180;
                 float x = i % 4 == 0 ? 10 : 12;
-                float scaleLeft = i % 2 == 0 ? 0.3f : 0.4f;
-                float scaleRight = i % 3 == 0 ? 0.3f : 0.5f;
+                float scaleLeft = i % 2 == 0 ? 0.5f : 0.3f;
+                float scaleRight = i % 3 == 0 ? 0.3f : 0.6f;
                 yield return new BuildingA(buildingModel, x, i * 20f, roatationLeft, scaleLeft);
                 yield return new BuildingA(buildingModel, -x, i * 20f, roatationRight, scaleRight);
             }
