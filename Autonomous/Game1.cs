@@ -59,34 +59,10 @@ namespace MonoGameTry
 
             player = new Car(model, metal);
 
-            road = new Road();
-
-            var buildingModel = Content.Load<Model>("BuildingA");
-            BuildingA[] buildings = {
-                    new BuildingA(buildingModel, 8f, 30f),
-                    new BuildingA(buildingModel, 10f, 60f),
-                    new BuildingA(buildingModel, 8f, 70f),
-                    new BuildingA(buildingModel, 10f, 90f),
-                    new BuildingA(buildingModel, 10f, 100f),
-                    new BuildingA(buildingModel, 10f, 120f),
-                    new BuildingA(buildingModel, 8f, 130f),
-                    new BuildingA(buildingModel, 10f, 145f),
-                    new BuildingA(buildingModel, 8f, 150f),
-
-                    new BuildingA(buildingModel, -8f, 30f),
-                    new BuildingA(buildingModel, -10f, 60f),
-                    new BuildingA(buildingModel, -8f, 70f),
-                    new BuildingA(buildingModel, -10f, 90f),
-                    new BuildingA(buildingModel, -10f, 100f),
-                    new BuildingA(buildingModel, -10f, 120f),
-                    new BuildingA(buildingModel, -8f, 130f),
-                    new BuildingA(buildingModel, -10f, 145f),
-                    new BuildingA(buildingModel, -8f, 150f),
-
-            };
-
+            road = new Road();          
+  
             gameObjects = new List<GameObject>() { road, player };
-            gameObjects.AddRange(buildings);
+            gameObjects.AddRange(GenerateBuildings());
             gameObjects.AddRange(GenerateInitialCarAgents());
 
             gameObjects.ForEach(go => go.Initialize());
@@ -99,6 +75,21 @@ namespace MonoGameTry
             viewports.Add(new GameObjectViewport(x, 0, width, height, player));
             x += width;
             viewports.Add(new BirdsEyeViewport(x, 0, width, height));
+        }
+
+        private IEnumerable<BuildingA> GenerateBuildings()
+        {
+            var buildingModel = Content.Load<Model>("BuildingA");
+            for (int i = 0; i < 100; i++)
+            {
+                float roatationLeft = i % 3 == 0 ? 90 : 180;
+                float roatationRight = i % 2 == 0 ? 90 : 180;
+                float x = i % 4 == 0 ? 10 : 12;
+                float scaleLeft = i % 2 == 0 ? 0.3f : 0.4f;
+                float scaleRight = i % 2 == 0 ? 0.3f : 0.5f;
+                yield return new BuildingA(buildingModel, x, i * 20f, roatationLeft, scaleLeft);
+                yield return new BuildingA(buildingModel, -x, i * 20f, roatationRight, scaleRight);
+            }
         }
 
         private IEnumerable<GameObject> GenerateInitialCarAgents()
