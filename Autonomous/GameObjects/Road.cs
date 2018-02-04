@@ -15,6 +15,8 @@ namespace MonoGameTry.GameObjects
         private static BasicEffect _quadEffect;
         private static Quad _quad;
 
+        private const float Width = 3*4;
+        private const float QoadHeight = Width * 2;
         public Road()
         {
         }
@@ -29,15 +31,19 @@ namespace MonoGameTry.GameObjects
             _quadEffect.Texture = _texture;
             _quadEffect.EnableDefaultLighting();
 
-            _quad = new Quad(Vector3.Zero, Vector3.Up, Vector3.Backward, 1, 2);
+            _quad = new Quad(Vector3.Zero, Vector3.Up, Vector3.Backward, Width, QoadHeight);
 
+        }
+
+        public override void Initialize()
+        {
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
             for (int i = 0; i < 100; i++)
             {
-                var world = Matrix.CreateTranslation(new Vector3(0, 0, -i * 2));
+                var world = Matrix.CreateTranslation(new Vector3(0, 0, -i * QoadHeight));
                 DrawQuad(world, view, projection, device);
             }
         }
@@ -54,7 +60,7 @@ namespace MonoGameTry.GameObjects
             _quadEffect.Projection = projection;
             _quadEffect.FogEnabled = true;
             _quadEffect.FogStart = 0;
-            _quadEffect.FogEnd = 10;
+            _quadEffect.FogEnd = 100;
             foreach (EffectPass pass in _quadEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();

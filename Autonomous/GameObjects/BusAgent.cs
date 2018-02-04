@@ -11,22 +11,23 @@ namespace MonoGameTry.GameObjects
 {
     public class BusAgent : GameObject
     {
-        private readonly Model _model;
         private float acceleration = 0.001f;
         private float VXMax = 0.01f;
 
         public BusAgent(Model model, float vy = 0.01f)
         {
-            _model = model;
+            Model = model;
             VY = vy;
             X = 0.32f;
-            Y = 1.0f;
+            Y = 20.0f;
+            Width = 2.6f;
+            ModelRotate = 180;
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
-            var carWorld = Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(0.03f) * Matrix.CreateTranslation(new Vector3(X, -0.01f, - Y));
-            DrawModel(_model, carWorld, view, projection);
+            var carWorld = this.TransformModelToWorld();
+            DrawModel(Model, carWorld, view, projection);
         }
 
         public override void Update(TimeSpan elapsed)

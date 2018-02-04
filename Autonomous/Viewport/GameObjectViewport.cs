@@ -20,7 +20,7 @@ namespace MonoGameTry
 
         protected override void UpdateCore()
         {
-            CameraPosition = new Vector3(_gameObject.X, 0.2f, -_gameObject.Y + 1);
+            CameraPosition = new Vector3(_gameObject.X, 2f, -_gameObject.Y + 10);
             LookAt = new Vector3(0, 0, -99999);
             CameraOrientation = Vector3.UnitY;
         }
