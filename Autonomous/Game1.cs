@@ -25,6 +25,7 @@ namespace MonoGameTry
         private Texture2D metal;
 
         private BuildingA building;
+        private bool collision;
 
 
         public Game1()
@@ -169,6 +170,16 @@ namespace MonoGameTry
                 Exit();
 
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
+
+
+            collision = (gameObjects.OfType<CarAgent>().Any(x => CollisionDetector.IsCollision(x, player))) ;
+            if (!collision)
+            {
+                if (player.X - player.Width / 2 < -6)
+                    collision = true;
+                if (player.X + player.Width / 2 > 6)
+                    collision = true;
+            }
             viewports.ForEach(vp => vp.Update());
             base.Update(gameTime);
         }
@@ -179,7 +190,7 @@ namespace MonoGameTry
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(collision ? Color.Red : Color.CornflowerBlue);
 
             Viewport original = graphics.GraphicsDevice.Viewport;
 

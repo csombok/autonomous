@@ -45,6 +45,7 @@
     <Compile Include="GameObjects\BuildingA.cs" />
     <Compile Include="GameObjects\CarAgent.cs" />
     <Compile Include="GameObjects\Car.cs" />
+    <Compile Include="GameObjects\CollisionDetector.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Road.cs" />
     <Compile Include="Viewport\BirdsEyeViewport.cs" />
