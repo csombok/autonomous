@@ -12,13 +12,15 @@ namespace MonoGameTry.GameObjects
     public class Car : GameObject
     {
         private readonly Texture2D _texture;
+        private float acceleration = 10f;
+        private float breakAcceleration = -20f;
+        private float VXMax = 3f;
 
-        public Car(Model model, Texture2D texture)
+        public Car(Model model)
         {
             Model = model;
-            _texture = texture;
             Width = 1.7f;
-            ModelRotate = 25;
+            ModelRotate = 180;
             MaxVY = GameConstants.PlayerMaxSpeed;
         }
 
@@ -50,8 +52,6 @@ namespace MonoGameTry.GameObjects
         {
             foreach (ModelMesh mesh in model.Meshes)
             {
-                if (mesh.Name == "platform")
-                    continue;
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.World = world;
@@ -59,12 +59,6 @@ namespace MonoGameTry.GameObjects
                     effect.Projection = projection;
 
                     effect.PreferPerPixelLighting = true;
-
-                    if (mesh.Name == "body")
-                    {
-                        effect.TextureEnabled = true;
-                        effect.Texture = _texture;
-                    }
                 }
 
                 mesh.Draw();
