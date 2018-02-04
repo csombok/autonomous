@@ -107,7 +107,7 @@ namespace MonoGameTry
             var vanModel = Content.Load<Model>("kendo");
             var busModel = Content.Load<Model>("bus");
 
-            const float laneWidth = 3f;
+            const float laneWidth = GameConstants.LaneWidth;
             const float vanWidth = 2f;
             for (int i = 0; i < 10; i++)
             {

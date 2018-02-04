@@ -15,7 +15,7 @@ namespace MonoGameTry.GameObjects
         private static BasicEffect _quadEffect;
         private static Quad _quad;
 
-        private const float Width = 3*4;
+        private const float Width = GameConstants.RoadWidth;
         private const float QoadHeight = Width * 2;
         public Road()
         {

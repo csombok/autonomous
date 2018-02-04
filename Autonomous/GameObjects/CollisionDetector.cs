@@ -13,7 +13,6 @@ namespace MonoGameTry.GameObjects
         {
             var rect1 = GetRectangle(first);
             var rect2 = GetRectangle(second);
-
             return rect1.Intersects(rect2);
         }
 
@@ -22,7 +21,7 @@ namespace MonoGameTry.GameObjects
             float x = gameObject.X - gameObject.Width / 2;
             float y = gameObject.Y - gameObject.Height / 2;
 
-            return new Rectangle((int)(x*10000), (int)(y*10000), (int)(gameObject.Width*10000), (int)(gameObject.Height*10000));
+            return new Rectangle((int)(x*10000), (int)(y*10000), (int)(gameObject.Width*10000 * 0.95f), (int)(gameObject.Height*10000 * 0.95f));
         }
     }
 }

@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameConstants.cs" />
     <Compile Include="GameObjects\BuildingA.cs" />
     <Compile Include="GameObjects\CarAgent.cs" />
     <Compile Include="GameObjects\Car.cs" />
