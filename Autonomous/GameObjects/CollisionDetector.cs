@@ -22,7 +22,7 @@ namespace MonoGameTry.GameObjects
             float x = gameObject.X - gameObject.Width / 2;
             float y = gameObject.Y - gameObject.Height / 2;
 
-            return new Rectangle((int)x, (int)y, (int)gameObject.Width, (int)gameObject.Height);
+            return new Rectangle((int)(x*10000), (int)(y*10000), (int)(gameObject.Width*10000), (int)(gameObject.Height*10000));
         }
     }
 }

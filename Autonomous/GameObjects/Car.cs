@@ -20,7 +20,7 @@ namespace MonoGameTry.GameObjects
         {
             Model = model;
             _texture = texture;
-            Width = 2.3f;
+            Width = 1.7f;
             ModelRotate = 25;
             MaxVY = 180 / 3.6f;
         }
@@ -28,7 +28,8 @@ namespace MonoGameTry.GameObjects
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
             var carWorld = this.TransformModelToWorld();
-            DrawModel(Model, carWorld, view, projection, Color.Olive);
+            DrawModel(Model, carWorld, view, projection, device);
+            DrawQuad(carWorld, view, projection, device, Color.Gray);
         }
 
         public override void Update(TimeSpan elapsed)
@@ -48,7 +49,7 @@ namespace MonoGameTry.GameObjects
             base.Update(elapsed);
         }
 
-        private void DrawModel(Model model, Matrix world, Matrix view, Matrix projection, Color color)
+        private void DrawModel(Model model, Matrix world, Matrix view, Matrix projection, GraphicsDevice device)
         {
             foreach (ModelMesh mesh in model.Meshes)
             {

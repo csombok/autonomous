@@ -68,13 +68,14 @@ namespace MonoGameTry
             gameObjects.ForEach(go => go.Initialize());
 
             int numViewports = 1;
-            int width = graphics.PreferredBackBufferWidth / numViewports;
+            int width1 = (int)(graphics.PreferredBackBufferWidth * 0.8f);
+            int width2 = (int)(graphics.PreferredBackBufferWidth * 0.2f);
             int height = graphics.PreferredBackBufferHeight;
             int x = 0;
 
-            viewports.Add(new GameObjectViewport(x, 0, width, height, player));
-            x += width;
-            viewports.Add(new BirdsEyeViewport(x, 0, width, height));
+            viewports.Add(new GameObjectViewport(x, 0, width1, height, player));
+            x += width1;
+            viewports.Add(new BirdsEyeViewport(x, 0, width2, height, player));
         }
 
         private IEnumerable<BuildingA> GenerateBuildings()
