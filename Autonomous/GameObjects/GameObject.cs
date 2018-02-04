@@ -12,17 +12,19 @@ namespace MonoGameTry.GameObjects
 {
     public abstract class GameObject
     {
-        public float X { get; protected set; }
-        public float Y { get; protected set; }
-        public float VY { get; protected set; }
-        public float VX { get; protected set; }
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float VY { get; set; }
+        public float VX { get; set; }
 
-        public float MaxVY { get; protected set; }
+        public float MaxVY { get; set; }
+
+        public float Width { get; protected set; }
+
 
         public float AccelerationY { get; protected set; }
 
         protected BoundingBox boundingBox { get; set; }
-        public float Width { get; protected set; }
 
         public float Height { get; private set; }
 

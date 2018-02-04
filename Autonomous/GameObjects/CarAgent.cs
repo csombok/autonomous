@@ -9,15 +9,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MonoGameTry.GameObjects
 {
-    public class VanAgent : GameObject
+    public class CarAgent : GameObject
     {
-        public VanAgent(Model model, float vy = 50f/3.6f)
+        public CarAgent(Model model, float modelRotate, float width)
         {
             Model = model;
-            VY = vy;
-            X = 3.5f;
-            Width = 2f;
-            ModelRotate = 90;
+            ModelRotate = modelRotate;
+            Width = width;
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)

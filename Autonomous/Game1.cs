@@ -20,8 +20,8 @@ namespace MonoGameTry
         private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
         private List<GameObject> gameObjects = new List<GameObject>();
         private Car player;
-        private VanAgent van;
-        private BusAgent bus;
+        private CarAgent van;
+        private CarAgent bus;
         private Road road;
         private Texture2D metal;
 
@@ -60,10 +60,23 @@ namespace MonoGameTry
             player = new Car(model, metal);
 
             var vanModel = Content.Load<Model>("kendo");
-            van = new VanAgent(vanModel);
+            van = new CarAgent(vanModel, 90, 2f)
+            {
+                VY = 50f / 3.6f,
+                MaxVY = 120f / 3.6f,
+                X = 3.5f
+            };
 
-            var busModel = Content.Load<Model>("bus");
-            bus = new BusAgent(busModel);
+
+        var busModel = Content.Load<Model>("bus");
+            bus = new CarAgent(busModel, 180f, 2.6f)
+                {
+                    VY = 50f / 3.6f,
+                    MaxVY = 100f / 3.6f,
+                    X = 3.5f,
+                    Y = 20f
+                };
+        
 
             road = new Road();
 
