@@ -89,6 +89,27 @@ namespace MonoGameTry.GameObjects
             return worldToView;
         }
 
+        protected void DrawQuad(Matrix cworld, Matrix view, Matrix projection, GraphicsDevice device, Color color)
+        {
+            BasicEffect _quadEffect;
+            _quadEffect = new BasicEffect(device);
+            // _quadEffect.World = cworld;
+            _quadEffect.View = view;
+            _quadEffect.Projection = projection;
+            _quadEffect.DiffuseColor = color.ToVector3();
+            _quadEffect.Alpha = 0.9f;
+
+            Quad _quad = new Quad(new Vector3(X, 0.01f, -Y), Vector3.Up, Vector3.Backward, Width, Height);
+            foreach (EffectPass pass in _quadEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawUserIndexedPrimitives
+                    <VertexPositionNormalTexture>(
+                        PrimitiveType.TriangleList,
+                        _quad.Vertices, 0, 4,
+                        _quad.Indices, 0, 2);
+            }
+        }
         public BoundingBox GetBounds()
         {
             Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -115,7 +136,7 @@ namespace MonoGameTry.GameObjects
                     {
                         Vector3 vertex = new Vector3(vertexData[i], vertexData[i + 1], vertexData[i + 2]) ;
 
-                        vertex = Vector3.Transform(vertex, Matrix.CreateRotationY(MathHelper.ToRadians(-ModelRotate)));
+                        vertex = Vector3.Transform(vertex, Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate)));
                         min = Vector3.Min(min, vertex);
                         max = Vector3.Max(max, vertex);
                     }

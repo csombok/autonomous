@@ -23,6 +23,7 @@ namespace MonoGameTry.GameObjects
         {
             var carWorld = this.TransformModelToWorld();
             DrawModel(Model, carWorld, view, projection);
+            DrawQuad(carWorld, view, projection, device, Color.Green);
         }
 
 
