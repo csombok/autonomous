@@ -76,9 +76,16 @@ namespace MonoGameTry.GameObjects
         {
             float scaleX = Width / (boundingBox.Max.X - boundingBox.Min.X) ;
             float translateZ = (boundingBox.Min.Y);
+            float translateX = (boundingBox.Max.X + boundingBox.Min.X) / 2;
+            float translateY = (boundingBox.Max.Z + boundingBox.Min.Z) / 2;
 
             float rotate = OppositeDirection ? 180 : 0;
-            var worldToView = Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate+rotate)) *  Matrix.CreateScale(scaleX) * Matrix.CreateTranslation(new Vector3(X, -translateZ * scaleX, -Y));
+            var worldToView =
+                Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate)) *
+                Matrix.CreateTranslation(-translateX, -translateZ, translateY) *
+                Matrix.CreateRotationY(MathHelper.ToRadians(rotate)) *  
+                Matrix.CreateScale(scaleX) * 
+                Matrix.CreateTranslation(new Vector3(X, 0, -Y));
             return worldToView;
         }
 

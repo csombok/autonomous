@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Configuration;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,8 +21,6 @@ namespace MonoGameTry
         private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
         private List<GameObject> gameObjects = new List<GameObject>();
         private Car player;
-        private CarAgent van;
-        private CarAgent bus;
         private Road road;
         private Texture2D metal;
 
@@ -59,25 +58,6 @@ namespace MonoGameTry
 
             player = new Car(model, metal);
 
-            var vanModel = Content.Load<Model>("kendo");
-            van = new CarAgent(vanModel, 90, 2f, false)
-            {
-                VY = 50f / 3.6f,
-                MaxVY = 120f / 3.6f,
-                X = 3.5f
-            };
-
-
-        var busModel = Content.Load<Model>("bus");
-            bus = new CarAgent(busModel, 180f, 2.6f, true)
-                {
-                    VY = 50f / 3.6f,
-                    MaxVY = 100f / 3.6f,
-                    X = 3.5f,
-                    Y = 20f
-                };
-        
-
             road = new Road();
 
             var buildingModel = Content.Load<Model>("BuildingA");
@@ -104,8 +84,9 @@ namespace MonoGameTry
 
             };
 
-            gameObjects = new List<GameObject>() { road, player, van, bus };
+            gameObjects = new List<GameObject>() { road, player };
             gameObjects.AddRange(buildings);
+            gameObjects.AddRange(GenerateInitialCarAgents());
 
             gameObjects.ForEach(go => go.Initialize());
 
@@ -119,6 +100,55 @@ namespace MonoGameTry
             viewports.Add(new BirdsEyeViewport(x, 0, width, height));
         }
 
+        private IEnumerable<GameObject> GenerateInitialCarAgents()
+        {
+            var vanModel = Content.Load<Model>("kendo");
+            var busModel = Content.Load<Model>("bus");
+
+            const float laneWidth = 3f;
+            const float vanWidth = 2f;
+            for (int i = 0; i < 10; i++)
+            {
+                var van = new CarAgent(vanModel, 90, vanWidth, false)
+                {
+                    VY = 70f / 3.6f,
+                    MaxVY = 120f / 3.6f,
+                    X = laneWidth / 2,
+                    Y = i * 100
+                };
+                yield return van;
+
+                van = new CarAgent(vanModel, 90, vanWidth, true)
+                {
+                    VY = 70f / 3.6f,
+                    MaxVY = 120f / 3.6f,
+                    X = -laneWidth / 2,
+                    Y = i * 200
+                };
+                yield return van;
+
+                var bus = new CarAgent(busModel, 180f, 2.6f, false)
+                {
+                    VY = 50f / 3.6f,
+                    MaxVY = 100f / 3.6f,
+                    X = laneWidth * 1.45f,
+                    Y = i * 100 + 20
+                };
+
+                yield return bus;
+
+                bus = new CarAgent(busModel, 180f, 2.6f, true)
+                {
+                    VY = 50f / 3.6f,
+                    MaxVY = 100f / 3.6f,
+                    X = -laneWidth * 1.45f,
+                    Y = i * 200 + 20
+                };
+
+                yield return bus;
+
+            }
+        }
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.
