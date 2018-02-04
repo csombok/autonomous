@@ -25,6 +25,8 @@ namespace MonoGameTry
         private Road road;
         private Texture2D metal;
 
+        private BuildingA building;
+
 
         public Game1()
         {
@@ -50,8 +52,7 @@ namespace MonoGameTry
         /// </summary>
         protected override void LoadContent()
         {
-
-            model = Content.Load<Model>("Low-Poly-Racing-Car");            
+            model = Content.Load<Model>("Low-Poly-Racing-Car");
             metal = Content.Load<Texture2D>("red_metal");
 
             Road.LoadContent(Content, graphics);
@@ -65,7 +66,23 @@ namespace MonoGameTry
             bus = new BusAgent(busModel);
 
             road = new Road();
+
+            var buildingModel = Content.Load<Model>("BuildingA");
+            BuildingA[] buildings ={ new BuildingA(buildingModel, 0.8f, 1.0f),
+                    new BuildingA(buildingModel, 0.8f, 3.0f),
+                    new BuildingA(buildingModel, 0.8f, 5.0f),
+                    new BuildingA(buildingModel, 0.8f, 10.0f),
+                    new BuildingA(buildingModel, 0.8f, 12.0f),
+
+                    new BuildingA(buildingModel, -0.8f, 3.0f),
+                    new BuildingA(buildingModel, -0.8f, 5.0f),
+                    new BuildingA(buildingModel, -0.8f, 10.0f),
+                    new BuildingA(buildingModel, -0.8f, 12.0f),
+
+            };
+
             gameObjects = new List<GameObject>() { road, player, van, bus };
+            gameObjects.AddRange(buildings);
 
             int numViewports = 1;
             int width = graphics.PreferredBackBufferWidth / numViewports;
@@ -73,10 +90,8 @@ namespace MonoGameTry
             int x = 0;
 
             viewports.Add(new GameObjectViewport(x, 0, width, height, player));
-            //x += width;
-            //viewports.Add(new GameObjectViewport(x, 0, width, height, player));
-            //x += width;
-            //viewports.Add(new BirdsEyeViewport(x, 0, width, height));
+            x += width;
+            viewports.Add(new BirdsEyeViewport(x, 0, width, height));
         }
 
         /// <summary>
@@ -128,6 +143,6 @@ namespace MonoGameTry
         {
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice));
         }
-            
+
     }
 }
