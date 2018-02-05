@@ -50,6 +50,11 @@
     <Compile Include="GameObjects\CollisionDetector.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Road.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="RectangleF.cs" />
+    <Compile Include="Strategies\IControlStrategy.cs" />
+    <Compile Include="Strategies\KeepSafetyDistance.cs" />
+    <Compile Include="Strategies\ControlState.cs" />
     <Compile Include="Viewport\BirdsEyeViewport.cs" />
     <Compile Include="Viewport\GameObjectViewport.cs" />
     <Compile Include="Program.cs" />

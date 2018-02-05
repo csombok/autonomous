@@ -21,6 +21,13 @@ namespace MonoGameTry.GameObjects
 
         public float Width { get; protected set; }
 
+        public RectangleF BoundingBox
+        {
+            get
+            {
+                return new RectangleF(X - Width/2, Y-Height/2, Width, Height);
+            }
+        }
         public bool OppositeDirection { get; protected set; }
 
 

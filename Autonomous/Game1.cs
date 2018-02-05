@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Configuration;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameTry.GameObjects;
+using MonoGameTry.Strategies;
 
 namespace MonoGameTry
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class Game1 : Game, IGameStateProvider
     {
         GraphicsDeviceManager graphics;
         private Model model;
@@ -112,29 +114,33 @@ namespace MonoGameTry
 
             const float laneWidth = GameConstants.LaneWidth;
             const float vanWidth = 2f;
+            Random r = new Random();
             for (int i = 0; i < 10; i++)
             {
-                var van = new CarAgent(vanModel, 90, vanWidth, false)
+                float v = ((float)r.NextDouble() * 20 + 70) / 3.6f;
+                var van = new CarAgent(vanModel, 90, vanWidth, false, this, new KeepSafetyDistance(v, this))
                 {
-                    VY = 70f / 3.6f,
+                    VY = v,
                     MaxVY = 120f / 3.6f,
                     X = laneWidth / 2,
                     Y = i * 100
                 };
                 yield return van;
 
-                van = new CarAgent(vanModel, 90, vanWidth, true)
+                v = ((float) r.NextDouble() * 20 + 70) / 3.6f;
+                van = new CarAgent(vanModel, 90, vanWidth, true, this, new KeepSafetyDistance(v, this))
                 {
-                    VY = 70f / 3.6f,
+                    VY = v,
                     MaxVY = 120f / 3.6f,
                     X = -laneWidth / 2,
-                    Y = i * 200
+                    Y = i * 100
                 };
                 yield return van;
 
-                var bus = new CarAgent(busModel, 180f, 2.6f, false)
+                v = ((float)r.NextDouble() * 20 + 50) / 3.6f;
+                var bus = new CarAgent(busModel, 180f, 2.6f, false, this, new KeepSafetyDistance(v, this))
                 {
-                    VY = 50f / 3.6f,
+                    VY = v,
                     MaxVY = 100f / 3.6f,
                     X = laneWidth * 1.45f,
                     Y = i * 100 + 20
@@ -142,12 +148,13 @@ namespace MonoGameTry
 
                 yield return bus;
 
-                bus = new CarAgent(busModel, 180f, 2.6f, true)
+                v = ((float)r.NextDouble() * 20 + 50) / 3.6f;
+                bus = new CarAgent(busModel, 180f, 2.6f, true, this, new KeepSafetyDistance(v, this))
                 {
-                    VY = 50f / 3.6f,
+                    VY = v,
                     MaxVY = 100f / 3.6f,
                     X = -laneWidth * 1.45f,
-                    Y = i * 200 + 20
+                    Y = i * 100 + 20
                 };
 
                 yield return bus;
@@ -214,5 +221,9 @@ namespace MonoGameTry
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice));
         }
 
+        public GameState GameState
+        {
+            get => new GameState() {GameObjects = this.gameObjects.Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)) };
+        }
     }
 }
