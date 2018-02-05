@@ -23,7 +23,7 @@ namespace MonoGameTry.GameObjects
         {
             var carWorld = this.TransformModelToWorld();
             DrawModel(Model, carWorld, view, projection, device);
-            DrawQuad(carWorld, view, projection, device, Color.Gray);
+            // DrawQuad(carWorld, view, projection, device, Color.Gray);
         }
 
         public override void Update(TimeSpan elapsed)
