@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 namespace MonoGameTry.GameObjects
 {
     public class Car : GameObject
-    {
+    {        
         public Car(Model model)
         {
             Model = model;
@@ -52,8 +52,8 @@ namespace MonoGameTry.GameObjects
                     effect.World = world;
                     effect.View = view;
                     effect.Projection = projection;
-
-                    effect.PreferPerPixelLighting = true;
+                 
+                    _defaultLigthing.Apply(effect);
                 }
 
                 mesh.Draw();

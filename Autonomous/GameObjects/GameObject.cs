@@ -12,6 +12,8 @@ namespace MonoGameTry.GameObjects
 {
     public abstract class GameObject
     {
+        protected LigthingEffect _defaultLigthing = new LigthingEffect();
+
         public float X { get; set; }
         public float Y { get; set; }
         public float VY { get; set; }

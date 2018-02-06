@@ -31,7 +31,7 @@ namespace MonoGameTry.GameObjects
                     effect.World = world;
                     effect.View = view;
                     effect.Projection = projection;
-                    effect.PreferPerPixelLighting = true;
+                    _defaultLigthing.Apply(effect);
                 }
 
                 mesh.Draw();
