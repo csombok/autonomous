@@ -8,21 +8,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGameTry.GameObjects
 {
-    public class Tree : GameObject
+    public class City : GameObject
     {
+        private float rotation;
         private readonly float scale;
 
-        public Tree(Model model_, float x, float y, float scale = 0.3f)
+        public City(Model model_, float x, float y, float rotation = 0, float scale = 0.02f)
         {
             this.Model = model_;
             X = x;
             Y = y;
+            this.rotation = rotation;
             this.scale = scale;
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
-            var world = Matrix.CreateRotationY(MathHelper.ToRadians(0)) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(X, -0.01f, -Y));
+            var world = Matrix.CreateRotationX(MathHelper.ToRadians(this.rotation)) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(X, 2f, -Y));
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -31,7 +33,7 @@ namespace MonoGameTry.GameObjects
                     effect.World = world;
                     effect.View = view;
                     effect.Projection = projection;
-                    _defaultLigthing.Apply(effect);
+                    effect.PreferPerPixelLighting = true;
                 }
 
                 mesh.Draw();
@@ -40,6 +42,7 @@ namespace MonoGameTry.GameObjects
 
         public override void Update(TimeSpan elapsed)
         {
+            this.rotation += 0.5f;
         }
     }
 }

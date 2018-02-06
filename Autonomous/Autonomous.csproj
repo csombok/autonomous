@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Game1.cs" />
     <Compile Include="GameConstants.cs" />
+    <Compile Include="GameObjects\LigthingEffect.cs" />
     <Compile Include="GameObjects\Tree.cs" />
     <Compile Include="GameObjects\BuildingA.cs" />
     <Compile Include="GameObjects\CarAgent.cs" />
