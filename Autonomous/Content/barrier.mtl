@@ -1,15 +1,20 @@
-newmtl barrier2SG_colour
-illum 4
-Kd 1.00 1.00 1.00
-Ka 1.00 1.00 1.00
-Tf 1.00 1.00 1.00
+#
+#
+#
+
+newmtl pCube1 Mesh_barrier2SG_colour
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ns 0.000000
 map_Kd road_barrier_barrier_mat_BaseColor.png
-bump road_barrier_barrier_mat_Normal.png -bm 0.0289017
-Ni 1.00
-newmtl lambert2SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd -s 0.0666667 0.0666667 TexturesCom_AsphaltCloseups0075_1_seamless_S.jpg
-Ni 1.00
+
+newmtl pPlane1 Mesh_lambert2SG
+illum 2
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ns 0.000000
+map_Kd -s
+

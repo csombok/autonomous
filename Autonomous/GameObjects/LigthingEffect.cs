@@ -23,8 +23,11 @@ namespace MonoGameTry.GameObjects
             effect.DirectionalLight0.SpecularColor = new Vector3(0.03f, 0.01f, 0.02f);
 
             effect.DirectionalLight1.DiffuseColor = new Vector3(0.3f, 0.2f, 0.2f);
-            effect.DirectionalLight1.Direction = new Vector3(-2, 1, 8f);
+            effect.DirectionalLight1.Direction = new Vector3(-2, 1, 100f);
             effect.DirectionalLight1.SpecularColor = new Vector3(0.1f, 0.03f, 0.2f);
+
+            effect.FogStart = 0;
+            effect.FogEnd = 100;
         }
     }
 }

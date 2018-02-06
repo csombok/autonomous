@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGameTry.GameObjects
 {
-    public class City : GameObject
+    public class Barrier : GameObject
     {
         private float rotation;
         private readonly float scale;
 
-        public City(Model model_, float x, float y, float rotation = 0, float scale = 0.35f)
+        public Barrier(Model model_, float x, float y, float rotation = 0, float scale = 0.013f)
         {
             this.Model = model_;
             X = x;
@@ -24,7 +24,7 @@ namespace MonoGameTry.GameObjects
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
-            var world = Matrix.CreateRotationY(MathHelper.ToRadians(rotation)) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(X, -16f, -Y));
+            var world = Matrix.CreateRotationY(MathHelper.ToRadians(rotation)) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(X, -0f, -Y));
 
             foreach (ModelMesh mesh in Model.Meshes)
             {

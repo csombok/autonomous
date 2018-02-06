@@ -58,11 +58,13 @@ namespace MonoGameTry
 
             player = new Car(model);
 
-            road = new Road();          
-  
+            road = new Road();
+
             gameObjects = new List<GameObject>() { road, player };
             gameObjects.AddRange(GenerateBuildings());
             gameObjects.AddRange(GenerateTrees());
+            gameObjects.AddRange(GenerateBarriers());
+            gameObjects.AddRange(GenerateCity());
             gameObjects.AddRange(GenerateInitialCarAgents());
 
             gameObjects.ForEach(go => go.Initialize());
@@ -87,8 +89,27 @@ namespace MonoGameTry
                 float x = i % 4 == 0 ? 8 : 9;
                 float scaleLeft = i % 2 == 0 ? 0.8f : 1.3f;
                 float scaleRight = i % 3 == 0 ? 0.9f : 1.3f;
-                yield return new Tree(model, x, i * 20f + 10,  scaleLeft);
-                yield return new Tree(model, -x, i * 20f + 10,  scaleRight);
+                yield return new Tree(model, x, i * 20f + 10, scaleLeft);
+                yield return new Tree(model, -x, i * 20f + 10, scaleRight);
+            }
+        }
+
+        private IEnumerable<Barrier> GenerateBarriers()
+        {
+            var model = Content.Load<Model>("barrier");
+            for (int i = 0; i < 500; i++)
+            {
+                yield return new Barrier(model, 6.3f, i * 3.3f);
+                yield return new Barrier(model, -6.3f, i * 3.3f);
+            }
+        }
+
+        private IEnumerable<City> GenerateCity()
+        {
+            var model = Content.Load<Model>("City/The City");
+            for (int i = 0; i < 10; i++)
+            {
+                yield return new City(model, 0f, i * 200);             
             }
         }
 
@@ -99,11 +120,11 @@ namespace MonoGameTry
             {
                 float roatationLeft = i % 3 == 0 ? 90 : 180;
                 float roatationRight = i % 2 == 0 ? 90 : 180;
-                float x = i % 4 == 0 ? 10 : 12;
+                float x = i % 4 == 0 ? 11 : 13;
                 float scaleLeft = i % 2 == 0 ? 0.5f : 0.3f;
                 float scaleRight = i % 3 == 0 ? 0.3f : 0.6f;
-                yield return new BuildingA(buildingModel, x, i * 20f, roatationLeft, scaleLeft);
-                yield return new BuildingA(buildingModel, -x, i * 20f, roatationRight, scaleRight);
+                yield return new BuildingA(buildingModel, x, i * 30f, roatationLeft, scaleLeft);
+                yield return new BuildingA(buildingModel, -x, i * 30f, roatationRight, scaleRight);
             }
         }
 
@@ -127,7 +148,7 @@ namespace MonoGameTry
                 };
                 yield return van;
 
-                v = ((float) r.NextDouble() * 20 + 70) / 3.6f;
+                v = ((float)r.NextDouble() * 20 + 70) / 3.6f;
                 van = new CarAgent(vanModel, 90, vanWidth, true, this, new KeepSafetyDistance(v, this))
                 {
                     VY = v,
@@ -183,7 +204,7 @@ namespace MonoGameTry
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
 
 
-            collision = (gameObjects.OfType<CarAgent>().Any(x => CollisionDetector.IsCollision(x, player))) ;
+            collision = (gameObjects.OfType<CarAgent>().Any(x => CollisionDetector.IsCollision(x, player)));
             if (!collision)
             {
                 if (player.X - player.Width / 2 < -6)
@@ -223,7 +244,7 @@ namespace MonoGameTry
 
         public GameState GameState
         {
-            get => new GameState() {GameObjects = this.gameObjects.Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)) };
+            get => new GameState() { GameObjects = this.gameObjects.Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)) };
         }
     }
 }
