@@ -150,10 +150,10 @@ namespace MonoGameTry
             const float laneWidth = GameConstants.LaneWidth;
             const float vanWidth = 2f;
             Random r = new Random();
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 10; i++)
             {
                 float v = ((float)r.NextDouble() * 20 + 70) / 3.6f;
-                var van = new CarAgent(vanModel, 90, vanWidth, false, this, new OvertakingStrategy(v, this))
+                var van = new CarAgent(vanModel, 90, vanWidth, false, this, new OvertakingStrategy(v, 1, this))
                 {
                     VY = v,
                     MaxVY = 120f / 3.6f,
@@ -163,17 +163,17 @@ namespace MonoGameTry
                 yield return van;
 
                 v = ((float)r.NextDouble() * 20 + 70) / 3.6f;
-                van = new CarAgent(vanModel, 90, vanWidth, true, this, new KeepSafetyDistance(v, this))
+                van = new CarAgent(vanModel, 90, vanWidth, true, this, new OvertakingStrategy(v, 1, this))
                 {
                     VY = v,
                     MaxVY = 120f / 3.6f,
                     X = -laneWidth / 2,
-                    Y = i * 100
+                    Y = i * 100 + 100
                 };
                 yield return van;
 
                 v = ((float)r.NextDouble() * 20 + 50) / 3.6f;
-                var bus = new CarAgent(busModel, 180f, 2.6f, false, this, new OvertakingStrategy(v, this))
+                var bus = new CarAgent(busModel, 180f, 2.6f, false, this, new OvertakingStrategy(v, 0, this))
                 {
                     VY = v,
                     MaxVY = 100f / 3.6f,
@@ -184,7 +184,7 @@ namespace MonoGameTry
                 yield return bus;
 
                 v = ((float)r.NextDouble() * 20 + 50) / 3.6f;
-                bus = new CarAgent(busModel, 180f, 2.6f, true, this, new KeepSafetyDistance(v, this))
+                bus = new CarAgent(busModel, 180f, 2.6f, true, this, new OvertakingStrategy(v, 0, this))
                 {
                     VY = v,
                     MaxVY = 100f / 3.6f,

@@ -21,14 +21,20 @@ namespace MonoGameTry.Strategies
     {
         private IGameStateProvider _gameStateProvider;
         private float _desiredSpeed;
-        private int preferredLane;
+        private int _preferredLane;
 
-        public  GameObject GameObject { get; set; }
+        public OvertakingStrategy(float desiredSpeed, int preferredLane, IGameStateProvider gameStateProvider)
+        {
+            _desiredSpeed = desiredSpeed;
+            _gameStateProvider = gameStateProvider;
+            _preferredLane = preferredLane;
+        }
+
+        public GameObject GameObject { get; set; }
         public ControlState Calculate()
         {
             if (GameObject == null)
                 throw new InvalidOperationException("GameObject not set");
-            var go = GetClosestObjectInFront(_gameStateProvider.GameState.GameObjects);
 
 
             LaneInfo[] laneInfos = new LaneInfo[2] {GetLaneInfo(0), GetLaneInfo(1)};
@@ -39,7 +45,7 @@ namespace MonoGameTry.Strategies
 
         private ControlState GetControlState(int targetLane, LaneInfo[] lanes)
         {
-            float targetSpeed = targetLane == preferredLane ? _desiredSpeed : _desiredSpeed * 1.1f;
+            float targetSpeed = targetLane == _preferredLane ? _desiredSpeed : _desiredSpeed * 1.1f;
             bool brake = lanes[targetLane].IsInBrakeZone || (lanes[0].IsInLane && lanes[0].IsInCrashZone) || (lanes[1].IsInLane && lanes[1].IsInCrashZone);
             float acceleration = 0.0f;
             if (brake || GameObject.VY > targetSpeed)
@@ -57,6 +63,9 @@ namespace MonoGameTry.Strategies
             else
                 vx = 1;
 
+            if (GameObject.OppositeDirection)
+                vx = -vx;
+
             return new ControlState() {Acceleration = acceleration, HorizontalSpeed = vx};
         }
 
@@ -64,6 +73,9 @@ namespace MonoGameTry.Strategies
         {
             float width = GameConstants.LaneWidth;
             float centerX = laneIndex == 0 ? width * 1.5f : width / 2;
+
+            if (GameObject.OppositeDirection)
+                centerX = -centerX;
 
             var carFront = GetClosestObjectInLaneFront(_gameStateProvider.GameState.GameObjects, laneIndex);
             var carBack = GetClosestObjectInLaneBack(_gameStateProvider.GameState.GameObjects, laneIndex);
@@ -89,13 +101,18 @@ namespace MonoGameTry.Strategies
             bool backCrash = false;
             if (carBack != null)
             {
-                if (Math.Abs(GameObject.Y) - carBack.Y < GameObject.Height/2 + carBack.Height /2 + 1)
+                float otherSpeed = carBack.OppositeDirection == GameObject.OppositeDirection
+                    ? Math.Max(carBack.VY, 130f / 3.6f)
+                    : 0; //  -go.VY;
+
+                if (Math.Abs(GameObject.Y - carBack.Y) < GameObject.Height/2 + carBack.Height /2 + 1)
                     backCrash = true;
+                else if (otherSpeed < GameObject.VY)
+                    backCrash = false;
                 else
-                {
-                    float otherSpeed = carBack.OppositeDirection == GameObject.OppositeDirection
-                        ? Math.Max(carBack.VY, 130f / 3.6f)
-                        : 0; //  -go.VY;
+                { 
+
+                    
                     float distanceToStop = CalculateDistanceToStop(otherSpeed-GameObject.VY, GameConstants.PlayerDeceleration);
 
                     float distanceBetweenCars =
@@ -118,80 +135,67 @@ namespace MonoGameTry.Strategies
 
         private int GetTargetLane(LaneInfo[] laneInfos)
         {
-            var preferredLaneInfo = laneInfos[preferredLane];
-            var otherLaneInfo = laneInfos[1 - preferredLane];
-            var otherLane = 1 - preferredLane;
+            var preferredLaneInfo = laneInfos[_preferredLane];
+            var otherLaneInfo = laneInfos[1 - _preferredLane];
+            var otherLane = 1 - _preferredLane;
 
             if (!preferredLaneInfo.IsInBrakeZone && preferredLaneInfo.IsInLane)
-                return preferredLane;
+                return _preferredLane;
 
             if ((otherLaneInfo.IsBackCarInCrashZone || otherLaneInfo.IsInCrashZone) && !otherLaneInfo.IsInLane)
-                return preferredLane;
+                return _preferredLane;
 
             if ((preferredLaneInfo.IsBackCarInCrashZone || preferredLaneInfo.IsInCrashZone) && !preferredLaneInfo.IsInLane)
                 return otherLane;
 
             if (!preferredLaneInfo.IsInBrakeZone)
-                return preferredLane;
+                return _preferredLane;
 
             if (!otherLaneInfo.IsInBrakeZone)
                 return otherLane;
 
             if (otherLaneInfo.IsInCrashZone)
-                return preferredLane;
+                return _preferredLane;
 
             if (preferredLaneInfo.IsInCrashZone)
                 return otherLane;
 
             if (preferredLaneInfo.IsInBrakeZone && otherLaneInfo.IsInBrakeZone)
-                return preferredLane;
+                return _preferredLane;
 
             throw  new InvalidOperationException("State is not handled");
 
         }
 
-        public OvertakingStrategy(float desiredSpeed, IGameStateProvider gameStateProvider )
-        {
-            _desiredSpeed = desiredSpeed;
-            _gameStateProvider = gameStateProvider;
-        }
         private float CalculateDistanceToStop(float v, float breakDeceleration)
         {
             return 0.5f * v * v / breakDeceleration;
         }
 
-        private GameObject GetClosestObjectInFront(IEnumerable<GameObject> objects)
-        {
-            if (!GameObject.OppositeDirection)
-                return objects.Where(o => o != GameObject && o.Y > GameObject.Y).OrderBy(o => o.Y).Where(IsOverlappingHorizontally).FirstOrDefault();
-            else
-                return objects.Where(o => o != GameObject && o.Y < GameObject.Y).OrderByDescending(o => o.Y).Where(IsOverlappingHorizontally).FirstOrDefault();
-        }
-
         private GameObject GetClosestObjectInLaneFront(IEnumerable<GameObject> objects, int lane)
         {
-            return objects.Where(o => o != GameObject && o.Y > GameObject.Y).OrderBy(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
+            if (!GameObject.OppositeDirection)
+                return objects.Where(o => o != GameObject && o.Y > GameObject.Y).OrderBy(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
+            return objects.Where(o => o != GameObject && o.Y < GameObject.Y).OrderByDescending(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
         }
 
         private GameObject GetClosestObjectInLaneBack(IEnumerable<GameObject> objects, int lane)
         {
-            return objects.Where(o => o != GameObject && o.Y < GameObject.Y).OrderByDescending(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
-        }
-
-        private bool IsOverlappingHorizontally(GameObject second)
-        {
-            var r1 = GameObject.BoundingBox;
-            var r2 = second.BoundingBox;
-            return Between(r1.Left, r1.Right, r2.Left) ||
-                   Between(r1.Left, r1.Right, r2.Right) ||
-                   Between(r2.Left, r2.Right, r1.Right) ||
-                   Between(r2.Left, r2.Right, r1.Left);
+            if (!GameObject.OppositeDirection)
+                return objects.Where(o => o != GameObject && o.Y < GameObject.Y).OrderByDescending(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
+            return objects.Where(o => o != GameObject && o.Y > GameObject.Y).OrderBy(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
         }
 
         private bool IsInLane(int laneIndex, GameObject second)
         {
             float min = laneIndex == 0 ? GameConstants.LaneWidth : 0;
             float max = laneIndex == 0 ? 2 * GameConstants.LaneWidth : GameConstants.LaneWidth;
+
+            if (GameObject.OppositeDirection)
+            {
+                max = -max;
+                min = -min;
+            }
 
             var r2 = second.BoundingBox;
             return Between(min, max, r2.Left) ||
