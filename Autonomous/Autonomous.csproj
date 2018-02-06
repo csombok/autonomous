@@ -44,6 +44,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="GameConstants.cs" />
     <Compile Include="GameObjects\Barrier.cs" />
+    <Compile Include="GameObjects\Terrain.cs" />
     <Compile Include="GameObjects\City.cs" />
     <Compile Include="GameObjects\LigthingEffect.cs" />
     <Compile Include="GameObjects\Tree.cs" />
