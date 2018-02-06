@@ -40,7 +40,7 @@ namespace MonoGameTry.GameObjects
                 ? GameConstants.PlayerAcceleration * state.Acceleration
                 : GameConstants.PlayerDeceleration * state.Acceleration;
 
-            VX = 0;
+            VX = state.HorizontalSpeed;
 
             base.Update(elapsed);
         }

@@ -53,6 +53,7 @@
     <Compile Include="GameState.cs" />
     <Compile Include="RectangleF.cs" />
     <Compile Include="Strategies\IControlStrategy.cs" />
+    <Compile Include="Strategies\OvertakingStrategy.cs" />
     <Compile Include="Strategies\KeepSafetyDistance.cs" />
     <Compile Include="Strategies\ControlState.cs" />
     <Compile Include="Viewport\BirdsEyeViewport.cs" />

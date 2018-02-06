@@ -21,12 +21,12 @@ namespace MonoGameTry.Strategies
 
             if (go != null)
             {
-                float otherSpeed = go.OppositeDirection == GameObject.OppositeDirection ? go.VY : -go.VY;
+                float otherSpeed = go.OppositeDirection == GameObject.OppositeDirection ? go.VY : 0; //  -go.VY;
                 float distanceToStop = CalculateDistanceToStop(otherSpeed, GameConstants.PlayerDeceleration);
 
                 float selfDistancveToStop = CalculateDistanceToStop(GameObject.VY, GameConstants.PlayerDeceleration);
                 float distanceBetweenCars = Math.Abs(GameObject.Y - go.Y) - GameObject.Height / 2 - go.Height / 2;
-                float plusSafeDistance = 1 + GameObject.VY * 1.5f;
+                float plusSafeDistance = 1 + GameObject.VY * 0.5f;
                 if (distanceBetweenCars  < selfDistancveToStop - distanceToStop + plusSafeDistance)
                     return new ControlState() {Acceleration = -1};
             }

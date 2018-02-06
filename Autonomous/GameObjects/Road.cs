@@ -58,8 +58,8 @@ namespace MonoGameTry.GameObjects
             _quadEffect.World = cworld;
             _quadEffect.View = view;
             _quadEffect.Projection = projection;
-            // _quadEffect.FogEnabled = true;
-            _quadEffect.FogStart = 0;
+            _quadEffect.FogEnabled = true;
+            _quadEffect.FogStart = 10;
             _quadEffect.FogEnd = 100;
             foreach (EffectPass pass in _quadEffect.CurrentTechnique.Passes)
             {

@@ -36,7 +36,7 @@ namespace MonoGameTry
         /// <summary>
         /// Speed of players' car in left/right direction. (m/s)
         /// </summary>
-        public const float PlayerHoriztontalSpeed = 3f;
+        public const float PlayerHoriztontalSpeed = 5f;
 
     }
 }

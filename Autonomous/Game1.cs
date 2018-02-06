@@ -115,14 +115,14 @@ namespace MonoGameTry
             const float laneWidth = GameConstants.LaneWidth;
             const float vanWidth = 2f;
             Random r = new Random();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 20; i++)
             {
                 float v = ((float)r.NextDouble() * 20 + 70) / 3.6f;
-                var van = new CarAgent(vanModel, 90, vanWidth, false, this, new KeepSafetyDistance(v, this))
+                var van = new CarAgent(vanModel, 90, vanWidth, false, this, new OvertakingStrategy(v, this))
                 {
                     VY = v,
                     MaxVY = 120f / 3.6f,
-                    X = laneWidth / 2,
+                    X = laneWidth * 1.5f,
                     Y = i * 100
                 };
                 yield return van;
@@ -138,11 +138,11 @@ namespace MonoGameTry
                 yield return van;
 
                 v = ((float)r.NextDouble() * 20 + 50) / 3.6f;
-                var bus = new CarAgent(busModel, 180f, 2.6f, false, this, new KeepSafetyDistance(v, this))
+                var bus = new CarAgent(busModel, 180f, 2.6f, false, this, new OvertakingStrategy(v, this))
                 {
                     VY = v,
                     MaxVY = 100f / 3.6f,
-                    X = laneWidth * 1.45f,
+                    X = laneWidth / 2,
                     Y = i * 100 + 20
                 };
 
