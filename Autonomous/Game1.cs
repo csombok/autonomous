@@ -89,25 +89,30 @@ namespace MonoGameTry
         {
             var model = Content.Load<Model>("Tree\\fir");
 
-            float offset = 150;
+            float offset = 180;
             for (int i = 0; i < 200; i++)
             {
                 float x = i % 4 == 0 ? 8 : 9;
-                float scaleLeft = i % 2 == 0 ? 0.8f : 1.3f;
-                float scaleRight = i % 3 == 0 ? 0.9f : 1.3f;
-                yield return new Tree(model, x, i * 20f + offset, scaleLeft);
-                yield return new Tree(model, -x, i * 20f + offset, scaleRight);
+                float widthLeft = i % 2 == 0 ? 4f : 3.4f;
+                float widthRight = i % 3 == 0 ? 3.4f : 4.5f;
+                if(i < 30)
+                {
+                    widthLeft += 2f;
+                    widthRight += 2f;
+                }
+                yield return new Tree(model, x, i * 20f + offset, widthLeft);
+                yield return new Tree(model, -x, i * 20f + offset, widthRight);
             }
         }
 
         private IEnumerable<Barrier> GenerateBarriers()
         {
             var model = Content.Load<Model>("barrier");
-            float offset = 300;
-            for (int i = 0; i < 500; i++)
+            float offset = 600;
+            for (int i = 0; i < 150; i++)
             {
-                yield return new Barrier(model, 6.3f, i * 3.3f + offset);
-                yield return new Barrier(model, -6.3f, i * 3.3f + offset);
+                yield return new Barrier(model, 6.3f, i * 1.8f + offset);
+                yield return new Barrier(model, -6.3f, i * 1.8f + offset);
             }
         }
 
@@ -139,10 +144,10 @@ namespace MonoGameTry
                 float roatationLeft = i % 3 == 0 ? 90 : 180;
                 float roatationRight = i % 2 == 0 ? 90 : 180;
                 float x = i % 4 == 0 ? 11 : 13;
-                float scaleLeft = i % 2 == 0 ? 0.5f : 0.3f;
-                float scaleRight = i % 3 == 0 ? 0.3f : 0.6f;
-                yield return new BuildingA(buildingModel, x, i * 30f + offset, roatationLeft, scaleLeft);
-                yield return new BuildingA(buildingModel, -x, i * 30f + offset, roatationRight, scaleRight);
+                float widthLeft = i % 2 == 0 ? 6f : 7f;
+                float widthRight = i % 3 == 0 ? 7f : 6f;
+                yield return new BuildingA(buildingModel, x, i * 30f + offset, roatationLeft);
+                yield return new BuildingA(buildingModel, -x, i * 30f + offset, roatationRight);
             }
         }
 

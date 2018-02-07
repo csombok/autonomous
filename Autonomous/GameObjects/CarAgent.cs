@@ -29,13 +29,6 @@ namespace MonoGameTry.GameObjects
             }
         }
 
-        public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
-        {
-            var carWorld = this.TransformModelToWorld();
-            DrawModel(Model, carWorld, view, projection);
-            // DrawQuad(carWorld, view, projection, device, Color.Green);
-        }
-
         public override void Update(TimeSpan elapsed)
         {
             if (_strategy != null)
@@ -49,23 +42,6 @@ namespace MonoGameTry.GameObjects
             }
 
             base.Update(elapsed);
-        }
-
-        private void DrawModel(Model model, Matrix world, Matrix view, Matrix projection)
-        {
-            foreach (ModelMesh mesh in model.Meshes)
-            {
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    effect.World = world;
-                    effect.View = view;
-                    effect.Projection = projection;
-
-                    _defaultLigthing.Apply(effect);
-                }
-
-                mesh.Draw();
-            }
         }
     }
 }

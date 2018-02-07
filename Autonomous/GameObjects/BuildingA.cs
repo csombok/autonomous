@@ -10,34 +10,10 @@ namespace MonoGameTry.GameObjects
 {
     public class BuildingA : GameObject
     {
-        private readonly float rotation;
-        private readonly float scale;
-
-        public BuildingA(Model model_, float x, float y, float rotation = 90, float scale = 0.3f)
+        public BuildingA(Model model, float x, float y, float rotation = 90, float width = 7f)
+            : base(model, x, y, rotation)
         {
-            this.Model = model_;
-            X = x;
-            Y = y;
-            this.rotation = rotation;
-            this.scale = scale;
-        }
-
-        public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
-        {
-            var world = Matrix.CreateRotationY(MathHelper.ToRadians(rotation)) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(X, -0.01f, -Y));
-
-            foreach (ModelMesh mesh in Model.Meshes)
-            {
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    effect.World = world;
-                    effect.View = view;
-                    effect.Projection = projection;
-                    _defaultLigthing.Apply(effect);
-                }
-
-                mesh.Draw();
-            }
+            Width = width;
         }
 
         public override void Update(TimeSpan elapsed)
