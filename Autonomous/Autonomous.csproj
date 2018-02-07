@@ -55,6 +55,7 @@
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Road.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="Public\API.cs" />
     <Compile Include="RectangleF.cs" />
     <Compile Include="Strategies\IControlStrategy.cs" />
     <Compile Include="Strategies\OvertakingStrategy.cs" />
