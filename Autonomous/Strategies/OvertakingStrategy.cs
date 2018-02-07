@@ -93,7 +93,7 @@ namespace MonoGameTry.Strategies
                 if (distanceBetweenCars < selfDistancveToStop - distanceToStop)
                     frontCrash = true;
 
-                float plusSafeDistance = 20f + GameObject.VY-carFront.VY;
+                float plusSafeDistance = 50f + GameObject.VY-carFront.VY;
                 if (distanceBetweenCars < selfDistancveToStop - distanceToStop + plusSafeDistance)
                     frontBrake = true;
             }
@@ -102,7 +102,7 @@ namespace MonoGameTry.Strategies
             if (carBack != null)
             {
                 float otherSpeed = carBack.OppositeDirection == GameObject.OppositeDirection
-                    ? Math.Max(carBack.VY, 130f / 3.6f)
+                    ? Math.Min(carBack.VY, 130f / 3.6f)
                     : 0; //  -go.VY;
 
                 if (Math.Abs(GameObject.Y - carBack.Y) < GameObject.Height/2 + carBack.Height /2 + 1)
