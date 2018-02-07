@@ -1,6 +1,6 @@
 # Autonomous
 
-This is a hackathon project inspired by currnet self-driving car innovation and machine learning trends. 
+This is a hackathon project inspired by current self-driving car innovation and machine learning trends. 
 
 # Useful resources
 
