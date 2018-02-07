@@ -10,32 +10,11 @@ namespace MonoGameTry.GameObjects
 {
     public class Tree : GameObject
     {
-        private readonly float scale;
 
-        public Tree(Model model_, float x, float y, float scale = 0.3f)
+        public Tree(Model model, float x, float y, float width = 5)
+            : base(model, x, y, 0)
         {
-            this.Model = model_;
-            X = x;
-            Y = y;
-            this.scale = scale;
-        }
-
-        public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
-        {
-            var world = Matrix.CreateRotationY(MathHelper.ToRadians(0)) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(X, -0.01f, -Y));
-
-            foreach (ModelMesh mesh in Model.Meshes)
-            {
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    effect.World = world;
-                    effect.View = view;
-                    effect.Projection = projection;
-                    _defaultLigthing.Apply(effect);
-                }
-
-                mesh.Draw();
-            }
+            Width = width;
         }
 
         public override void Update(TimeSpan elapsed)

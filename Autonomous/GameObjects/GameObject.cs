@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGameTry.GameObjects
 {
-    public abstract class GameObject
+    public class GameObject
     {
         protected LigthingEffect _defaultLigthing = new LigthingEffect();
 
@@ -27,7 +27,7 @@ namespace MonoGameTry.GameObjects
         {
             get
             {
-                return new RectangleF(X - Width/2, Y-Height/2, Width, Height);
+                return new RectangleF(X - Width / 2, Y - Height / 2, Width, Height);
             }
         }
         public bool OppositeDirection { get; protected set; }
@@ -39,13 +39,20 @@ namespace MonoGameTry.GameObjects
 
         public float Height { get; private set; }
 
-        public Model Model { get; protected set;  }
+        public Model Model { get; protected set; }
 
         protected float ModelRotate { get; set; }
 
-        public GameObject()
+        public GameObject(Model model, float x, float y, float rotate)
         {
-            ModelRotate = 0;
+            Model = model;
+            X = x;
+            Y = y;
+            ModelRotate = rotate;
+        }
+
+        public GameObject() : this(null, 0, 0, 0)
+        {
             MaxVY = 50f / 3.6f;
             VX = 0;
             VY = 0;
@@ -72,18 +79,33 @@ namespace MonoGameTry.GameObjects
             }
         }
 
-        public abstract void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device);
+        public virtual void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
+        {
+            var world = TransformModelToWorld();
+            foreach (ModelMesh mesh in Model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.World = world;
+                    effect.View = view;
+                    effect.Projection = projection;
+                    _defaultLigthing.Apply(effect);
+                }
+
+                mesh.Draw();
+            }
+        }
 
         public virtual void Initialize()
         {
             boundingBox = GetBounds();
             float scaleX = Width / (boundingBox.Max.X - boundingBox.Min.X);
-            Height = (boundingBox.Max.Z - boundingBox.Min.Z)*scaleX;
+            Height = (boundingBox.Max.Z - boundingBox.Min.Z) * scaleX;
         }
 
         protected virtual Matrix TransformModelToWorld()
         {
-            float scaleX = Width / (boundingBox.Max.X - boundingBox.Min.X) ;
+            float scaleX = Width / (boundingBox.Max.X - boundingBox.Min.X);
             float translateZ = (boundingBox.Min.Y);
             float translateX = (boundingBox.Max.X + boundingBox.Min.X) / 2;
             float translateY = (boundingBox.Max.Z + boundingBox.Min.Z) / 2;
@@ -92,8 +114,8 @@ namespace MonoGameTry.GameObjects
             var worldToView =
                 Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate)) *
                 Matrix.CreateTranslation(-translateX, -translateZ, translateY) *
-                Matrix.CreateRotationY(MathHelper.ToRadians(rotate)) *  
-                Matrix.CreateScale(scaleX) * 
+                Matrix.CreateRotationY(MathHelper.ToRadians(rotate)) *
+                Matrix.CreateScale(scaleX) *
                 Matrix.CreateTranslation(new Vector3(X, 0, -Y));
             return worldToView;
         }
@@ -123,7 +145,7 @@ namespace MonoGameTry.GameObjects
         {
             Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
             Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-            
+
             foreach (ModelMesh mesh in this.Model.Meshes)
             {
                 if (this.GetType() == typeof(Car))
@@ -131,7 +153,7 @@ namespace MonoGameTry.GameObjects
 
                 if (mesh.Name == "platform")
                     continue;
-                
+
                 foreach (ModelMeshPart meshPart in mesh.MeshParts)
                 {
                     int vertexStride = meshPart.VertexBuffer.VertexDeclaration.VertexStride;
@@ -143,7 +165,7 @@ namespace MonoGameTry.GameObjects
 
                     for (int i = 0; i < vertexDataSize; i += vertexStride / sizeof(float))
                     {
-                        Vector3 vertex = new Vector3(vertexData[i], vertexData[i + 1], vertexData[i + 2]) ;
+                        Vector3 vertex = new Vector3(vertexData[i], vertexData[i + 1], vertexData[i + 2]);
 
                         vertex = Vector3.Transform(vertex, Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate)));
                         min = Vector3.Min(min, vertex);

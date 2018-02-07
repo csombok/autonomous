@@ -19,13 +19,6 @@ namespace MonoGameTry.GameObjects
             MaxVY = GameConstants.PlayerMaxSpeed;
         }
 
-        public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
-        {
-            var carWorld = this.TransformModelToWorld();
-            DrawModel(Model, carWorld, view, projection, device);
-            // DrawQuad(carWorld, view, projection, device, Color.Gray);
-        }
-
         public override void Update(TimeSpan elapsed)
         {
             AccelerationY = 0;
@@ -41,23 +34,6 @@ namespace MonoGameTry.GameObjects
                 VX += GameConstants.PlayerHoriztontalSpeed;
 
             base.Update(elapsed);
-        }
-
-        private void DrawModel(Model model, Matrix world, Matrix view, Matrix projection, GraphicsDevice device)
-        {
-            foreach (ModelMesh mesh in model.Meshes)
-            {
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    effect.World = world;
-                    effect.View = view;
-                    effect.Projection = projection;
-                 
-                    _defaultLigthing.Apply(effect);
-                }
-
-                mesh.Draw();
-            }
         }
     }
 }
