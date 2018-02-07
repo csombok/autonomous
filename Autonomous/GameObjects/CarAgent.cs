@@ -22,8 +22,11 @@ namespace MonoGameTry.GameObjects
             ModelRotate = modelRotate;
             Width = width;
             OppositeDirection = opposite;
-            _strategy = drivingStrategy;
-            _strategy.GameObject = this;
+            if (drivingStrategy != null)
+            {
+                _strategy = drivingStrategy;
+                _strategy.GameObject = this;
+            }
         }
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
@@ -35,12 +38,15 @@ namespace MonoGameTry.GameObjects
 
         public override void Update(TimeSpan elapsed)
         {
-            var state = _strategy.Calculate();
-            AccelerationY = state.Acceleration > 0
-                ? GameConstants.PlayerAcceleration * state.Acceleration
-                : GameConstants.PlayerDeceleration * state.Acceleration;
+            if (_strategy != null)
+            {
+                var state = _strategy.Calculate();
+                AccelerationY = state.Acceleration > 0
+                    ? GameConstants.PlayerAcceleration * state.Acceleration
+                    : GameConstants.PlayerDeceleration * state.Acceleration;
 
-            VX = state.HorizontalSpeed;
+                VX = state.HorizontalSpeed;
+            }
 
             base.Update(elapsed);
         }
