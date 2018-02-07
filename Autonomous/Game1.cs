@@ -23,6 +23,7 @@ namespace MonoGameTry
         private Car player;
         private Road road;
         private Texture2D metal;
+        private AgentFactory _agentFactory;
 
         private BuildingA building;
         private bool collision;
@@ -32,6 +33,7 @@ namespace MonoGameTry
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            _agentFactory = new AgentFactory(this);
         }
 
         /// <summary>
@@ -57,6 +59,8 @@ namespace MonoGameTry
             Road.LoadContent(Content, graphics);
 
             player = new Car(model);
+
+            _agentFactory.LoadContent(Content);
 
             road = new Road();
 
@@ -144,89 +148,15 @@ namespace MonoGameTry
 
         private IEnumerable<GameObject> GenerateInitialCarAgents()
         {
-            var vanModel = Content.Load<Model>("kendo");
-            var lamboModel = Content.Load<Model>("Lambo\\Lamborghini_Aventador");
-            var busModel = Content.Load<Model>("bus");
-            var barrierModel = Content.Load<Model>("barrier");
-
-            const float laneWidth = GameConstants.LaneWidth;
-            const float vanWidth = 2f;
-            Random r = new Random();
-
-
             for (int i = 0; i < 5; i++)
             {
-                var barrier = new CarAgent(barrierModel, 90, laneWidth*0.8f, false, this, null)
-                {
-                    VY = 0,
-                    MaxVY = 0,
-                    X = laneWidth * 1.5f,
-                    Y = i * 1000+50
-                };
-                yield return barrier;
-
-                float v = ((float)r.NextDouble() * 20 + 70) / 3.6f;
-                var van = new CarAgent(vanModel, 90, vanWidth, false, this, new OvertakingStrategy(v, 0, this))
-                {
-                    VY = v,
-                    MaxVY = 100f / 3.6f,
-                    X = laneWidth*1.45f,
-                    Y = i * 200
-                };
-                yield return van;
-
-                v = ((float)r.NextDouble() * 20 + 70) / 3.6f;
-                van = new CarAgent(vanModel, 90, vanWidth, true, this, new OvertakingStrategy(v, 0, this))
-                {
-                    VY = v,
-                    MaxVY = 100f / 3.6f,
-                    X = -laneWidth * 1.45f,
-                    Y = i * 200
-                };
-                yield return van;
-
-                v = ((float)r.NextDouble() * 20 + 110) / 3.6f;
-                var lambo = new CarAgent(lamboModel, 180, vanWidth, false, this, new OvertakingStrategy(v, 1, this))
-                {
-                    VY = v,
-                    MaxVY = 180f / 3.6f,
-                    X = laneWidth /2,
-                    Y = i * 200+50
-                };
-                yield return lambo;
-
-                v = ((float)r.NextDouble() * 20 + 110) / 3.6f;
-                lambo = new CarAgent(lamboModel, 180, vanWidth, true, this, new OvertakingStrategy(v, 1, this))
-                {
-                    VY = v,
-                    MaxVY = 180f / 3.6f,
-                    X = -laneWidth / 2,
-                    Y = i * 200 + 50
-                };
-                yield return lambo;
-
-
-                v = ((float)r.NextDouble() * 20 + 50) / 3.6f;
-                var bus = new CarAgent(busModel, 180f, 2.6f, false, this, new OvertakingStrategy(v, 0, this))
-                {
-                    VY = v,
-                    MaxVY = 100f / 3.6f,
-                    X = laneWidth * 1.45f,
-                    Y = i * 100 + 20
-                };
-
-                yield return bus;
-
-                v = ((float)r.NextDouble() * 20 + 50) / 3.6f;
-                bus = new CarAgent(busModel, 180f, 2.6f, true, this, new OvertakingStrategy(v, 0, this))
-                {
-                    VY = v,
-                    MaxVY = 100f / 3.6f,
-                    X = -laneWidth * 1.45f,
-                    Y = i * 100 + 20
-                };
-
-                yield return bus;
+                yield return _agentFactory.CreateBarrier(0, false, i * 1000 + 50);
+                yield return _agentFactory.CreateVan(0, false, i * 200 + 50);
+                yield return _agentFactory.CreateVan(0, true, i * 200 + 50);
+                yield return _agentFactory.CreateLambo(1, true, i * 200 + 80);
+                yield return _agentFactory.CreateLambo(1, false, i * 200 + 80);
+                yield return _agentFactory.CreateBus(0, true, i * 300 + 130);
+                yield return _agentFactory.CreateBus(0, false, i * 300 + 130);
 
             }
         }
