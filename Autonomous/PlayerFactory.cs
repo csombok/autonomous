@@ -6,10 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonoGameTry
 {
@@ -25,7 +21,7 @@ namespace MonoGameTry
         public void LoadContent(ContentManager content)
         {
             porsheModel = content.Load<Model>("Cars/Porshe/carrgt");
-            lamborginiModel = content.Load<Model>("Lambo\\Lamborghini_Aventador");
+            lamborginiModel = content.Load<Model>("Lambo/Lamborghini_Aventador");
         }
 
         public IEnumerable<Car> LoadPlayers()
