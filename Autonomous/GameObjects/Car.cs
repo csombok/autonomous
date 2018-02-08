@@ -5,11 +5,11 @@ using Autonomous.Public;
 
 namespace MonoGameTry.GameObjects
 {
-    internal class Car : GameObject
+    public class Car : GameObject
     {
         private readonly GameStateManager _gameStateManager;
 
-        public Car(Model model, string playerId, GameStateManager gameStateManager)
+        public Car(Model model, string playerId, GameStateManager gameStateManager, float x=0)
         {
             _gameStateManager = gameStateManager;
             Model = model;

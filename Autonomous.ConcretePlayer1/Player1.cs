@@ -20,7 +20,7 @@ namespace Autonomous.ConcretePlayer1
             throw new NotImplementedException();
         }
 
-        public PlayerCommand Update(GameState gameState)
+        public PlayerAction Update(GameState gameState)
         {
             throw new NotImplementedException();
         }

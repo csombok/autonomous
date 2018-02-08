@@ -8,7 +8,7 @@ using Autonomous.Public;
 
 namespace MonoGameTry
 {
-    class GameStateManager
+    public class GameStateManager
     {
         private ConcurrentDictionary<string, PlayerAction> playerCommands = new ConcurrentDictionary<string, PlayerAction>();
 

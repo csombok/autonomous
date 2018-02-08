@@ -24,7 +24,7 @@ namespace MonoGameTry
             lamborginiModel = content.Load<Model>("Lambo/Lamborghini_Aventador");
         }
 
-        public IEnumerable<Car> LoadPlayers()
+        public IEnumerable<Car> LoadPlayers(GameStateManager gameStateManager)
         {
             //An aggregate catalog that combines multiple catalogs  
             var catalog = new AggregateCatalog();
@@ -44,7 +44,7 @@ namespace MonoGameTry
             {
                 var model = i % 2 == 0 ? lamborginiModel : porsheModel;
                 var x = 3f + i * 2f;
-                yield return new Car(model, false, x);
+                yield return new Car(model, player.Metadata.PlayerName, gameStateManager, x);
                 i++;
             }
 

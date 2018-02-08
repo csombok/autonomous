@@ -45,6 +45,7 @@
     <Compile Include="GameObjectState.cs" />
     <Compile Include="GameObjectType.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="IPlayerData.cs" />
     <Compile Include="PlayerAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RectangleF.cs" />

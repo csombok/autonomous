@@ -68,7 +68,7 @@ namespace MonoGameTry
             _agentFactory.LoadContent(Content);
             courseObjectFactory.LoadContent(Content);
             playerFactory.LoadContent(Content);
-            var players = playerFactory.LoadPlayers();
+            var players = playerFactory.LoadPlayers(_gameStateManager);
 
             road = new Road();
 

@@ -60,9 +60,7 @@
     <Compile Include="GameStateInternal.cs" />
     <Compile Include="GameStateManager.cs" />
     <Compile Include="PlayerGameLoop.cs" />
-    <Compile Include="GameState.cs" />
     <Compile Include="PlayerFactory.cs" />
-    <Compile Include="Public\API.cs" />
     <Compile Include="Strategies\IControlStrategy.cs" />
     <Compile Include="Strategies\OvertakingStrategy.cs" />
     <Compile Include="Strategies\KeepSafetyDistance.cs" />
