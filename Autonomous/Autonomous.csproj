@@ -43,10 +43,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />
+    <Compile Include="CourseObjectFactory.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameConstants.cs" />
     <Compile Include="GameObjects\Barrier.cs" />
-    <Compile Include="CourseObjdecFactory.cs" />
     <Compile Include="GameObjects\Terrain.cs" />
     <Compile Include="GameObjects\City.cs" />
     <Compile Include="GameObjects\LigthingEffect.cs" />
@@ -58,6 +58,7 @@
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Road.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="PlayerFactory.cs" />
     <Compile Include="Public\API.cs" />
     <Compile Include="Strategies\IControlStrategy.cs" />
     <Compile Include="Strategies\OvertakingStrategy.cs" />
@@ -75,6 +76,7 @@
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +88,14 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Autonomous.ConcretePlayer1\Autonomous.ConcretePlayer1.csproj">
+      <Project>{bc897a69-e3aa-4b8d-bfdf-d3cdd1b1b5c6}</Project>
+      <Name>Autonomous.ConcretePlayer1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Autonomous.ConcretePlayer2\Autonomous.ConcretePlayer2.csproj">
+      <Project>{17d5c580-0c86-42fb-af5a-780a3046df44}</Project>
+      <Name>Autonomous.ConcretePlayer2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Autonomous.Public\Autonomous.Public.csproj">
       <Project>{6a315a2d-53b0-4f32-9cca-60b913ec3347}</Project>
       <Name>Autonomous.Public</Name>

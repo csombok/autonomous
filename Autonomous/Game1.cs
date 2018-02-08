@@ -17,18 +17,15 @@ namespace MonoGameTry
     {
         GraphicsDeviceManager graphics;
         private Model model;
-
         private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
         private List<GameObject> gameObjects = new List<GameObject>();
         private Car player;
         private Road road;
-        private Texture2D metal;
         private AgentFactory _agentFactory;
         private CourseObjectFactory courseObjectFactory;
+        private PlayerFactory playerFactory;
 
-        private BuildingA building;
         private bool collision;
-
 
         public Game1()
         {
@@ -36,6 +33,7 @@ namespace MonoGameTry
             Content.RootDirectory = "Content";
             _agentFactory = new AgentFactory(this);
             courseObjectFactory = new CourseObjectFactory();
+            playerFactory = new PlayerFactory();
         }
 
         /// <summary>
@@ -47,8 +45,9 @@ namespace MonoGameTry
         protected override void Initialize()
         {
             base.Initialize();
-        }
 
+            
+        }
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -64,10 +63,12 @@ namespace MonoGameTry
 
             _agentFactory.LoadContent(Content);
             courseObjectFactory.LoadContent(Content);
+            playerFactory.LoadContent(Content);
+            var players = playerFactory.LoadPlayers();
 
             road = new Road();
 
-            gameObjects = new List<GameObject>() { road, player };
+            gameObjects = new List<GameObject>(players) { road, player };
             gameObjects.AddRange(courseObjectFactory.GenerateBuildings());
             gameObjects.AddRange(courseObjectFactory.GenerateTrees());
             //gameObjects.AddRange(courseObjectFactory.GenerateBarriers());
@@ -76,8 +77,6 @@ namespace MonoGameTry
             gameObjects.AddRange(GenerateInitialCarAgents());
 
             gameObjects.ForEach(go => go.Initialize());
-
-            int numViewports = 1;
             int width1 = (int)(graphics.PreferredBackBufferWidth * 0.8f);
             int width2 = (int)(graphics.PreferredBackBufferWidth * 0.2f);
             int height = graphics.PreferredBackBufferHeight;
@@ -99,7 +98,6 @@ namespace MonoGameTry
                 yield return _agentFactory.CreateLambo(1, false, i * 200 + 80);
                 yield return _agentFactory.CreateBus(0, true, i * 300 + 130);
                 yield return _agentFactory.CreateBus(0, false, i * 300 + 130);
-
             }
         }
         /// <summary>
