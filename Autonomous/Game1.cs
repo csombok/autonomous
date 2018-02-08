@@ -24,6 +24,7 @@ namespace MonoGameTry
         private AgentFactory _agentFactory;
         private CourseObjectFactory courseObjectFactory;
         private PlayerFactory playerFactory;
+        private Dashboard dashboard;
 
         private bool collision;
 
@@ -34,6 +35,7 @@ namespace MonoGameTry
             _agentFactory = new AgentFactory(this);
             courseObjectFactory = new CourseObjectFactory();
             playerFactory = new PlayerFactory();
+            dashboard = new Dashboard();
         }
 
         /// <summary>
@@ -44,9 +46,7 @@ namespace MonoGameTry
         /// </summary>
         protected override void Initialize()
         {
-            base.Initialize();
-
-            
+            base.Initialize();            
         }
 
         /// <summary>
@@ -64,6 +64,8 @@ namespace MonoGameTry
             _agentFactory.LoadContent(Content);
             courseObjectFactory.LoadContent(Content);
             playerFactory.LoadContent(Content);
+            dashboard.LoadContent(Content);
+
             var players = playerFactory.LoadPlayers();
 
             road = new Road();
@@ -157,6 +159,7 @@ namespace MonoGameTry
 
         private void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
+            //dashboard.DrawPlayerScores(GraphicsDevice, playerFactory.PlayersInfo);
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice));
         }
 

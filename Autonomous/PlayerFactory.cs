@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameTry.GameObjects;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
@@ -17,6 +18,17 @@ namespace MonoGameTry
         private CompositionContainer _container;
         private Model porsheModel;
         private Model lamborginiModel;
+
+        public IEnumerable<IPlayerData> PlayersInfo
+        {
+            get
+            {
+                foreach (Lazy<IPlayer, IPlayerData> player in players)
+                {
+                    yield return player.Metadata;
+                }
+            }
+        }
 
         public void LoadContent(ContentManager content)
         {
