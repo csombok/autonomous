@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autonomous.Public;
 using MonoGameTry.GameObjects;
-using MonoGameTry.Public;
 
 namespace MonoGameTry
 {

@@ -8,3 +8,6 @@
 /Autonomous/obj/x86/Debug
 /.vs/Autonomous/v15
 /Autonomous/Autonomous.csproj.user
+/Autonomous/bin/Windows/AnyCPU/Debug
+/Autonomous/obj/Debug
+/Autonomous/Content/road2.jpg

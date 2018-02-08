@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGameTry.Public;
+using Autonomous.Public;
 
 namespace MonoGameTry.GameObjects
 {
@@ -40,7 +35,6 @@ namespace MonoGameTry.GameObjects
                 VX -= GameConstants.PlayerHoriztontalSpeed;
             if (command.MoveRight)
                 VX += GameConstants.PlayerHoriztontalSpeed;
-
             base.Update(elapsed);
         }
     }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using Microsoft.Xna.Framework;
 
-namespace MonoGameTry
+namespace Autonomous.Public
 {
     /// <summary>Stores a set of four floating-point numbers that represent the location and size of a rectangle. For more advanced region functions, use a <see cref="T:System.Drawing.Region" /> object.</summary>
     /// <filterpriority>1</filterpriority>
@@ -314,15 +313,6 @@ namespace MonoGameTry
         {
             this.X += x;
             this.Y += y;
-        }
-
-        /// <summary>Converts the specified <see cref="T:System.Drawing.Rectangle" /> structure to a <see cref="T:System.Drawing.RectangleF" /> structure.</summary>
-        /// <returns>The <see cref="T:System.Drawing.RectangleF" /> structure that is converted from the specified <see cref="T:System.Drawing.Rectangle" /> structure.</returns>
-        /// <param name="r">The <see cref="T:System.Drawing.Rectangle" /> structure to convert. </param>
-        /// <filterpriority>3</filterpriority>
-        public static implicit operator RectangleF(Rectangle r)
-        {
-            return new RectangleF((float)r.X, (float)r.Y, (float)r.Width, (float)r.Height);
         }
 
         /// <summary>Converts the Location and <see cref="T:System.Drawing.Size" /> of this <see cref="T:System.Drawing.RectangleF" /> to a human-readable string.</summary>

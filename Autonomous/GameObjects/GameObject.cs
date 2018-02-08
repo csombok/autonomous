@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Autonomous.Public;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameTry.Public;
 
 namespace MonoGameTry.GameObjects
 {

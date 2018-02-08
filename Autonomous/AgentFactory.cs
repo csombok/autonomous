@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autonomous.Public;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameTry.GameObjects;
-using MonoGameTry.Public;
 using MonoGameTry.Strategies;
 
 namespace MonoGameTry

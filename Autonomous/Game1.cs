@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameTry.GameObjects;
-using MonoGameTry.Public;
 using MonoGameTry.Strategies;
 
 namespace MonoGameTry
