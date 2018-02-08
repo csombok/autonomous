@@ -8,3 +8,7 @@
 /Autonomous/obj/x86/Debug
 /.vs/Autonomous/v15
 /Autonomous/Autonomous.csproj.user
+/Autonomous.ConcretePlayer2/obj/Debug
+/Autonomous.ConcretePlayer1/obj/Debug
+/Autonomous.Public/bin/Debug
+/Autonomous.Public/obj/Debug

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
-using Microsoft.Xna.Framework;
 
-namespace MonoGameTry
+namespace Autonomous.Public
 {
     /// <summary>Stores a set of four floating-point numbers that represent the location and size of a rectangle. For more advanced region functions, use a <see cref="T:System.Drawing.Region" /> object.</summary>
     /// <filterpriority>1</filterpriority>
