@@ -20,7 +20,6 @@ namespace MonoGameTry
         private Model model;
         private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
         private List<GameObject> gameObjects = new List<GameObject>();
-        private Car player;
         private Road road;
         private AgentFactory _agentFactory;
         private CourseObjectFactory courseObjectFactory;
@@ -28,6 +27,7 @@ namespace MonoGameTry
 
         private bool collision;
         private GameStateManager _gameStateManager = new GameStateManager();
+        private List<Car> _players;
 
         public bool Stopped { get; set; }
 
@@ -68,12 +68,11 @@ namespace MonoGameTry
             _agentFactory.LoadContent(Content);
             courseObjectFactory.LoadContent(Content);
             playerFactory.LoadContent(Content);
-            var players = playerFactory.LoadPlayers(_gameStateManager).ToList();
+            _players = playerFactory.LoadPlayers(_gameStateManager).ToList();
             // TEMP
-            player = players.First();
             road = new Road();
 
-            gameObjects = new List<GameObject>(players) { road };
+            gameObjects = new List<GameObject>(_players) { road };
             gameObjects.AddRange(courseObjectFactory.GenerateBuildings());
             gameObjects.AddRange(courseObjectFactory.GenerateTrees());
             //gameObjects.AddRange(courseObjectFactory.GenerateBarriers());
@@ -82,7 +81,7 @@ namespace MonoGameTry
             gameObjects.AddRange(GenerateInitialCarAgents());
 
             gameObjects.ForEach(go => go.Initialize());
-            var numViewPorts = players.Count();
+            var numViewPorts = _players.Count();
 
             int width1 = (int)(graphics.PreferredBackBufferWidth /numViewPorts);
             int width2 = (int)(graphics.PreferredBackBufferWidth * 0.2f);
@@ -91,7 +90,7 @@ namespace MonoGameTry
 
             for (int i = 0; i < numViewPorts; i++)
             {
-                viewports.Add(new GameObjectViewport(x, 0, width1, height, players.ElementAt(i)));
+                viewports.Add(new GameObjectViewport(x, 0, width1, height, _players.ElementAt(i)));
                 x += width1;
             }
             
@@ -138,13 +137,17 @@ namespace MonoGameTry
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
 
 
-            collision = (gameObjects.OfType<CarAgent>().Any(x => CollisionDetector.IsCollision(x, player)));
-            if (!collision)
+            foreach (var player in _players)
             {
-                if (player.X - player.Width / 2 < -6)
-                    collision = true;
-                if (player.X + player.Width / 2 > 6)
-                    collision = true;
+
+                collision = (gameObjects.OfType<CarAgent>().Any(x => CollisionDetector.IsCollision(x, player)));
+                if (!collision)
+                {
+                    if (player.X - player.Width / 2 < -6)
+                        collision = true;
+                    if (player.X + player.Width / 2 > 6)
+                        collision = true;
+                }
             }
             viewports.ForEach(vp => vp.Update());
             base.Update(gameTime);
