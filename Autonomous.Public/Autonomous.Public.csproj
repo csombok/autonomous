@@ -40,7 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API.cs" />
+    <Compile Include="GameConstants.cs" />
+    <Compile Include="IPlayer.cs" />
+    <Compile Include="GameObjectState.cs" />
+    <Compile Include="GameObjectType.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="PlayerAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RectangleF.cs" />
   </ItemGroup>

@@ -10,4 +10,5 @@
 /Autonomous/Autonomous.csproj.user
 /Autonomous/bin/Windows/AnyCPU/Debug
 /Autonomous/obj/Debug
-/Autonomous/Content/road2.jpg
+/Autonomous.Public/obj/Debug
+/Autonomous.Public/bin/Debug

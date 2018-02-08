@@ -10,18 +10,18 @@ namespace MonoGameTry
 {
     class GameStateManager
     {
-        private ConcurrentDictionary<string, PlayerCommand> playerCommands = new ConcurrentDictionary<string, PlayerCommand>();
+        private ConcurrentDictionary<string, PlayerAction> playerCommands = new ConcurrentDictionary<string, PlayerAction>();
 
-        public void SetPlayerCommand(string playerId, PlayerCommand command)
+        public void SetPlayerCommand(string playerId, PlayerAction action)
         {
-            playerCommands.AddOrUpdate(playerId, command, (tmp1, tmp2) => command);
+            playerCommands.AddOrUpdate(playerId, action, (tmp1, tmp2) => action);
         }
 
-        public PlayerCommand GetPlayerCommand(string playerId)
+        public PlayerAction GetPlayerCommand(string playerId)
         {
-            PlayerCommand command;
-            playerCommands.TryGetValue(playerId, out command);
-            return command ?? new PlayerCommand();
+            PlayerAction action;
+            playerCommands.TryGetValue(playerId, out action);
+            return action ?? new PlayerAction();
         }
 
         public GameState GameState { get; set; }

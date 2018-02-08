@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="GameConstants.cs" />
     <Compile Include="GameStateMapper.cs" />
     <Compile Include="GameObjects\Barrier.cs" />
     <Compile Include="GameObjects\Terrain.cs" />
