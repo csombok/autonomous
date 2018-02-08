@@ -1,6 +1,0 @@
-D:\temp\Autonomous\autonomous\Autonomous.Public\obj\Debug\Autonomous.Public.csprojResolveAssemblyReference.cache
-D:\temp\Autonomous\autonomous\Autonomous.Public\obj\Debug\Autonomous.Public.csproj.CoreCompileInputs.cache
-D:\temp\Autonomous\autonomous\Autonomous.Public\bin\Debug\Autonomous.Public.dll
-D:\temp\Autonomous\autonomous\Autonomous.Public\bin\Debug\Autonomous.Public.pdb
-D:\temp\Autonomous\autonomous\Autonomous.Public\obj\Debug\Autonomous.Public.dll
-D:\temp\Autonomous\autonomous\Autonomous.Public\obj\Debug\Autonomous.Public.pdb
