@@ -24,7 +24,7 @@ namespace MonoGameTry.GameObjects
 
         public static void LoadContent(ContentManager content, GraphicsDeviceManager graphics)
         {
-            _texture = content.Load<Texture2D>("road_t");
+            _texture = content.Load<Texture2D>("road");
 
             _quadEffect = new BasicEffect(graphics.GraphicsDevice);
             _quadEffect.EnableDefaultLighting();

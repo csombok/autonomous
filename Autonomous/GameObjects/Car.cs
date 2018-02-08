@@ -15,6 +15,7 @@ namespace MonoGameTry.GameObjects
             Model = model;
             Width = 1.7f;
             ModelRotate = 180;
+            X = x;
             MaxVY = GameConstants.PlayerMaxSpeed;
             Id = playerId;
             Type = GameObjectType.Player;

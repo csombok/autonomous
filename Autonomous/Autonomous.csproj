@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />
+    <Compile Include="CourseObjectFactory.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameStateMapper.cs" />
     <Compile Include="GameObjects\Barrier.cs" />
@@ -59,6 +60,9 @@
     <Compile Include="GameStateInternal.cs" />
     <Compile Include="GameStateManager.cs" />
     <Compile Include="PlayerGameLoop.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="PlayerFactory.cs" />
+    <Compile Include="Public\API.cs" />
     <Compile Include="Strategies\IControlStrategy.cs" />
     <Compile Include="Strategies\OvertakingStrategy.cs" />
     <Compile Include="Strategies\KeepSafetyDistance.cs" />
@@ -75,6 +79,7 @@
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
