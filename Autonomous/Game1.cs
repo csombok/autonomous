@@ -63,16 +63,17 @@ namespace MonoGameTry
 
             Road.LoadContent(Content, graphics);
 
-            player = new Car(model, Guid.NewGuid().ToString(), _gameStateManager);
+            
 
             _agentFactory.LoadContent(Content);
             courseObjectFactory.LoadContent(Content);
             playerFactory.LoadContent(Content);
-            var players = playerFactory.LoadPlayers(_gameStateManager);
-
+            var players = playerFactory.LoadPlayers(_gameStateManager).ToList();
+            // TEMP
+            player = players.First();
             road = new Road();
 
-            gameObjects = new List<GameObject>(players) { road, player };
+            gameObjects = new List<GameObject>(players) { road };
             gameObjects.AddRange(courseObjectFactory.GenerateBuildings());
             gameObjects.AddRange(courseObjectFactory.GenerateTrees());
             //gameObjects.AddRange(courseObjectFactory.GenerateBarriers());
@@ -81,15 +82,21 @@ namespace MonoGameTry
             gameObjects.AddRange(GenerateInitialCarAgents());
 
             gameObjects.ForEach(go => go.Initialize());
-            int width1 = (int)(graphics.PreferredBackBufferWidth * 0.8f);
+            var numViewPorts = players.Count();
+
+            int width1 = (int)(graphics.PreferredBackBufferWidth /numViewPorts);
             int width2 = (int)(graphics.PreferredBackBufferWidth * 0.2f);
             int height = graphics.PreferredBackBufferHeight;
             int x = 0;
 
-            viewports.Add(new GameObjectViewport(x, 0, width1, height, player));
-            x += width1;
-            viewports.Add(new BirdsEyeViewport(x, 0, width2, height, player));
-            PlayerGameLoop.StartGameLoop(new HumanPlayer(), player.Id, _gameStateManager);
+            for (int i = 0; i < numViewPorts; i++)
+            {
+                viewports.Add(new GameObjectViewport(x, 0, width1, height, players.ElementAt(i)));
+                x += width1;
+            }
+            
+            
+            // viewports.Add(new BirdsEyeViewport(x, 0, width2, height, player));
         }
 
         private IEnumerable<GameObject> GenerateInitialCarAgents()

@@ -44,7 +44,9 @@ namespace MonoGameTry
             {
                 var model = i % 2 == 0 ? lamborginiModel : porsheModel;
                 var x = 3f + i * 2f;
-                yield return new Car(model, player.Metadata.PlayerName, gameStateManager, x);
+                string id = Guid.NewGuid().ToString();
+                PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
+                yield return new Car(model, id, gameStateManager, x);
                 i++;
             }
 

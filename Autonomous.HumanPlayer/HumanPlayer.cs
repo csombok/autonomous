@@ -1,8 +1,11 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using System.ComponentModel.Composition;
+using Microsoft.Xna.Framework.Input;
 using Autonomous.Public;
 
 namespace Autonomous.HumanPlayer
 {
+    [Export(typeof(IPlayer))]
+    [ExportMetadata("PlayerName", "Human")]
     public class HumanPlayer : IPlayer
     {
         public string TeamName => "Human";
