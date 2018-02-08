@@ -24,6 +24,7 @@ namespace MonoGameTry
         private Road road;
         private Texture2D metal;
         private AgentFactory _agentFactory;
+        private CourseObjectFactory courseObjectFactory;
 
         private BuildingA building;
         private bool collision;
@@ -34,6 +35,7 @@ namespace MonoGameTry
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             _agentFactory = new AgentFactory(this);
+            courseObjectFactory = new CourseObjectFactory();
         }
 
         /// <summary>
@@ -61,15 +63,16 @@ namespace MonoGameTry
             player = new Car(model);
 
             _agentFactory.LoadContent(Content);
+            courseObjectFactory.LoadContent(Content);
 
             road = new Road();
 
             gameObjects = new List<GameObject>() { road, player };
-            gameObjects.AddRange(GenerateBuildings());
-            gameObjects.AddRange(GenerateTrees());
-            gameObjects.AddRange(GenerateBarriers());
-            gameObjects.AddRange(GenerateCity());
-            gameObjects.AddRange(GenerateTerrain());
+            gameObjects.AddRange(courseObjectFactory.GenerateBuildings());
+            gameObjects.AddRange(courseObjectFactory.GenerateTrees());
+            //gameObjects.AddRange(courseObjectFactory.GenerateBarriers());
+            gameObjects.AddRange(courseObjectFactory.GenerateCity());
+            gameObjects.AddRange(courseObjectFactory.GenerateTerrain());
             gameObjects.AddRange(GenerateInitialCarAgents());
 
             gameObjects.ForEach(go => go.Initialize());
@@ -83,72 +86,6 @@ namespace MonoGameTry
             viewports.Add(new GameObjectViewport(x, 0, width1, height, player));
             x += width1;
             viewports.Add(new BirdsEyeViewport(x, 0, width2, height, player));
-        }
-
-        private IEnumerable<Tree> GenerateTrees()
-        {
-            var model = Content.Load<Model>("Tree\\fir");
-
-            float offset = 180;
-            for (int i = 0; i < 200; i++)
-            {
-                float x = i % 4 == 0 ? 8 : 9;
-                float widthLeft = i % 2 == 0 ? 4f : 3.4f;
-                float widthRight = i % 3 == 0 ? 3.4f : 4.5f;
-                if(i < 30)
-                {
-                    widthLeft += 2f;
-                    widthRight += 2f;
-                }
-                yield return new Tree(model, x, i * 20f + offset, widthLeft);
-                yield return new Tree(model, -x, i * 20f + offset, widthRight);
-            }
-        }
-
-        private IEnumerable<Barrier> GenerateBarriers()
-        {
-            var model = Content.Load<Model>("barrier");
-            float offset = 600;
-            for (int i = 0; i < 150; i++)
-            {
-                yield return new Barrier(model, 6.3f, i * 1.8f + offset);
-                yield return new Barrier(model, -6.3f, i * 1.8f + offset);
-            }
-        }
-
-        private IEnumerable<City> GenerateCity()
-        {
-            var model = Content.Load<Model>("City/The City");
-            float offset = 800;
-            for (int i = 0; i < 10; i++)
-            {
-                yield return new City(model, 0f, i * 450 + offset);             
-            }
-        }
-
-        private IEnumerable<Terrain> GenerateTerrain()
-        {
-            var model = Content.Load<Model>("mountain/mountains");
-            for (int i = 0; i < 50; i++)
-            {
-                yield return new Terrain(model, 8f, i * 200);
-            }
-        }
-
-        private IEnumerable<BuildingA> GenerateBuildings()
-        {
-            var buildingModel = Content.Load<Model>("BuildingA");
-            for (int i = 0; i < 100; i++)
-            {
-                float offset = 500;
-                float roatationLeft = i % 3 == 0 ? 90 : 180;
-                float roatationRight = i % 2 == 0 ? 90 : 180;
-                float x = i % 4 == 0 ? 11 : 13;
-                float widthLeft = i % 2 == 0 ? 6f : 7f;
-                float widthRight = i % 3 == 0 ? 7f : 6f;
-                yield return new BuildingA(buildingModel, x, i * 30f + offset, roatationLeft);
-                yield return new BuildingA(buildingModel, -x, i * 30f + offset, roatationRight);
-            }
         }
 
         private IEnumerable<GameObject> GenerateInitialCarAgents()
