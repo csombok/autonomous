@@ -13,8 +13,11 @@ namespace MonoGameTry.Strategies
         public bool IsInLane { get; set; }
         public bool IsInBrakeZone { get; set; }
         public bool IsInCrashZone { get; set; }
+
+        public bool IsFrontCarOverlapping { get; set; }
         public bool IsBackCarInCrashZone { get; set; }
         public float CenterX;
+        public float FrontCarSpeed { get; set; }
     }
 
     class OvertakingStrategy : IControlStrategy
@@ -46,7 +49,9 @@ namespace MonoGameTry.Strategies
         private ControlState GetControlState(int targetLane, LaneInfo[] lanes)
         {
             float targetSpeed = targetLane == _preferredLane ? _desiredSpeed : _desiredSpeed * 1.1f;
-            bool brake = lanes[targetLane].IsInBrakeZone || (lanes[0].IsInLane && lanes[0].IsInCrashZone) || (lanes[1].IsInLane && lanes[1].IsInCrashZone);
+            bool brake = lanes[targetLane].IsInBrakeZone || 
+                (lanes[0].IsInLane && lanes[0].IsInCrashZone && lanes[0].IsFrontCarOverlapping) || 
+                (lanes[1].IsInLane && lanes[1].IsInCrashZone && lanes[1].IsFrontCarOverlapping);
             float acceleration = 0.0f;
             if (brake || GameObject.VY > targetSpeed)
                 acceleration = -1f;
@@ -71,8 +76,8 @@ namespace MonoGameTry.Strategies
 
         private LaneInfo GetLaneInfo(int laneIndex)      
         {
-            float width = GameConstants.LaneWidth;
-            float centerX = laneIndex == 0 ? width * 1.5f : width / 2;
+            float width = GameConstants.LaneWidth*0.9f;
+            float centerX = laneIndex == 0 ? width * 1.6f : width / 2;
 
             if (GameObject.OppositeDirection)
                 centerX = -centerX;
@@ -83,6 +88,8 @@ namespace MonoGameTry.Strategies
             float selfDistancveToStop = CalculateDistanceToStop(GameObject.VY, GameConstants.PlayerDeceleration);
             bool frontBrake = false;
             bool frontCrash = false;
+            bool isCarOverlapping = false;
+
             if (carFront != null)
             {
                 float otherSpeed = carFront.OppositeDirection == GameObject.OppositeDirection ? carFront.VY : 0; //  -go.VY;
@@ -93,9 +100,11 @@ namespace MonoGameTry.Strategies
                 if (distanceBetweenCars < selfDistancveToStop - distanceToStop)
                     frontCrash = true;
 
-                float plusSafeDistance = 50f + GameObject.VY-carFront.VY;
+                float plusSafeDistance = 20f + GameObject.VY-carFront.VY;
                 if (distanceBetweenCars < selfDistancveToStop - distanceToStop + plusSafeDistance)
                     frontBrake = true;
+
+                isCarOverlapping = IsOverlappingHorizontally(carFront);
             }
 
             bool backCrash = false;
@@ -129,8 +138,19 @@ namespace MonoGameTry.Strategies
                 IsBackCarInCrashZone = backCrash,
                 IsInBrakeZone = frontBrake,
                 IsInCrashZone = frontCrash,
-                IsInLane = IsInLane(laneIndex, GameObject)
+                IsInLane = IsInLane(laneIndex, GameObject),
+                IsFrontCarOverlapping = isCarOverlapping,
+                FrontCarSpeed = carFront?.VY ?? float.NaN
             };
+        }
+        private bool IsOverlappingHorizontally(GameObject second)
+        {
+            var r1 = GameObject.BoundingBox;
+            var r2 = second.BoundingBox;
+            return Between(r1.Left, r1.Right, r2.Left) ||
+                   Between(r1.Left, r1.Right, r2.Right) ||
+                   Between(r2.Left, r2.Right, r1.Right) ||
+                   Between(r2.Left, r2.Right, r1.Left);
         }
 
         private int GetTargetLane(LaneInfo[] laneInfos)
@@ -160,10 +180,14 @@ namespace MonoGameTry.Strategies
             if (preferredLaneInfo.IsInCrashZone)
                 return otherLane;
 
-            if (preferredLaneInfo.IsInBrakeZone && otherLaneInfo.IsInBrakeZone)
+            if (preferredLaneInfo.IsInBrakeZone && otherLaneInfo.IsInBrakeZone && preferredLaneInfo.FrontCarSpeed >= otherLaneInfo.FrontCarSpeed)
                 return _preferredLane;
 
-            throw  new InvalidOperationException("State is not handled");
+            if (preferredLaneInfo.IsInBrakeZone && otherLaneInfo.IsInBrakeZone &&
+                otherLaneInfo.FrontCarSpeed >= preferredLaneInfo.FrontCarSpeed)
+                return otherLane;
+
+                throw  new InvalidOperationException("State is not handled");
 
         }
 
@@ -188,8 +212,8 @@ namespace MonoGameTry.Strategies
 
         private bool IsInLane(int laneIndex, GameObject second)
         {
-            float min = laneIndex == 0 ? GameConstants.LaneWidth : 0;
-            float max = laneIndex == 0 ? 2 * GameConstants.LaneWidth : GameConstants.LaneWidth;
+            float min = laneIndex == 0 ? GameConstants.LaneWidth*1.1f : GameConstants.LaneWidth*0.1f;
+            float max = laneIndex == 0 ? GameConstants.LaneWidth*1.9f : GameConstants.LaneWidth*0.9f;
 
             if (GameObject.OppositeDirection)
             {
