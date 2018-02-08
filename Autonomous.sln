@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous", "Autonomous\Au
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous.Public", "Autonomous.Public\Autonomous.Public.csproj", "{08EF91C4-856E-4CD8-A0DD-D962FB4A27D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous.HumanPlayer", "Autonomous.HumanPlayer\Autonomous.HumanPlayer.csproj", "{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{08EF91C4-856E-4CD8-A0DD-D962FB4A27D1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{08EF91C4-856E-4CD8-A0DD-D962FB4A27D1}.Release|x86.ActiveCfg = Release|Any CPU
 		{08EF91C4-856E-4CD8-A0DD-D962FB4A27D1}.Release|x86.Build.0 = Release|Any CPU
+		{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}.Debug|x86.Build.0 = Debug|Any CPU
+		{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

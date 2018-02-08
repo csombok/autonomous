@@ -58,7 +58,6 @@
     <Compile Include="GameObjects\Road.cs" />
     <Compile Include="GameStateInternal.cs" />
     <Compile Include="GameStateManager.cs" />
-    <Compile Include="HumanPlayer.cs" />
     <Compile Include="PlayerGameLoop.cs" />
     <Compile Include="Strategies\IControlStrategy.cs" />
     <Compile Include="Strategies\OvertakingStrategy.cs" />
@@ -87,6 +86,10 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Autonomous.HumanPlayer\Autonomous.HumanPlayer.csproj">
+      <Project>{C4C8D5FF-2CF1-4C18-91B2-5A28D882BB4F}</Project>
+      <Name>Autonomous.HumanPlayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Autonomous.Public\Autonomous.Public.csproj">
       <Project>{08ef91c4-856e-4cd8-a0dd-d962fb4a27d1}</Project>
       <Name>Autonomous.Public</Name>
