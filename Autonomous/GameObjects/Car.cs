@@ -6,31 +6,39 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGameTry.Public;
 
 namespace MonoGameTry.GameObjects
 {
-    public class Car : GameObject
-    {        
-        public Car(Model model)
+    internal class Car : GameObject
+    {
+        private readonly GameStateManager _gameStateManager;
+
+        public Car(Model model, string playerId, GameStateManager gameStateManager)
         {
+            _gameStateManager = gameStateManager;
             Model = model;
             Width = 1.7f;
             ModelRotate = 180;
             MaxVY = GameConstants.PlayerMaxSpeed;
+            Id = playerId;
+            Type = GameObjectType.Player;
         }
 
         public override void Update(TimeSpan elapsed)
         {
+            var command = _gameStateManager.GetPlayerCommand(Id);
             AccelerationY = 0;
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                AccelerationY = GameConstants.PlayerAcceleration;
+            
+            if (command.Acceleration > 0)
+                AccelerationY = Math.Min(command.Acceleration,1) * GameConstants.PlayerAcceleration;
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                AccelerationY = -GameConstants.PlayerDeceleration;
+                AccelerationY = Math.Max(command.Acceleration, -1) * GameConstants.PlayerDeceleration;
 
             VX = 0;
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            if (command.MoveLeft)
                 VX -= GameConstants.PlayerHoriztontalSpeed;
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            if (command.MoveRight)
                 VX += GameConstants.PlayerHoriztontalSpeed;
 
             base.Update(elapsed);

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameTry.GameObjects;
+using MonoGameTry.Public;
 using MonoGameTry.Strategies;
 
 namespace MonoGameTry
@@ -34,7 +35,7 @@ namespace MonoGameTry
         const float laneWidth = GameConstants.LaneWidth;
         public CarAgent CreateBarrier(int lane, bool opposite, float y)
         {
-            var barrier = new CarAgent(_barrierModel, 90, laneWidth * 0.8f, opposite, _gameStateProvider, null)
+            var barrier = new CarAgent(_barrierModel, 90, laneWidth * 0.8f, opposite, GameObjectType.Roadblock, _gameStateProvider, null)
             {
                 VY = 0,
                 MaxVY = 0,
@@ -70,7 +71,7 @@ namespace MonoGameTry
 
         private CarAgent CreateVehicleAgent(Model model, int lane, bool opposite, float y, float vanWidth, float v, float rotation)
         {
-            var van = new CarAgent(model, rotation, vanWidth, opposite, _gameStateProvider,
+            var van = new CarAgent(model, rotation, vanWidth, opposite, GameObjectType.Car, _gameStateProvider,
                 new OvertakingStrategy(v, lane, _gameStateProvider))
             {
                 VY = v,

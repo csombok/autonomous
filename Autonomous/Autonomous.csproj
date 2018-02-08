@@ -44,6 +44,7 @@
     <Compile Include="AgentFactory.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameConstants.cs" />
+    <Compile Include="GameStateMapper.cs" />
     <Compile Include="GameObjects\Barrier.cs" />
     <Compile Include="GameObjects\Terrain.cs" />
     <Compile Include="GameObjects\City.cs" />
@@ -55,7 +56,9 @@
     <Compile Include="GameObjects\CollisionDetector.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Road.cs" />
-    <Compile Include="GameState.cs" />
+    <Compile Include="GameStateInternal.cs" />
+    <Compile Include="GameStateManager.cs" />
+    <Compile Include="PlayerGameLoop.cs" />
     <Compile Include="Public\API.cs" />
     <Compile Include="RectangleF.cs" />
     <Compile Include="Strategies\IControlStrategy.cs" />

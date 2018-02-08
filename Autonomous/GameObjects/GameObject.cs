@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGameTry.Public;
 
 namespace MonoGameTry.GameObjects
 {
@@ -22,6 +23,10 @@ namespace MonoGameTry.GameObjects
         public float MaxVY { get; set; }
 
         public float Width { get; protected set; }
+
+        public string Id { get; protected set; }
+
+        public GameObjectType Type { get; protected set; }
 
         public RectangleF BoundingBox
         {

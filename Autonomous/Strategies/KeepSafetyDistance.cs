@@ -17,7 +17,7 @@ namespace MonoGameTry.Strategies
         {
             if (GameObject == null)
                 throw new InvalidOperationException("GameObject not set");
-            var go = GetClosestObjectInFront(_gameStateProvider.GameState.GameObjects);
+            var go = GetClosestObjectInFront(_gameStateProvider.GameStateInternal.GameObjects);
 
             if (go != null)
             {

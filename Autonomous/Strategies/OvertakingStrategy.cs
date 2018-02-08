@@ -49,7 +49,7 @@ namespace MonoGameTry.Strategies
         private ControlState GetControlState(int targetLane, LaneInfo[] lanes)
         {
             float targetSpeed = targetLane == _preferredLane ? _desiredSpeed : _desiredSpeed * 1.1f;
-            bool brake = lanes[targetLane].IsInBrakeZone || 
+            bool brake = (lanes[targetLane].IsInBrakeZone && lanes[targetLane].FrontCarSpeed < GameObject.VY) || 
                 (lanes[0].IsInLane && lanes[0].IsInCrashZone && lanes[0].IsFrontCarOverlapping) || 
                 (lanes[1].IsInLane && lanes[1].IsInCrashZone && lanes[1].IsFrontCarOverlapping);
             float acceleration = 0.0f;
@@ -82,8 +82,8 @@ namespace MonoGameTry.Strategies
             if (GameObject.OppositeDirection)
                 centerX = -centerX;
 
-            var carFront = GetClosestObjectInLaneFront(_gameStateProvider.GameState.GameObjects, laneIndex);
-            var carBack = GetClosestObjectInLaneBack(_gameStateProvider.GameState.GameObjects, laneIndex);
+            var carFront = GetClosestObjectInLaneFront(_gameStateProvider.GameStateInternal.GameObjects, laneIndex);
+            var carBack = GetClosestObjectInLaneBack(_gameStateProvider.GameStateInternal.GameObjects, laneIndex);
 
             float selfDistancveToStop = CalculateDistanceToStop(GameObject.VY, GameConstants.PlayerDeceleration);
             bool frontBrake = false;

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameTry.GameObjects;
+using MonoGameTry.Public;
 using MonoGameTry.Strategies;
 
 namespace MonoGameTry
@@ -27,6 +28,9 @@ namespace MonoGameTry
 
         private BuildingA building;
         private bool collision;
+        private GameStateManager _gameStateManager = new GameStateManager();
+
+        public bool Stopped { get; set; }
 
 
         public Game1()
@@ -58,7 +62,7 @@ namespace MonoGameTry
 
             Road.LoadContent(Content, graphics);
 
-            player = new Car(model);
+            player = new Car(model, Guid.NewGuid().ToString(), _gameStateManager);
 
             _agentFactory.LoadContent(Content);
 
@@ -83,6 +87,7 @@ namespace MonoGameTry
             viewports.Add(new GameObjectViewport(x, 0, width1, height, player));
             x += width1;
             viewports.Add(new BirdsEyeViewport(x, 0, width2, height, player));
+            PlayerGameLoop.StartGameLoop(new HumanPlayer(), player.Id, _gameStateManager);
         }
 
         private IEnumerable<Tree> GenerateTrees()
@@ -181,6 +186,10 @@ namespace MonoGameTry
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            _gameStateManager.GameState = GameStateMapper.GameStateToPublic(GameStateInternal);
+            if (Stopped)
+                return;
+            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -225,9 +234,9 @@ namespace MonoGameTry
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice));
         }
 
-        public GameState GameState
+        public GameStateInternal GameStateInternal
         {
-            get => new GameState() { GameObjects = this.gameObjects.Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)) };
+            get => new GameStateInternal() { GameObjects = this.gameObjects.Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)), Stopped = Stopped};
         }
     }
 }

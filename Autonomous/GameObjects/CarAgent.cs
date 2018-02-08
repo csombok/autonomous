@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGameTry.Public;
 using MonoGameTry.Strategies;
 
 namespace MonoGameTry.GameObjects
@@ -15,7 +16,7 @@ namespace MonoGameTry.GameObjects
         private IGameStateProvider _gameStateProvider;
         private IControlStrategy _strategy;
 
-        public CarAgent(Model model, float modelRotate, float width, bool opposite, IGameStateProvider gameStateProvider, IControlStrategy drivingStrategy)
+        public CarAgent(Model model, float modelRotate, float width, bool opposite, GameObjectType type,  IGameStateProvider gameStateProvider, IControlStrategy drivingStrategy)
         {
             _gameStateProvider = gameStateProvider;
             Model = model;
@@ -27,6 +28,8 @@ namespace MonoGameTry.GameObjects
                 _strategy = drivingStrategy;
                 _strategy.GameObject = this;
             }
+            Type = type;
+            Id = Guid.NewGuid().ToString();
         }
 
         public override void Update(TimeSpan elapsed)

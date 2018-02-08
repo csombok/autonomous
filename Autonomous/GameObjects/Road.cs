@@ -16,14 +16,14 @@ namespace MonoGameTry.GameObjects
         private static Quad _quad;
 
         private const float Width = GameConstants.RoadWidth;
-        private const float QoadHeight = Width * 2;
+        private const float QoadHeight = Width;
         public Road()
         {
         }
 
         public static void LoadContent(ContentManager content, GraphicsDeviceManager graphics)
         {
-            _texture = content.Load<Texture2D>("road_t");
+            _texture = content.Load<Texture2D>("road2");
 
             _quadEffect = new BasicEffect(graphics.GraphicsDevice);
             _quadEffect.EnableDefaultLighting();
