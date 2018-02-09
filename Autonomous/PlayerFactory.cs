@@ -55,7 +55,7 @@ namespace MonoGameTry
             foreach (var player in this.players)
             {
                 var model = i % 2 == 0 ? lamborginiModel : porsheModel;
-                var x = 3f + i * 2f;
+                var x = GameConstants.LaneWidth *1.5f - i * GameConstants.LaneWidth;
                 string id = Guid.NewGuid().ToString();
                 PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
                 yield return new Car(model, id, gameStateManager, x);
