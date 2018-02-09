@@ -125,11 +125,11 @@ namespace MonoGameTry
 
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
 
-
+            collision = false;
             foreach (var player in _players)
             {
 
-                collision = (gameObjects.OfType<CarAgent>().Any(x => CollisionDetector.IsCollision(x, player)));
+                collision |= (gameObjects.OfType<CarAgent>().Any(x => CollisionDetector.IsCollision(x, player)));
                 if (!collision)
                 {
                     if (player.X - player.Width / 2 < -6)
