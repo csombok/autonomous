@@ -82,21 +82,9 @@ namespace MonoGameTry
             gameObjects.AddRange(GenerateInitialCarAgents());
 
             gameObjects.ForEach(go => go.Initialize());
-            var numViewPorts = _players.Count();
 
-            int width1 = (int)(graphics.PreferredBackBufferWidth /numViewPorts);
-            int width2 = (int)(graphics.PreferredBackBufferWidth * 0.2f);
-            int height = graphics.PreferredBackBufferHeight;
-            int x = 0;
-
-            for (int i = 0; i < numViewPorts; i++)
-            {
-                viewports.Add(new GameObjectViewport(x, 0, width1, height, _players.ElementAt(i)));
-                x += width1;
-            }
-            
-            
-            // viewports.Add(new BirdsEyeViewport(x, 0, width2, height, player));
+            viewports = ViewportFactory.CreateViewPorts(_players, graphics.PreferredBackBufferWidth,
+                graphics.PreferredBackBufferHeight).ToList();
         }
 
         private IEnumerable<GameObject> GenerateInitialCarAgents()

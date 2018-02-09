@@ -66,6 +66,7 @@
     <Compile Include="Strategies\OvertakingStrategy.cs" />
     <Compile Include="Strategies\KeepSafetyDistance.cs" />
     <Compile Include="Strategies\ControlState.cs" />
+    <Compile Include="ViewportFactory.cs" />
     <Compile Include="Viewport\BirdsEyeViewport.cs" />
     <Compile Include="Viewport\GameObjectViewport.cs" />
     <Compile Include="Program.cs" />
