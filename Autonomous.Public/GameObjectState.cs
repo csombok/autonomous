@@ -47,6 +47,16 @@
         /// </summary>
         public string Id { get; private set; }
 
+        public float MaximumAcceleration =>
+            GameObjectType == GameObjectType.Car || GameObjectType == GameObjectType.Player
+                ? GameConstants.PlayerAcceleration
+                : 0;
+
+        public float MaximumDeceleration =>
+            GameObjectType == GameObjectType.Car || GameObjectType == GameObjectType.Player
+                ? GameConstants.PlayerDeceleration
+                : 0;
+
         // TODO Damage, score
     }
 }
