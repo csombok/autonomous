@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous.ConcretePlayer1"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous.ConcretePlayer2", "Autonomous.ConcretePlayer2\Autonomous.ConcretePlayer2.csproj", "{17D5C580-0C86-42FB-AF5A-780A3046DF44}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous.SamplePlayer", "Autonomous.SamplePlayer\Autonomous.SamplePlayer.csproj", "{14813A42-35CC-4647-BEC2-7049FFEDED0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,14 @@ Global
 		{17D5C580-0C86-42FB-AF5A-780A3046DF44}.Release|Any CPU.Build.0 = Release|Any CPU
 		{17D5C580-0C86-42FB-AF5A-780A3046DF44}.Release|x86.ActiveCfg = Release|Any CPU
 		{17D5C580-0C86-42FB-AF5A-780A3046DF44}.Release|x86.Build.0 = Release|Any CPU
+		{14813A42-35CC-4647-BEC2-7049FFEDED0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14813A42-35CC-4647-BEC2-7049FFEDED0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14813A42-35CC-4647-BEC2-7049FFEDED0C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{14813A42-35CC-4647-BEC2-7049FFEDED0C}.Debug|x86.Build.0 = Debug|Any CPU
+		{14813A42-35CC-4647-BEC2-7049FFEDED0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14813A42-35CC-4647-BEC2-7049FFEDED0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14813A42-35CC-4647-BEC2-7049FFEDED0C}.Release|x86.ActiveCfg = Release|Any CPU
+		{14813A42-35CC-4647-BEC2-7049FFEDED0C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

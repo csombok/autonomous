@@ -101,7 +101,7 @@ namespace MonoGameTry
 
         private IEnumerable<GameObject> GenerateInitialCarAgents()
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 yield return _agentFactory.CreateBarrier(0, false, i * 1000 + 50);
                 yield return _agentFactory.CreateVan(0, false, i * 200 + 50);

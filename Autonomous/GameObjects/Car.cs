@@ -28,7 +28,7 @@ namespace MonoGameTry.GameObjects
             
             if (command.Acceleration > 0)
                 AccelerationY = Math.Min(command.Acceleration,1) * GameConstants.PlayerAcceleration;
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            else
                 AccelerationY = Math.Max(command.Acceleration, -1) * GameConstants.PlayerDeceleration;
 
             VX = 0;

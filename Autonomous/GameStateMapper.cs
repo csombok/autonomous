@@ -17,7 +17,7 @@ namespace MonoGameTry
         private static GameObjectState GameObjectStateToPublic(GameObject gameObject)
         {
             return new GameObjectState(gameObject.Id, gameObject.Type, gameObject.BoundingBox, gameObject.VX,
-                gameObject.VY);
+               gameObject.OppositeDirection ? -gameObject.VY : gameObject.VY);
         }
     }
 }
