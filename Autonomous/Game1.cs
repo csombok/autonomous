@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Configuration;
-using Autonomous.HumanPlayer;
+using Autonomous.Public;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameTry.GameObjects;
-using MonoGameTry.Strategies;
 
 namespace MonoGameTry
 {
@@ -29,6 +27,7 @@ namespace MonoGameTry
         private bool collision;
         private GameStateManager _gameStateManager = new GameStateManager();
         private List<Car> _players;
+        private TimeSpan lastUpdate;
 
         public bool Stopped { get; set; }
 
@@ -50,7 +49,7 @@ namespace MonoGameTry
         /// </summary>
         protected override void Initialize()
         {
-            base.Initialize();            
+            base.Initialize();
         }
 
         /// <summary>
@@ -63,8 +62,6 @@ namespace MonoGameTry
 
             Road.LoadContent(Content, graphics);
 
-            
-
             _agentFactory.LoadContent(Content);
             courseObjectFactory.LoadContent(Content);
             playerFactory.LoadContent(Content);
@@ -74,16 +71,12 @@ namespace MonoGameTry
             road = new Road();
 
             gameObjects = new List<GameObject>(_players) { road };
-            gameObjects.AddRange(courseObjectFactory.GenerateBuildings());
-            gameObjects.AddRange(courseObjectFactory.GenerateTrees());
-            //gameObjects.AddRange(courseObjectFactory.GenerateBarriers());
-            gameObjects.AddRange(courseObjectFactory.GenerateCity());
-            gameObjects.AddRange(courseObjectFactory.GenerateTerrain());
+            gameObjects.AddRange(courseObjectFactory.GenerateCourseArea());
             gameObjects.AddRange(GenerateInitialCarAgents());
-
             gameObjects.ForEach(go => go.Initialize());
 
-            viewports = ViewportFactory.CreateViewPorts(_players, graphics.PreferredBackBufferWidth,
+            viewports = ViewportFactory.CreateViewPorts(_players, 
+                graphics.PreferredBackBufferWidth,
                 graphics.PreferredBackBufferHeight).ToList();
         }
 
@@ -117,18 +110,25 @@ namespace MonoGameTry
         protected override void Update(GameTime gameTime)
         {
             _gameStateManager.GameState = GameStateMapper.GameStateToPublic(GameStateInternal);
+
             if (Stopped)
                 return;
-            
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
+            //UpdateGameCourse(gameTime);
+            CheckCollision();
+            viewports.ForEach(vp => vp.Update());
+            base.Update(gameTime);
+        }
 
+        private void CheckCollision()
+        {
             collision = false;
             foreach (var player in _players)
             {
-
                 collision |= (gameObjects.OfType<CarAgent>().Any(x => CollisionDetector.IsCollision(x, player)));
                 if (!collision)
                 {
@@ -138,8 +138,37 @@ namespace MonoGameTry
                         collision = true;
                 }
             }
-            viewports.ForEach(vp => vp.Update());
-            base.Update(gameTime);
+        }
+
+        private void UpdateGameCourse(GameTime gameTime)
+        {
+            if ((gameTime.TotalGameTime - lastUpdate).TotalMilliseconds < GameConstants.GameCourseUpdateFrequency)           
+                return;                
+
+            var newObjects = courseObjectFactory
+                .GenerateCourseArea(GameStateInternal.FirstPlayerPosition)
+                .ToList();
+
+            gameObjects.AddRange(newObjects);
+            newObjects.ForEach(go => go.Initialize());
+
+            var firstCarPosition = GameStateInternal.FirstPlayerPosition;
+            var lastCarPosition = GameStateInternal.LastPlayerPosition;
+
+            const float dinstanceToRemove = 50f;
+
+            var objectsToRemove = gameObjects
+                .Where(go => !(go.GetType() == typeof(CarAgent) && go.VY >= 0) &&
+                             go.GetType() != typeof(Road) &&
+                             go.GetType() != typeof(Car))
+                .Where(go =>
+                    go.BoundingBox.Top <= firstCarPosition && Math.Abs(go.BoundingBox.Top - firstCarPosition) > dinstanceToRemove ||
+                    go.BoundingBox.Top <= lastCarPosition && Math.Abs(go.BoundingBox.Top - lastCarPosition) > dinstanceToRemove
+                ).ToList();
+
+            objectsToRemove.ForEach(go => gameObjects.Remove(go));
+
+            lastUpdate = gameTime.ElapsedGameTime;
         }
 
         /// <summary>
@@ -151,7 +180,6 @@ namespace MonoGameTry
             GraphicsDevice.Clear(collision ? Color.Red : Color.CornflowerBlue);
 
             Viewport original = graphics.GraphicsDevice.Viewport;
-
             foreach (var viewport in viewports)
             {
                 graphics.GraphicsDevice.Viewport = viewport.Viewport;
@@ -166,12 +194,13 @@ namespace MonoGameTry
         private void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
             //dashboard.DrawPlayerScores(GraphicsDevice, playerFactory.PlayersInfo);
+
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice));
         }
 
         public GameStateInternal GameStateInternal
         {
-            get => new GameStateInternal() { GameObjects = this.gameObjects.Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)), Stopped = Stopped};
+            get => new GameStateInternal() { GameObjects = this.gameObjects.Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)), Stopped = Stopped };
         }
     }
 }

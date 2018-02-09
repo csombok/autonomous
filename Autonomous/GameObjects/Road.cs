@@ -18,9 +18,7 @@ namespace MonoGameTry.GameObjects
 
         private const float Width = GameConstants.RoadWidth;
         private const float QoadHeight = Width;
-        public Road()
-        {
-        }
+
 
         public static void LoadContent(ContentManager content, GraphicsDeviceManager graphics)
         {
@@ -42,7 +40,7 @@ namespace MonoGameTry.GameObjects
 
         public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 500; i++)
             {
                 var world = Matrix.CreateTranslation(new Vector3(0, 0, -i * QoadHeight));
                 DrawQuad(world, view, projection, device);

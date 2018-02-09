@@ -1,6 +1,8 @@
 ﻿using System;
+using System.CodeDom;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using MonoGameTry.GameObjects;
 using MonoGameTry.Strategies;
@@ -14,10 +16,7 @@ namespace MonoGameTry
         private Model cityModel;
         private Model terrainModel;
         private Model buildingModel;
-
-        public CourseObjectFactory()
-        {
-        }
+        private readonly Dictionary<Type, float> lastObjectPositions = new Dictionary<Type, float>();
 
         public void LoadContent(ContentManager content)
         {
@@ -28,64 +27,151 @@ namespace MonoGameTry
             buildingModel = content.Load<Model>("BuildingA");
         }
 
-        public IEnumerable<Tree> GenerateTrees()
+        public IEnumerable<GameObject> GenerateCourseArea(float positionY = 0)
         {
-            float offset = 180;
-            for (int i = 0; i < 200; i++)
+            var newObjects = new List<GameObject>();
+            newObjects.AddRange(GenerateTrees(positionY));
+            newObjects.AddRange(GenerateBarriers(positionY));
+            newObjects.AddRange(GenerateCity(positionY));
+            newObjects.AddRange(GenerateTerrain(positionY));
+            newObjects.AddRange(GenerateBuildings(positionY));
+            return newObjects;
+        }
+
+        private IEnumerable<Tree> GenerateTrees(float areaPositionY = 0, int count = 10)
+        {
+            const float frequency = 40f;
+            const float firstTreePositionY = 180f;
+            const float cityStartPositionY = 300f;
+            const float positionXNear = 8f;
+            const float positionXFar = 9f;
+            const float smallWidth = 3.2f;
+            const float largeWidth = 4.5f;
+
+            if (IsNewObjectGenerationRequried<Tree>(areaPositionY))
             {
-                float x = i % 4 == 0 ? 8 : 9;
-                float widthLeft = i % 2 == 0 ? 4f : 3.4f;
-                float widthRight = i % 3 == 0 ? 3.4f : 4.5f;
-                if (i < 30)
+                for (int i = 0; i < count; i++)
                 {
-                    widthLeft += 2f;
-                    widthRight += 2f;
+                    float x = i % 4 == 0 ? positionXNear : positionXFar;
+                    float widthLeft = i % 2 == 0 ? largeWidth : smallWidth;
+                    float widthRight = i % 3 == 0 ? smallWidth : largeWidth;
+
+                    var positionY = GetNextPosition<Tree>(frequency, firstTreePositionY);
+
+                    if (positionY < cityStartPositionY)
+                    {
+                        widthLeft += 2f;
+                        widthRight += 2f;
+                    }
+
+                    if (positionY >= firstTreePositionY)
+                    {
+                        yield return new Tree(treeModel, x, positionY + 10, widthLeft);
+                        yield return new Tree(treeModel, -x, positionY + 10, widthRight);
+                    }
                 }
-                yield return new Tree(treeModel, x, i * 20f + offset, widthLeft);
-                yield return new Tree(treeModel, -x, i * 20f + offset, widthRight);
             }
         }
 
-        public IEnumerable<Barrier> GenerateBarriers()
+        private IEnumerable<Barrier> GenerateBarriers(float areaPositionY = 0, int count = 20)
         {
-            float offset = 600;
-            for (int i = 0; i < 150; i++)
+            float firtBarrierPositionY = 700;
+            float lastBarrierPositionY = 2000;
+            float positionX = 6.3f;
+            float frequency = 1.8f;
+
+            if (lastBarrierPositionY > areaPositionY &&
+                areaPositionY >= firtBarrierPositionY &&
+                IsNewObjectGenerationRequried<Barrier>(areaPositionY))
             {
-                yield return new Barrier(barrierModel, 6.3f, i * 1.8f + offset);
-                yield return new Barrier(barrierModel, -6.3f, i * 1.8f + offset);
+                for (int i = 0; i < count; i++)
+                {
+                    var positionY = GetNextPosition<Barrier>(frequency, firtBarrierPositionY);
+
+                    yield return new Barrier(barrierModel, positionX, positionY);
+                    yield return new Barrier(barrierModel, -positionX, positionY);
+                }
             }
         }
 
-        public IEnumerable<City> GenerateCity()
+        private IEnumerable<City> GenerateCity(float areaPositionY = 0, int count = 2)
         {
-            float offset = 800;
-            for (int i = 0; i < 10; i++)
+            const float cityStartPositionY = 600;
+            const float frequency = 300f;
+
+            if (cityStartPositionY < areaPositionY && IsNewObjectGenerationRequried<City>(areaPositionY))
             {
-                yield return new City(cityModel, 0f, i * 450 + offset);
+                for (int i = 0; i < count; i++)
+                {
+                    float positionY = GetNextPosition<City>(frequency, cityStartPositionY);
+                    yield return new City(cityModel, 0f, positionY);
+                }
             }
         }
 
-        public IEnumerable<Terrain> GenerateTerrain()
+        private IEnumerable<Terrain> GenerateTerrain(float areaPositionY = 0, int count = 4)
         {
-            for (int i = 0; i < 50; i++)
+            const float frequency = 180f;
+            const float terrainPositionX = -10f;
+
+            if (IsNewObjectGenerationRequried<Terrain>(areaPositionY))
             {
-                yield return new Terrain(terrainModel, 8f, i * 200);
+                for (int i = 0; i < count; i++)
+                {
+                    float positionY = GetNextPosition<Terrain>(frequency);
+                    yield return new Terrain(terrainModel, terrainPositionX, positionY);
+                }
             }
         }
 
-        public IEnumerable<BuildingA> GenerateBuildings()
+        private IEnumerable<BuildingA> GenerateBuildings(float areaPositionY = 0, int count = 20)
         {
-            for (int i = 0; i < 100; i++)
+            const float buildingsStartPositionLeftY = 600f;
+            const float buildingsStartPositionRightY = 420f;
+            const float frequency = 30f;
+
+            if (buildingsStartPositionRightY < areaPositionY && IsNewObjectGenerationRequried<BuildingA>(areaPositionY))
             {
-                float offset = 500;
-                float roatationLeft = i % 3 == 0 ? 90 : 180;
-                float roatationRight = i % 2 == 0 ? 90 : 180;
-                float x = i % 4 == 0 ? 11 : 13;
-                float widthLeft = i % 2 == 0 ? 6f : 7f;
-                float widthRight = i % 3 == 0 ? 7f : 6f;
-                yield return new BuildingA(buildingModel, x, i * 30f + offset, roatationLeft);
-                yield return new BuildingA(buildingModel, -x, i * 30f + offset, roatationRight);
+                for (int i = 0; i < count; i++)
+                {
+                    float positionY = GetNextPosition<BuildingA>(frequency, buildingsStartPositionRightY);
+                    float rotationLeft = i % 3 == 0 ? 90 : 180;
+                    float rotationRight = i % 2 == 0 ? 90 : 180;
+                    float x = i % 4 == 0 ? 11 : 13;
+                    float widthLeft = i % 2 == 0 ? 6f : 7f;
+                    float widthRight = i % 3 == 0 ? 7f : 6f;
+
+                    if (positionY >= buildingsStartPositionLeftY)
+                        yield return new BuildingA(buildingModel, x, positionY, rotationLeft, widthLeft);
+
+                    if (positionY >= buildingsStartPositionRightY)
+                        yield return new BuildingA(buildingModel, -x, positionY, rotationRight, widthRight);
+
+                }
             }
+        }
+
+        private bool IsNewObjectGenerationRequried<T>(float positionY = 0)
+        {
+            if (!lastObjectPositions.TryGetValue(typeof(T), out var lastPositionY))
+            {
+                return true;
+            }
+
+            return Math.Abs(positionY - lastPositionY) < 100f;
+        }
+
+        private float GetNextPosition<T>(float offsetY, float initialPosition = 0f) where T : GameObject
+        {
+            float newPosition = initialPosition;
+            if (lastObjectPositions.TryGetValue(typeof(T), out var positionY))
+            {
+                newPosition = positionY + offsetY;
+            }
+
+            lastObjectPositions[typeof(T)] = newPosition;
+
+            return newPosition;
         }
     }
 }

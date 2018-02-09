@@ -38,5 +38,10 @@ namespace Autonomous.Public
         /// </summary>
         public const float PlayerHoriztontalSpeed = 5f;
 
+        /// <summary>
+        /// Frequency of updating the course game objects
+        /// </summary>
+        public const int GameCourseUpdateFrequency = 1000;
+
     }
 }

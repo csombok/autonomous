@@ -67,8 +67,8 @@ namespace MonoGameTry.GameObjects
         {
             float elapsedSeconds = (float)elapsed.TotalMilliseconds / 1000f;
             VY += AccelerationY * elapsedSeconds;
-            if (VY < 0)
-                VY = 0;
+            //if (VY < 0)
+            //    VY = 0;
             if (VY > MaxVY)
                 VY = MaxVY;
 
@@ -115,9 +115,14 @@ namespace MonoGameTry.GameObjects
             float translateX = (boundingBox.Max.X + boundingBox.Min.X) / 2;
             float translateY = (boundingBox.Max.Z + boundingBox.Min.Z) / 2;
 
+            float speedRatio = VY / 10f;
+            float turnRotation = Math.Abs(speedRatio - 0) < 0.001f 
+                ? 0 
+                : VX * 2 / speedRatio;
+
             float rotate = OppositeDirection ? 180 : 0;
             var worldToView =
-                Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate)) *
+                Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate - turnRotation)) *
                 Matrix.CreateTranslation(-translateX, -translateZ, translateY) *
                 Matrix.CreateRotationY(MathHelper.ToRadians(rotate)) *
                 Matrix.CreateScale(scaleX) *
