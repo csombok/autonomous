@@ -41,7 +41,7 @@ namespace Autonomous.Public
         /// <summary>
         /// Frequency of updating the course game objects
         /// </summary>
-        public const int GameCourseUpdateFrequency = 1000;
+        public const int GameCourseUpdateFrequency = 500;
 
     }
 }

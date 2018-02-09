@@ -118,7 +118,7 @@ namespace MonoGameTry
                 Exit();
 
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
-            //UpdateGameCourse(gameTime);
+            UpdateGameCourse(gameTime);
             CheckCollision();
             viewports.ForEach(vp => vp.Update());
             base.Update(gameTime);
@@ -142,7 +142,7 @@ namespace MonoGameTry
 
         private void UpdateGameCourse(GameTime gameTime)
         {
-            if ((gameTime.TotalGameTime - lastUpdate).TotalMilliseconds < GameConstants.GameCourseUpdateFrequency)           
+            if ((gameTime.TotalGameTime - lastUpdate).TotalMilliseconds < GameConstants.GameCourseUpdateFrequency)
                 return;                
 
             var newObjects = courseObjectFactory
