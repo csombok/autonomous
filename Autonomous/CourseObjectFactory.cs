@@ -31,7 +31,7 @@ namespace MonoGameTry
         {
             var newObjects = new List<GameObject>();
             newObjects.AddRange(GenerateTrees(positionY));
-            newObjects.AddRange(GenerateBarriers(positionY));
+            //newObjects.AddRange(GenerateBarriers(positionY));
             newObjects.AddRange(GenerateCity(positionY));
             newObjects.AddRange(GenerateTerrain(positionY));
             newObjects.AddRange(GenerateBuildings(positionY));

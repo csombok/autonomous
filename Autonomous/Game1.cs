@@ -152,7 +152,6 @@ namespace MonoGameTry
             gameObjects.AddRange(newObjects);
             newObjects.ForEach(go => go.Initialize());
 
-            var firstCarPosition = GameStateInternal.FirstPlayerPosition;
             var lastCarPosition = GameStateInternal.LastPlayerPosition;
 
             const float dinstanceToRemove = 50f;
@@ -162,8 +161,8 @@ namespace MonoGameTry
                              go.GetType() != typeof(Road) &&
                              go.GetType() != typeof(Car))
                 .Where(go =>
-                    go.BoundingBox.Top <= firstCarPosition && Math.Abs(go.BoundingBox.Top - firstCarPosition) > dinstanceToRemove ||
-                    go.BoundingBox.Top <= lastCarPosition && Math.Abs(go.BoundingBox.Top - lastCarPosition) > dinstanceToRemove
+                    go.BoundingBox.Top <= lastCarPosition && 
+                    Math.Abs(go.BoundingBox.Top - lastCarPosition) > dinstanceToRemove
                 ).ToList();
 
             objectsToRemove.ForEach(go => gameObjects.Remove(go));
