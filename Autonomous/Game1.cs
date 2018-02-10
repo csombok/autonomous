@@ -72,7 +72,7 @@ namespace MonoGameTry
 
             gameObjects = new List<GameObject>(_players) { road };
             gameObjects.AddRange(courseObjectFactory.GenerateCourseArea());
-            gameObjects.AddRange(GenerateInitialCarAgents());
+            gameObjects.AddRange(_agentFactory.GenerateInitialCarAgents());
             gameObjects.ForEach(go => go.Initialize());
 
             viewports = ViewportFactory.CreateViewPorts(_players, 
@@ -80,19 +80,6 @@ namespace MonoGameTry
                 graphics.PreferredBackBufferHeight).ToList();
         }
 
-        private IEnumerable<GameObject> GenerateInitialCarAgents()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                yield return _agentFactory.CreateBarrier(0, false, i * 1000 + 50);
-                yield return _agentFactory.CreateVan(0, false, i * 200 + 50);
-                yield return _agentFactory.CreateVan(0, true, i * 200 + 50);
-                yield return _agentFactory.CreateLambo(1, true, i * 200 + 80);
-                yield return _agentFactory.CreateLambo(1, false, i * 200 + 80);
-                yield return _agentFactory.CreateBus(0, true, i * 300 + 130);
-                yield return _agentFactory.CreateBus(0, false, i * 300 + 130);
-            }
-        }
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.

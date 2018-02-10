@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autonomous.Public;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,8 +14,11 @@ namespace MonoGameTry
         private Model _lamboModel;
         private Model _busModel;
         private Model _barrierModel;
+        private Model _prideModel;
+        private Model _peugeotModel;
         private IGameStateProvider _gameStateProvider;
         private Random random = new Random();
+        private List<Func<bool, float, CarAgent>> _agentCreators = new List<Func<bool, float, CarAgent>>();
 
         public AgentFactory(IGameStateProvider stateProvider)
         {
@@ -26,11 +30,42 @@ namespace MonoGameTry
             _lamboModel = content.Load<Model>("Lambo\\Lamborghini_Aventador");
             _busModel = content.Load<Model>("bus");
             _barrierModel = content.Load<Model>("barrier");
+            _prideModel = content.Load<Model>("cars\\pride\\pride_400");
+            _peugeotModel = content.Load<Model>("cars\\glx_400\\glx_400");
+
+            _agentCreators.Add(CreateBarrier);
+            _agentCreators.Add(CreateVan);
+            _agentCreators.Add(CreateLambo);
+            _agentCreators.Add(CreateBus);
+            _agentCreators.Add(CreatePeugeot);
+            _agentCreators.Add(CreatePride);
         }
 
-        const float laneWidth = GameConstants.LaneWidth;
-        public CarAgent CreateBarrier(int lane, bool opposite, float y)
+        public IEnumerable<GameObject> GenerateInitialCarAgents()
         {
+            float y = 0;
+            for (int i = 0; i < 20; i++)
+            {
+                y += (float)random.NextDouble() * 100 + 100;
+                var index = random.Next(_agentCreators.Count);
+                yield return _agentCreators[index](false, y);
+            }
+
+            y = 0;
+            for (int i = 0; i < 20; i++)
+            {
+                y += (float)random.NextDouble() * 100 + 100;
+                var index = random.Next(_agentCreators.Count);
+                yield return _agentCreators[index](true, y);
+            }
+
+        }
+
+
+        const float laneWidth = GameConstants.LaneWidth;
+        public CarAgent CreateBarrier(bool opposite, float y)
+        {
+            int lane = 0;
             var barrier = new CarAgent(_barrierModel, 90, laneWidth * 0.8f, opposite, GameObjectType.Roadblock, _gameStateProvider, null)
             {
                 VY = 0,
@@ -41,24 +76,45 @@ namespace MonoGameTry
             return barrier;
         }
 
-        public CarAgent CreateVan(int lane, bool opposite, float y)
+        public CarAgent CreateVan(bool opposite, float y)
         {
+            int lane = 0;
             const float vanWidth = 2f;
 
             float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_vanModel, lane, opposite, y, vanWidth, v, 90);
         }
 
-        public CarAgent CreateLambo(int lane, bool opposite, float y)
+        public CarAgent CreatePride(bool opposite, float y)
         {
+            int lane = 0;
+            const float width = 1.45f;
+
+            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            return CreateVehicleAgent(_prideModel, lane, opposite, y, width, v, 180);
+        }
+
+        public CarAgent CreatePeugeot(bool opposite, float y)
+        {
+            int lane = 0;
+            const float width = 1.65f;
+
+            float v = ((float)random.NextDouble() * 30 + 70) / 3.6f;
+            return CreateVehicleAgent(_peugeotModel, lane, opposite, y, width, v, 0);
+        }
+
+        public CarAgent CreateLambo(bool opposite, float y)
+        {
+            int lane = 1;
             const float width = 2f;
 
             float v = ((float)random.NextDouble() * 20 + 110) / 3.6f;
             return CreateVehicleAgent(_lamboModel, lane, opposite, y, width, v, 180);
         }
 
-        public CarAgent CreateBus(int lane, bool opposite, float y)
+        public CarAgent CreateBus(bool opposite, float y)
         {
+            int lane = 0;
             const float width = 2.6f;
 
             float v = ((float)random.NextDouble() * 20 + 50) / 3.6f;
