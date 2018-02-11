@@ -24,6 +24,7 @@ namespace MonoGameTry
             return action ?? new PlayerAction();
         }
 
-        public GameState GameState { get; set; }
+        public volatile GameState GameState;
+        public volatile int GameStateCounter;
     }
 }

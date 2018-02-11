@@ -24,9 +24,16 @@ namespace MonoGameTry
                 }
 
                 bool stopped = false;
-
+                int lastState = -1;
                 while (!stopped)
                 {
+                    if (gameStateManager.GameStateCounter == lastState)
+                    {
+                        Task.Delay(20);
+                        continue;
+                    }
+
+                    lastState = gameStateManager.GameStateCounter;
                     var state = gameStateManager.GameState;
                     if (state == null)
                         continue;

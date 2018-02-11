@@ -97,6 +97,7 @@ namespace MonoGameTry
         protected override void Update(GameTime gameTime)
         {
             _gameStateManager.GameState = GameStateMapper.GameStateToPublic(GameStateInternal);
+            _gameStateManager.GameStateCounter++;
 
             if (Stopped)
                 return;
