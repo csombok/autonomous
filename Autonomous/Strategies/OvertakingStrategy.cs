@@ -23,7 +23,7 @@ namespace MonoGameTry.Strategies
 
     class OvertakingStrategy : IControlStrategy
     {
-        private IGameStateProvider _gameStateProvider;
+        protected IGameStateProvider _gameStateProvider;
         private float _desiredSpeed;
         private int _preferredLane;
 
@@ -35,7 +35,7 @@ namespace MonoGameTry.Strategies
         }
 
         public GameObject GameObject { get; set; }
-        public ControlState Calculate()
+        public virtual ControlState Calculate()
         {
             if (GameObject == null)
                 throw new InvalidOperationException("GameObject not set");
@@ -47,7 +47,7 @@ namespace MonoGameTry.Strategies
             return GetControlState(targetLane, laneInfos);
         }
 
-        private ControlState GetControlState(int targetLane, LaneInfo[] lanes)
+        protected ControlState GetControlState(int targetLane, LaneInfo[] lanes)
         {
             float targetSpeed = targetLane == _preferredLane ? _desiredSpeed : _desiredSpeed * 1.1f;
             bool brake = (lanes[targetLane].IsInBrakeZone && lanes[targetLane].FrontCarSpeed < GameObject.VY) || 
@@ -192,7 +192,7 @@ namespace MonoGameTry.Strategies
 
         }
 
-        private float CalculateDistanceToStop(float v, float breakDeceleration)
+        protected float CalculateDistanceToStop(float v, float breakDeceleration)
         {
             return 0.5f * v * v / breakDeceleration;
         }

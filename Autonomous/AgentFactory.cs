@@ -16,6 +16,7 @@ namespace MonoGameTry
         private Model _barrierModel;
         private Model _prideModel;
         private Model _peugeotModel;
+        private Model _busStopModel;
         private IGameStateProvider _gameStateProvider;
         private Random random = new Random();
         private List<Func<bool, float, CarAgent>> _agentCreators = new List<Func<bool, float, CarAgent>>();
@@ -32,6 +33,7 @@ namespace MonoGameTry
             _barrierModel = content.Load<Model>("barrier");
             _prideModel = content.Load<Model>("cars\\pride\\pride_400");
             _peugeotModel = content.Load<Model>("cars\\glx_400\\glx_400");
+            _busStopModel = content.Load<Model>("busstop\\bus_stop");
 
             _agentCreators.Add(CreateBarrier);
             _agentCreators.Add(CreateVan);
@@ -39,6 +41,7 @@ namespace MonoGameTry
             _agentCreators.Add(CreateBus);
             _agentCreators.Add(CreatePeugeot);
             _agentCreators.Add(CreatePride);
+            _agentCreators.Add(CreateBusStop);
         }
 
         public IEnumerable<GameObject> GenerateInitialCarAgents()
@@ -46,7 +49,7 @@ namespace MonoGameTry
             float y = 0;
             for (int i = 0; i < 20; i++)
             {
-                y += (float)random.NextDouble() * 100 + 100;
+                y += (float)random.NextDouble() * 30 + 100;
                 var index = random.Next(_agentCreators.Count);
                 yield return _agentCreators[index](false, y);
             }
@@ -54,7 +57,7 @@ namespace MonoGameTry
             y = 0;
             for (int i = 0; i < 20; i++)
             {
-                y += (float)random.NextDouble() * 100 + 100;
+                y += (float)random.NextDouble() * 30 + 100;
                 var index = random.Next(_agentCreators.Count);
                 yield return _agentCreators[index](true, y);
             }
@@ -71,6 +74,21 @@ namespace MonoGameTry
                 VY = 0,
                 MaxVY = 0,
                 X = GetLaneCenter(lane, opposite),
+                Y = y
+            };
+            return barrier;
+        }
+
+        public CarAgent CreateBusStop(bool opposite, float y)
+        {
+            int lane = 0;
+            float width = 2f;
+            float x = GameConstants.RoadWidth / 2 + width / 2 + 0.1f;
+            var barrier = new CarAgent(_busStopModel, 270, width, opposite, GameObjectType.BusStop, _gameStateProvider, null)
+            {
+                VY = 0,
+                MaxVY = 0,
+                X = opposite ? -x : x,
                 Y = y
             };
             return barrier;
@@ -116,15 +134,18 @@ namespace MonoGameTry
         {
             int lane = 0;
             const float width = 2.6f;
-
             float v = ((float)random.NextDouble() * 20 + 50) / 3.6f;
-            return CreateVehicleAgent(_busModel, lane, opposite, y, width, v, 180);
+
+            var drivingStrategy = new BusStrategy(v, lane, _gameStateProvider);
+            return CreateVehicleAgent(_busModel, lane, opposite, y, width, v, 180, drivingStrategy);
         }
 
-        private CarAgent CreateVehicleAgent(Model model, int lane, bool opposite, float y, float vanWidth, float v, float rotation)
+        private CarAgent CreateVehicleAgent(Model model, int lane, bool opposite, float y, float vanWidth, float v, float rotation, IControlStrategy drivingStrategy=null)
         {
-            var van = new CarAgent(model, rotation, vanWidth, opposite, GameObjectType.Car, _gameStateProvider,
-                new OvertakingStrategy(v, lane, _gameStateProvider))
+            if (drivingStrategy == null)
+                drivingStrategy = new OvertakingStrategy(v, lane, _gameStateProvider);
+            
+            var van = new CarAgent(model, rotation, vanWidth, opposite, GameObjectType.Car, _gameStateProvider, drivingStrategy)
             {
                 VY = v,
                 MaxVY = 100f / 3.6f,

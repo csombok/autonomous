@@ -20,6 +20,10 @@
         /// <summary>
         /// Pedestrian.
         /// </summary>
-        Pedestrian
+        Pedestrian,
+        /// <summary>
+        /// Bus stop, outside of the road.
+        /// </summary>
+        BusStop
     }
 }

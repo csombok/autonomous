@@ -62,6 +62,7 @@
     <Compile Include="GameStateManager.cs" />
     <Compile Include="PlayerGameLoop.cs" />
     <Compile Include="PlayerFactory.cs" />
+    <Compile Include="Strategies\BusStrategy.cs" />
     <Compile Include="Strategies\IControlStrategy.cs" />
     <Compile Include="Strategies\OvertakingStrategy.cs" />
     <Compile Include="Strategies\KeepSafetyDistance.cs" />
