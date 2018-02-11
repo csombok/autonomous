@@ -169,7 +169,7 @@ namespace MonoGameTry
             foreach (var viewport in viewports)
             {
                 graphics.GraphicsDevice.Viewport = viewport.Viewport;
-                Draw(gameTime, viewport.View, viewport.Projection);
+                Draw(gameTime, viewport);
             }
 
             graphics.GraphicsDevice.Viewport = original;
@@ -177,11 +177,11 @@ namespace MonoGameTry
             base.Draw(gameTime);
         }
 
-        private void Draw(GameTime gameTime, Matrix view, Matrix projection)
+        private void Draw(GameTime gameTime, ViewportWrapper viewport)
         {
             //dashboard.DrawPlayerScores(GraphicsDevice, playerFactory.PlayersInfo);
 
-            gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, view, projection, GraphicsDevice));
+            gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, viewport, GraphicsDevice));
         }
 
         public GameStateInternal GameStateInternal

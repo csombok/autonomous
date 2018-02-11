@@ -84,16 +84,25 @@ namespace MonoGameTry.GameObjects
             }
         }
 
-        public virtual void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
+        protected bool IsInView(ViewportWrapper viewport)
         {
+            float cameraY = -viewport.CameraPosition.Z;
+            return this.Y > cameraY - 10 && this.Y < cameraY + 200;
+
+
+        }
+        public virtual void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
+        {
+            if (!IsInView(viewport))
+                return;
             var world = TransformModelToWorld();
             foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.World = world;
-                    effect.View = view;
-                    effect.Projection = projection;
+                    effect.View = viewport.View;
+                    effect.Projection = viewport.Projection;
                     _defaultLigthing.Apply(effect);
                 }
 

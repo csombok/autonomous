@@ -38,12 +38,13 @@ namespace MonoGameTry.GameObjects
         {
         }
 
-        public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
+        public override void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
         {
-            for (int i = 0; i < 500; i++)
+            var firstQuad = (int) (viewport.CameraPosition.Z / QoadHeight) * QoadHeight;
+            for (int i = 0; i < 20; i++)
             {
-                var world = Matrix.CreateTranslation(new Vector3(0, 0, -i * QoadHeight));
-                DrawQuad(world, view, projection, device);
+                var world = Matrix.CreateTranslation(new Vector3(0, 0, firstQuad + -i * QoadHeight));
+                DrawQuad(world, viewport.View, viewport.Projection, device);
             }
         }
 
@@ -58,7 +59,7 @@ namespace MonoGameTry.GameObjects
             _quadEffect.View = view;
             _quadEffect.Projection = projection;
             _quadEffect.FogEnabled = true;
-            _quadEffect.FogStart = 10;
+            _quadEffect.FogStart = 2;
             _quadEffect.FogEnd = 100;
             foreach (EffectPass pass in _quadEffect.CurrentTechnique.Passes)
             {

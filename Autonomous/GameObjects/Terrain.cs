@@ -22,7 +22,7 @@ namespace MonoGameTry.GameObjects
             this.scale = scale;
         }
 
-        public override void Draw(TimeSpan elapsed, Matrix view, Matrix projection, GraphicsDevice device)
+        public override void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
         {
             var world = Matrix.CreateRotationY(MathHelper.ToRadians(rotation)) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(-100, -2f, -Y));
 
@@ -31,8 +31,8 @@ namespace MonoGameTry.GameObjects
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.World = world;
-                    effect.View = view;
-                    effect.Projection = projection;
+                    effect.View = viewport.View;
+                    effect.Projection = viewport.Projection;
                     _defaultLigthing.Apply(effect);
                 }
 
