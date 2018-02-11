@@ -12,7 +12,7 @@ namespace MonoGameTry
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game, IGameStateProvider
+    public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         private Model model;
@@ -35,7 +35,7 @@ namespace MonoGameTry
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            _agentFactory = new AgentFactory(this);
+            _agentFactory = new AgentFactory(_gameStateManager);
             courseObjectFactory = new CourseObjectFactory();
             playerFactory = new PlayerFactory();
             dashboard = new Dashboard();
@@ -96,7 +96,12 @@ namespace MonoGameTry
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            _gameStateManager.GameState = GameStateMapper.GameStateToPublic(GameStateInternal);
+            var agentObjects = this.gameObjects
+                .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)).OrderBy(g => g.Y);
+            var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped };
+
+            _gameStateManager.GameStateInternal = internalState;
+            _gameStateManager.GameState = GameStateMapper.GameStateToPublic(internalState);
             _gameStateManager.GameStateCounter++;
 
             if (Stopped)
@@ -134,13 +139,13 @@ namespace MonoGameTry
                 return;                
 
             var newObjects = courseObjectFactory
-                .GenerateCourseArea(GameStateInternal.FirstPlayerPosition)
+                .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayerPosition)
                 .ToList();
 
             gameObjects.AddRange(newObjects);
             newObjects.ForEach(go => go.Initialize());
 
-            var lastCarPosition = GameStateInternal.LastPlayerPosition;
+            var lastCarPosition = _gameStateManager.GameStateInternal.LastPlayerPosition;
 
             const float dinstanceToRemove = 50f;
 
@@ -183,11 +188,6 @@ namespace MonoGameTry
             //dashboard.DrawPlayerScores(GraphicsDevice, playerFactory.PlayersInfo);
 
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, viewport, GraphicsDevice));
-        }
-
-        public GameStateInternal GameStateInternal
-        {
-            get => new GameStateInternal() { GameObjects = this.gameObjects.Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)), Stopped = Stopped };
         }
     }
 }

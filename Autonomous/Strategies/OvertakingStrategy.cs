@@ -40,8 +40,8 @@ namespace MonoGameTry.Strategies
             if (GameObject == null)
                 throw new InvalidOperationException("GameObject not set");
 
-
-            LaneInfo[] laneInfos = new LaneInfo[2] {GetLaneInfo(0), GetLaneInfo(1)};
+            int selfIndex = _gameStateProvider.GameStateInternal.GameObjects.IndexOf(GameObject);
+            LaneInfo[] laneInfos = new LaneInfo[2] {GetLaneInfo(0, selfIndex), GetLaneInfo(1, selfIndex)};
             int targetLane = GetTargetLane(laneInfos);
 
             return GetControlState(targetLane, laneInfos);
@@ -75,7 +75,7 @@ namespace MonoGameTry.Strategies
             return new ControlState() {Acceleration = acceleration, HorizontalSpeed = vx};
         }
 
-        private LaneInfo GetLaneInfo(int laneIndex)      
+        private LaneInfo GetLaneInfo(int laneIndex, int selfIndex)      
         {
             float width = GameConstants.LaneWidth*0.9f;
             float centerX = laneIndex == 0 ? width * 1.6f : width / 2;
@@ -83,8 +83,8 @@ namespace MonoGameTry.Strategies
             if (GameObject.OppositeDirection)
                 centerX = -centerX;
 
-            var carFront = GetClosestObjectInLaneFront(_gameStateProvider.GameStateInternal.GameObjects, laneIndex);
-            var carBack = GetClosestObjectInLaneBack(_gameStateProvider.GameStateInternal.GameObjects, laneIndex);
+            var carFront = GetClosestObjectInLaneFrontFast(_gameStateProvider.GameStateInternal.GameObjects, laneIndex, selfIndex);
+            var carBack = GetClosestObjectInLaneBackFast(_gameStateProvider.GameStateInternal.GameObjects, laneIndex, selfIndex);
 
             float selfDistancveToStop = CalculateDistanceToStop(GameObject.VY, GameConstants.PlayerDeceleration);
             bool frontBrake = false;
@@ -200,15 +200,53 @@ namespace MonoGameTry.Strategies
         private GameObject GetClosestObjectInLaneFront(IEnumerable<GameObject> objects, int lane)
         {
             if (!GameObject.OppositeDirection)
-                return objects.Where(o => o != GameObject && o.Y > GameObject.Y).OrderBy(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
-            return objects.Where(o => o != GameObject && o.Y < GameObject.Y).OrderByDescending(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
+                return objects.Where(o => o != GameObject && o.Y > GameObject.Y).FirstOrDefault(o => IsInLane(lane, o));
+            return objects.Reverse().Where(o => o != GameObject && o.Y < GameObject.Y).FirstOrDefault(o => IsInLane(lane, o));
+        }
+
+        private GameObject GetClosestObjectInLaneFrontFast(IList<GameObject> objects, int lane, int selfIndex)
+        {
+            return GetClosestObjectInLane(objects, lane, selfIndex, !GameObject.OppositeDirection);
+        }
+
+        private GameObject GetClosestObjectInLaneBackFast(IList<GameObject> objects, int lane, int selfIndex)
+        {
+            return GetClosestObjectInLane(objects, lane, selfIndex, GameObject.OppositeDirection);
+        }
+
+        private GameObject GetClosestObjectInLane(IList<GameObject> objects, int lane, int selfIndex, bool front)
+        {
+            if (front)
+            {
+                for (int i = selfIndex + 1; i < objects.Count; i++)
+                {
+                    if (Math.Abs(GameObject.Y - objects[i].Y) > 300)
+                        return null;
+
+                    if (IsInLane(lane, objects[i]))
+                        return objects[i];
+                }
+            }
+            else
+            {
+                for (int i = selfIndex - 1; i >= 0; i--)
+                {
+                    if (Math.Abs(GameObject.Y - objects[i].Y) > 300)
+                        return null;
+
+                    if (IsInLane(lane, objects[i]))
+                        return objects[i];
+                }
+            }
+
+            return null;
         }
 
         private GameObject GetClosestObjectInLaneBack(IEnumerable<GameObject> objects, int lane)
         {
             if (!GameObject.OppositeDirection)
-                return objects.Where(o => o != GameObject && o.Y < GameObject.Y).OrderByDescending(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
-            return objects.Where(o => o != GameObject && o.Y > GameObject.Y).OrderBy(o => o.Y).FirstOrDefault(o => IsInLane(lane, o));
+                return objects.Reverse().Where(o => o != GameObject && o.Y < GameObject.Y).FirstOrDefault(o => IsInLane(lane, o));
+            return objects.Where(o => o != GameObject && o.Y > GameObject.Y).FirstOrDefault(o => IsInLane(lane, o));
         }
 
         private bool IsInLane(int laneIndex, GameObject second)

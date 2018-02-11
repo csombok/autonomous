@@ -10,7 +10,7 @@ namespace MonoGameTry
     public class GameStateInternal
     {
         public bool Stopped { get; set; }
-        public IEnumerable<GameObject> GameObjects { get; set; }
+        public IList<GameObject> GameObjects { get; set; }
         public float FirstPlayerPosition
         {
             get { return GameObjects.OfType<Car>().Max(t => t.Y); }

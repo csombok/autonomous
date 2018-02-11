@@ -47,7 +47,7 @@ namespace MonoGameTry
         public IEnumerable<GameObject> GenerateInitialCarAgents()
         {
             float y = 0;
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 200; i++)
             {
                 y += (float)random.NextDouble() * 30 + 100;
                 var index = random.Next(_agentCreators.Count);
@@ -55,7 +55,7 @@ namespace MonoGameTry
             }
 
             y = 0;
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 200; i++)
             {
                 y += (float)random.NextDouble() * 30 + 100;
                 var index = random.Next(_agentCreators.Count);

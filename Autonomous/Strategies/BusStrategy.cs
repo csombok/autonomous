@@ -32,7 +32,7 @@ namespace MonoGameTry.Strategies
                     return new ControlState() {Acceleration = 0, HorizontalSpeed = 0};
                 }
             }
-            var busStop = GetClosestBusStop(_gameStateProvider.GameStateInternal.GameObjects.Where(go => go!=_lastStopped));
+            var busStop = GetClosestBusStopFast(_gameStateProvider.GameStateInternal.GameObjects);
             var distanceToStop = CalculateDistanceToStop(GameObject.VY, GameConstants.PlayerDeceleration);
 
             if (busStop == null || Math.Abs(busStop.Y - GameObject.Y) > distanceToStop+0.2f)
@@ -64,9 +64,44 @@ namespace MonoGameTry.Strategies
         private GameObject GetClosestBusStop(IEnumerable<GameObject> objects)
         {
             if (!GameObject.OppositeDirection)
-                return objects.Where(o => o != GameObject && o.Y > GameObject.Y).OrderBy(o => o.Y).FirstOrDefault(o => o.Type==GameObjectType.BusStop && o.X > 0);
-            return objects.Where(o => o != GameObject && o.Y < GameObject.Y).OrderByDescending(o => o.Y).FirstOrDefault(o => o.Type == GameObjectType.BusStop && o.X < 0);
+                return objects.Where(o => o != GameObject && o.Y > GameObject.Y).FirstOrDefault(o => o.Type==GameObjectType.BusStop && o.X > 0);
+            return objects.Reverse().Where(o => o != GameObject && o.Y < GameObject.Y).FirstOrDefault(o => o.Type == GameObjectType.BusStop && o.X < 0);
         }
+
+        private GameObject GetClosestBusStopFast(IList<GameObject> objects)
+        {
+            int selfIndex = _gameStateProvider.GameStateInternal.GameObjects.IndexOf(GameObject);
+            if (!GameObject.OppositeDirection)
+            {
+                for (int i = selfIndex + 1; i < objects.Count; i++)
+                {
+                    if (Math.Abs(GameObject.Y - objects[i].Y) > 300)
+                        return null;
+
+                    if (objects[i] == _lastStopped)
+                        continue;
+                    if (objects[i].Type == GameObjectType.BusStop && objects[i].X > 0)
+                        return objects[i];
+                }
+            }
+            else
+            {
+                for (int i = selfIndex - 1; i >= 0; i--)
+                {
+                    if (Math.Abs(GameObject.Y - objects[i].Y) > 300)
+                        return null;
+
+                    if (objects[i] == _lastStopped)
+                        continue;
+
+                    if (objects[i].Type == GameObjectType.BusStop && objects[i].X < 0)
+                        return objects[i];
+                }
+            }
+
+            return null;
+        }
+
 
     }
 }

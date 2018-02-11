@@ -8,7 +8,7 @@ using Autonomous.Public;
 
 namespace MonoGameTry
 {
-    public class GameStateManager
+    public class GameStateManager : IGameStateProvider
     {
         private ConcurrentDictionary<string, PlayerAction> playerCommands = new ConcurrentDictionary<string, PlayerAction>();
 
@@ -26,5 +26,6 @@ namespace MonoGameTry
 
         public volatile GameState GameState;
         public volatile int GameStateCounter;
+        public GameStateInternal GameStateInternal { get; internal set; }
     }
 }
