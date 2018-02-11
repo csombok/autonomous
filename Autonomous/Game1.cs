@@ -109,8 +109,14 @@ namespace MonoGameTry
             if (Stopped)
                 return;
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            try
+            {
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                    Exit();
+            }
+            catch (Exception e)
+            {
+            }
 
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
             UpdateGameCourse(gameTime);
@@ -155,6 +161,7 @@ namespace MonoGameTry
                 .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayerPosition)
                 .ToList();
 
+            newObjects.AddRange(GenerateAgents(_gameStateManager.GameStateInternal.FirstPlayerPosition, 10, 100));
             gameObjects.AddRange(newObjects);
             newObjects.ForEach(go => go.Initialize());
 
@@ -176,6 +183,23 @@ namespace MonoGameTry
             lastUpdate = gameTime.ElapsedGameTime;
         }
 
+        private IEnumerable<GameObject> GenerateAgents(float firstPlayerPosition, float minDistance, float maxDistance)
+        {
+            var sameDirY = _gameStateManager.GameStateInternal.GameObjects.Reverse()
+                .FirstOrDefault(o => !o.OppositeDirection)?.Y;
+
+            var oppositeY = _gameStateManager.GameStateInternal.GameObjects.Reverse()
+                .FirstOrDefault(o => o.OppositeDirection)?.Y;
+
+            if (sameDirY - firstPlayerPosition < 500)
+                yield return _agentFactory.GenerateRandomAgent(sameDirY.GetValueOrDefault(firstPlayerPosition) + minDistance, sameDirY.GetValueOrDefault(firstPlayerPosition) + maxDistance , false);
+
+            if (oppositeY - firstPlayerPosition < 500)
+                yield return _agentFactory.GenerateRandomAgent(oppositeY.GetValueOrDefault(firstPlayerPosition) + minDistance, oppositeY.GetValueOrDefault(firstPlayerPosition) + maxDistance, true);
+
+
+
+        }
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>

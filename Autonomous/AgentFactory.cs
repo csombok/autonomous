@@ -47,7 +47,7 @@ namespace MonoGameTry
         public IEnumerable<GameObject> GenerateInitialCarAgents()
         {
             float y = 0;
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < 10; i++)
             {
                 y += (float)random.NextDouble() * 30 + 100;
                 var index = random.Next(_agentCreators.Count);
@@ -55,7 +55,7 @@ namespace MonoGameTry
             }
 
             y = 0;
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < 10; i++)
             {
                 y += (float)random.NextDouble() * 30 + 100;
                 var index = random.Next(_agentCreators.Count);
@@ -64,6 +64,12 @@ namespace MonoGameTry
 
         }
 
+        public GameObject GenerateRandomAgent(float minY, float maxY, bool opposite)
+        {
+            var y = (float)random.NextDouble() * (maxY-minY) + minY;
+            var index = random.Next(_agentCreators.Count);
+            return _agentCreators[index](opposite, y);
+        }
 
         const float laneWidth = GameConstants.LaneWidth;
         public CarAgent CreateBarrier(bool opposite, float y)
@@ -114,7 +120,7 @@ namespace MonoGameTry
 
         public CarAgent CreatePeugeot(bool opposite, float y)
         {
-            int lane = 0;
+            int lane = 1;
             const float width = 1.65f;
 
             float v = ((float)random.NextDouble() * 30 + 70) / 3.6f;
@@ -126,7 +132,7 @@ namespace MonoGameTry
             int lane = 1;
             const float width = 2f;
 
-            float v = ((float)random.NextDouble() * 20 + 110) / 3.6f;
+            float v = ((float)random.NextDouble() * 20 + 90) / 3.6f;
             return CreateVehicleAgent(_lamboModel, lane, opposite, y, width, v, 180);
         }
 
