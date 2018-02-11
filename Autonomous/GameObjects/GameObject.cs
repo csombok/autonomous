@@ -125,8 +125,8 @@ namespace MonoGameTry.GameObjects
             float translateY = (boundingBox.Max.Z + boundingBox.Min.Z) / 2;
 
             float speedRatio = VY / 10f;
-            float turnRotation = Math.Abs(speedRatio - 0) < 0.001f 
-                ? 0 
+            float turnRotation = Math.Abs(speedRatio - 0) < 0.001f
+                ? 0
                 : VX * 2 / speedRatio;
 
             float rotate = OppositeDirection ? 180 : 0;
@@ -194,6 +194,27 @@ namespace MonoGameTry.GameObjects
             }
 
             return new BoundingBox(min, max);
+        }
+
+        public virtual void HandleCollision(GameObject other, GameTime gameTime)
+        {
+            if (other == null) return;
+
+            if (this.OppositeDirection == other.OppositeDirection)
+            {
+                if (this.Y <= other.Y)
+                {
+                    this.VY = 0;
+                }
+                else
+                {
+                    this.VY += Math.Max(this.MaxVY, this.VY / 3);
+                }
+            }
+            else
+            {
+                this.VY = 0;
+            }
         }
     }
 }

@@ -2,12 +2,14 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Autonomous.Public;
+using Microsoft.Xna.Framework;
 
 namespace MonoGameTry.GameObjects
 {
     public class Car : GameObject
     {
         private readonly GameStateManager _gameStateManager;
+        private TimeSpan _lastCollision = new TimeSpan();
 
         public Car(Model model, string playerId, GameStateManager gameStateManager, float x=0)
         {
@@ -37,6 +39,17 @@ namespace MonoGameTry.GameObjects
             if (command.MoveRight)
                 VX += GameConstants.PlayerHoriztontalSpeed;
             base.Update(elapsed);
+        }
+
+        public override void HandleCollision(GameObject other, GameTime gameTime)
+        {
+            base.HandleCollision(other, gameTime);
+            if ((gameTime.TotalGameTime - _lastCollision).TotalMilliseconds > 2000)
+            {
+                this.MaxVY = this.MaxVY * 0.8f;
+            }
+
+            _lastCollision = gameTime.TotalGameTime;
         }
     }
 }

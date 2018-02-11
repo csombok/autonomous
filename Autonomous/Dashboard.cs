@@ -22,14 +22,16 @@ namespace MonoGameTry
 
         public void DrawPlayerScores(GraphicsDevice graphics, IEnumerable<IPlayerData> players)
         {
-            spriteBatch = new SpriteBatch(graphics);
+            if (spriteBatch == null)
+                spriteBatch = new SpriteBatch(graphics);
+
             spriteBatch.Begin();
             int i = 0;
             foreach (var player in players)
             {
                 spriteBatch.DrawString(font, player.PlayerName, new Vector2(20, i * 100), Color.Black);
                 i++;
-            }            
+            }
 
             spriteBatch.End();
         }

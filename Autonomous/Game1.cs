@@ -34,6 +34,8 @@ namespace MonoGameTry
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            //set the GraphicsDeviceManager's fullscreen property
+            //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
             _agentFactory = new AgentFactory(_gameStateManager);
             courseObjectFactory = new CourseObjectFactory();
@@ -112,17 +114,28 @@ namespace MonoGameTry
 
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
             UpdateGameCourse(gameTime);
-            CheckCollision();
+            CheckCollision(gameTime);
             viewports.ForEach(vp => vp.Update());
             base.Update(gameTime);
         }
 
-        private void CheckCollision()
+        private void CheckCollision(GameTime gameTime)
         {
             collision = false;
             foreach (var player in _players)
             {
-                collision |= (gameObjects.OfType<CarAgent>().Any(x => CollisionDetector.IsCollision(x, player)));
+                var agentsInCollision = gameObjects
+                    .OfType<CarAgent>()
+                    .Where(x => CollisionDetector.IsCollision(x, player))
+                    .ToList();
+
+                agentsInCollision.ForEach(agent =>
+                {
+                    agent.HandleCollision(player, gameTime);
+                    player.HandleCollision(agent, gameTime);
+                });
+
+                collision |= agentsInCollision.Any();
                 if (!collision)
                 {
                     if (player.X - player.Width / 2 < -6)
