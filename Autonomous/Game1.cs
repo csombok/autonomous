@@ -27,11 +27,15 @@ namespace MonoGameTry
         private GameStateManager _gameStateManager = new GameStateManager();
         private List<Car> _players;
         private TimeSpan lastUpdate;
+        private float _length;
+        private float _agentDensity;
 
         public bool Stopped { get; set; }
 
-        public Game1()
+        public Game1(float length, float agentDensity)
         {
+            _agentDensity = agentDensity;
+            _length = length;
             graphics = new GraphicsDeviceManager(this);
             //set the GraphicsDeviceManager's fullscreen property
             //graphics.IsFullScreen = true;

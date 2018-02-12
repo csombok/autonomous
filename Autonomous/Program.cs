@@ -23,7 +23,7 @@ namespace MonoGameTry
 
             else
             {
-                using (var game = new Game1())
+                using (var game = new Game1(10000, 0.2f))
                 {
                     game.Run();
                 }
@@ -32,7 +32,7 @@ namespace MonoGameTry
 
         private static void RunInSilentMode(float timeAccelerationFactor)
         {
-            using (var game = new Game1())
+            using (var game = new Game1(10000, 0.2f))
             {
                 game.InitializeModel();
                 var sw = Stopwatch.StartNew();
