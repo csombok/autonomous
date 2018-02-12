@@ -7,10 +7,10 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{6F439211-F2C5-4A1B-80D2-FB1D152A1E32}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoGameTry</RootNamespace>
-    <AssemblyName>MonoGameTry</AssemblyName>
+    <RootNamespace>Autonomous</RootNamespace>
+    <AssemblyName>Autonomous</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -40,6 +40,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />

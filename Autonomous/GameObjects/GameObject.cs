@@ -44,6 +44,8 @@ namespace MonoGameTry.GameObjects
 
         public float Height { get; private set; }
 
+        public float HardCodedHeight { get; set; }
+
         public Model Model { get; protected set; }
 
         protected float ModelRotate { get; set; }
@@ -112,9 +114,19 @@ namespace MonoGameTry.GameObjects
 
         public virtual void Initialize()
         {
+            if (Model == null)
+            {
+                Height = HardCodedHeight;
+                return;
+            }
+
             boundingBox = GetBounds();
             float scaleX = Width / (boundingBox.Max.X - boundingBox.Min.X);
             Height = (boundingBox.Max.Z - boundingBox.Min.Z) * scaleX;
+
+            if (Math.Abs(Height-HardCodedHeight) > 0.01 && HardCodedHeight > 0)
+                Console.WriteLine($"{Width} - {Height} - {HardCodedHeight}");
+
         }
 
         protected virtual Matrix TransformModelToWorld()

@@ -15,7 +15,6 @@ namespace MonoGameTry
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        private Model model;
         private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
         private List<GameObject> gameObjects = new List<GameObject>();
         private Road road;
@@ -60,26 +59,30 @@ namespace MonoGameTry
         /// </summary>
         protected override void LoadContent()
         {
-            model = Content.Load<Model>("Cars/Porshe/carrgt");
-
             Road.LoadContent(Content, graphics);
 
             _agentFactory.LoadContent(Content);
             courseObjectFactory.LoadContent(Content);
             playerFactory.LoadContent(Content);
             dashboard.LoadContent(Content);
-            _players = playerFactory.LoadPlayers(_gameStateManager).ToList();
             // TEMP
-            road = new Road();
-
-            gameObjects = new List<GameObject>(_players) { road };
-            gameObjects.AddRange(courseObjectFactory.GenerateCourseArea());
-            gameObjects.AddRange(_agentFactory.GenerateInitialCarAgents());
-            gameObjects.ForEach(go => go.Initialize());
+            InitializeModel();
 
             viewports = ViewportFactory.CreateViewPorts(_players, 
                 graphics.PreferredBackBufferWidth,
                 graphics.PreferredBackBufferHeight).ToList();
+
+        }
+
+        public void InitializeModel()
+        {
+            road = new Road();
+
+            _players = playerFactory.LoadPlayers(_gameStateManager).ToList();
+            gameObjects = new List<GameObject>(_players) { road };
+            gameObjects.AddRange(courseObjectFactory.GenerateCourseArea());
+            gameObjects.AddRange(_agentFactory.GenerateInitialCarAgents());
+            gameObjects.ForEach(go => go.Initialize());
         }
 
         /// <summary>
@@ -98,16 +101,6 @@ namespace MonoGameTry
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            var agentObjects = this.gameObjects
-                .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)).OrderBy(g => g.Y);
-            var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped };
-
-            _gameStateManager.GameStateInternal = internalState;
-            _gameStateManager.GameState = GameStateMapper.GameStateToPublic(internalState);
-            _gameStateManager.GameStateCounter++;
-
-            if (Stopped)
-                return;
 
             try
             {
@@ -118,13 +111,24 @@ namespace MonoGameTry
             {
             }
 
-            gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
-            UpdateGameCourse(gameTime);
-            CheckCollision(gameTime);
+            UpdateModel(gameTime);
             viewports.ForEach(vp => vp.Update());
             base.Update(gameTime);
         }
 
+        public void UpdateModel(GameTime gameTime)
+        {
+            var agentObjects = this.gameObjects
+                .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)).OrderBy(g => g.Y);
+            var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped };
+
+            _gameStateManager.GameStateInternal = internalState;
+            _gameStateManager.GameState = GameStateMapper.GameStateToPublic(internalState);
+            _gameStateManager.GameStateCounter++;
+            gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
+            UpdateGameCourse(gameTime);
+            CheckCollision(gameTime);
+        }
         private void CheckCollision(GameTime gameTime)
         {
             collision = false;

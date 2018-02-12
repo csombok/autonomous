@@ -16,12 +16,13 @@ namespace MonoGameTry.GameObjects
         private IGameStateProvider _gameStateProvider;
         private IControlStrategy _strategy;
 
-        public CarAgent(Model model, float modelRotate, float width, bool opposite, GameObjectType type,  IGameStateProvider gameStateProvider, IControlStrategy drivingStrategy)
+        public CarAgent(Model model, float modelRotate, float width, float height, bool opposite, GameObjectType type,  IGameStateProvider gameStateProvider, IControlStrategy drivingStrategy)
         {
             _gameStateProvider = gameStateProvider;
             Model = model;
             ModelRotate = modelRotate;
             Width = width;
+            HardCodedHeight = height;
             OppositeDirection = opposite;
             if (drivingStrategy != null)
             {
