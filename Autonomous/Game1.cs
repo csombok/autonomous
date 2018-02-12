@@ -217,6 +217,7 @@ namespace MonoGameTry
             GraphicsDevice.Clear(collision ? Color.Red : Color.CornflowerBlue);
 
             Viewport original = graphics.GraphicsDevice.Viewport;
+
             foreach (var viewport in viewports)
             {
                 graphics.GraphicsDevice.Viewport = viewport.Viewport;
@@ -225,14 +226,17 @@ namespace MonoGameTry
 
             graphics.GraphicsDevice.Viewport = original;
 
+            dashboard.DrawPlayerScores(graphics.GraphicsDevice, playerFactory.PlayersInfo);
+
             base.Draw(gameTime);
+
         }
 
         private void Draw(GameTime gameTime, ViewportWrapper viewport)
         {
-            //dashboard.DrawPlayerScores(GraphicsDevice, playerFactory.PlayersInfo);
-
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, viewport, GraphicsDevice));
+            // dashboard.DrawPlayerScores(GraphicsDevice, playerFactory.PlayersInfo);
+
         }
     }
 }

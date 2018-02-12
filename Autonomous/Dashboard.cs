@@ -24,7 +24,7 @@ namespace MonoGameTry
         {
             if (spriteBatch == null)
                 spriteBatch = new SpriteBatch(graphics);
-
+            
             spriteBatch.Begin();
             int i = 0;
             foreach (var player in players)
@@ -34,6 +34,11 @@ namespace MonoGameTry
             }
 
             spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
+
         }
     }
 }
