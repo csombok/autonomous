@@ -19,7 +19,7 @@ namespace MonoGameTry
         static void Main(string[] args)
         {
             if (args.Length > 0 && args[0] == "-quiet")
-                RunInSilentMode(50);
+                RunInSilentMode(1);
 
             else
             {
@@ -30,24 +30,19 @@ namespace MonoGameTry
             }
         }
 
-        private static void RunInSilentMode(int fps)
+        private static void RunInSilentMode(float timeAccelerationFactor)
         {
-            int timeBetweenUpdatesMs = 1000 / fps;
             using (var game = new Game1())
             {
                 game.InitializeModel();
                 var sw = Stopwatch.StartNew();
-                TimeSpan lastTick = sw.Elapsed;
-                while(!game.Stopped)
+                int lastTick = (int) (sw.Elapsed.TotalMilliseconds * timeAccelerationFactor);
+                while (!game.Stopped)
                 {
-                    var frameStart = sw.Elapsed;
+                    int frameStart = (int)(sw.Elapsed.TotalMilliseconds* timeAccelerationFactor);
                     var elapsed = frameStart - lastTick;
                     lastTick = frameStart;
-                    game.UpdateModel(new GameTime(frameStart, elapsed));
-
-                    int remaingTimeInFrame = timeBetweenUpdatesMs - (int) (sw.Elapsed -  frameStart).TotalMilliseconds;
-                    if (remaingTimeInFrame > 0)
-                        Task.Delay(remaingTimeInFrame).Wait();
+                    game.UpdateModel(new GameTime(TimeSpan.FromMilliseconds(frameStart), TimeSpan.FromMilliseconds(elapsed)));
                 }
             }
         }
