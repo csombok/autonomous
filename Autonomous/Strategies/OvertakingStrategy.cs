@@ -197,13 +197,6 @@ namespace MonoGameTry.Strategies
             return 0.5f * v * v / breakDeceleration;
         }
 
-        private GameObject GetClosestObjectInLaneFront(IEnumerable<GameObject> objects, int lane)
-        {
-            if (!GameObject.OppositeDirection)
-                return objects.Where(o => o != GameObject && o.Y > GameObject.Y).FirstOrDefault(o => IsInLane(lane, o));
-            return objects.Reverse().Where(o => o != GameObject && o.Y < GameObject.Y).FirstOrDefault(o => IsInLane(lane, o));
-        }
-
         private GameObject GetClosestObjectInLaneFrontFast(IList<GameObject> objects, int lane, int selfIndex)
         {
             return GetClosestObjectInLane(objects, lane, selfIndex, !GameObject.OppositeDirection);
@@ -242,13 +235,6 @@ namespace MonoGameTry.Strategies
             return null;
         }
 
-        private GameObject GetClosestObjectInLaneBack(IEnumerable<GameObject> objects, int lane)
-        {
-            if (!GameObject.OppositeDirection)
-                return objects.Reverse().Where(o => o != GameObject && o.Y < GameObject.Y).FirstOrDefault(o => IsInLane(lane, o));
-            return objects.Where(o => o != GameObject && o.Y > GameObject.Y).FirstOrDefault(o => IsInLane(lane, o));
-        }
-
         private bool IsInLane(int laneIndex, GameObject second)
         {
             float min = laneIndex == 0 ? GameConstants.LaneWidth*1.1f : GameConstants.LaneWidth*0.1f;
@@ -262,7 +248,9 @@ namespace MonoGameTry.Strategies
 
             var r2 = second.BoundingBox;
             return Between(min, max, r2.Left) ||
-                   Between(min, max, r2.Right);
+                   Between(min, max, r2.Right) ||
+                   Between(r2.Left, r2.Right, min) ||
+                   Between(r2.Left, r2.Right, max);
         }
 
         private static bool Between(float limit1, float limit2, float value)
