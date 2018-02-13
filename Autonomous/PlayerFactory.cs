@@ -30,6 +30,23 @@ namespace MonoGameTry
             }
         }
 
+        public int HumanPlayerIndex
+        {
+            get
+            {
+                int index = 0;
+                foreach (var item in PlayersInfo)
+                {
+                    if (item.PlayerName.Equals("Human", StringComparison.InvariantCultureIgnoreCase))
+                        return index;
+
+                    ++index;
+                }
+
+                return -1;
+            }
+        }
+
         public void LoadContent(ContentManager content)
         {
             porsheModel = content.Load<Model>("Cars/Porshe/carrgt");
@@ -58,6 +75,7 @@ namespace MonoGameTry
                 var x = GameConstants.LaneWidth *1.5f - i * GameConstants.LaneWidth;
                 string id = Guid.NewGuid().ToString();
                 PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
+
                 yield return new Car(model, id, gameStateManager, x);
                 i++;
             }

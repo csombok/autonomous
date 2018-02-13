@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using MonoGameTry.GameObjects;
 
 namespace MonoGameTry
 {
     class ViewportFactory
     {
-        public static IEnumerable<ViewportWrapper> CreateViewPorts(IEnumerable<GameObject> objects, float windowWidth, float windowHeight)
+        private readonly GraphicsDeviceManager graphics;
+
+        public ViewportFactory(GraphicsDeviceManager graphics)
+        {
+            this.graphics = graphics;
+        }
+
+        public IEnumerable<ViewportWrapper> CreateViewPorts(IEnumerable<GameObject> objects)
         {
             var numViewPorts = objects.Count();
             if (numViewPorts < 1)
@@ -17,23 +23,23 @@ namespace MonoGameTry
 
             if (numViewPorts == 1)
             {
-                int width = (int)windowWidth;
-                int height = (int) windowHeight;
+                int width = (int)graphics.PreferredBackBufferWidth;
+                int height = (int) graphics.PreferredBackBufferHeight;
                 yield return CreateViewPort(objects.ElementAt(0), 0, 0, width, height);
             }
 
             if (numViewPorts == 2)
             {
-                int width = (int)windowWidth;
-                int height = (int)windowHeight/2;
+                int width = (int)graphics.PreferredBackBufferWidth;
+                int height = (int)graphics.PreferredBackBufferHeight /2;
                 yield return CreateViewPort(objects.ElementAt(0), 0, 0, width, height);
                 yield return CreateViewPort(objects.ElementAt(1), 0, height, width, height);
             }
 
             if (numViewPorts >= 3)
             {
-                int width = (int)windowWidth / 2;
-                int height = (int)windowHeight / 2;
+                int width = (int)graphics.PreferredBackBufferWidth / 2;
+                int height = (int)graphics.PreferredBackBufferHeight / 2;
                 yield return CreateViewPort(objects.ElementAt(0), 0, 0, width, height);
                 yield return CreateViewPort(objects.ElementAt(1), 0, height, width, height);
                 yield return CreateViewPort(objects.ElementAt(2), width, 0, width, height);

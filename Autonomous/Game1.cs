@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
+using Autonomous.Commands;
 using Autonomous.Public;
+using Autonomous.Viewport;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,8 +17,8 @@ namespace MonoGameTry
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        private List<ViewportWrapper> viewports = new List<ViewportWrapper>();
+        private GraphicsDeviceManager graphics;
+        private ViewportManager viewportManager;
         private List<GameObject> gameObjects = new List<GameObject>();
         private Road road;
         private AgentFactory _agentFactory;
@@ -29,6 +32,7 @@ namespace MonoGameTry
         private TimeSpan lastUpdate;
         private float _length;
         private float _agentDensity;
+        private List<IGameCommand> gameCommands = new List<IGameCommand>();
 
         public bool Stopped { get; set; }
 
@@ -44,6 +48,7 @@ namespace MonoGameTry
             courseObjectFactory = new CourseObjectFactory();
             playerFactory = new PlayerFactory();
             dashboard = new Dashboard();
+            viewportManager = new ViewportManager(new ViewportFactory(graphics));            
         }
 
         /// <summary>
@@ -72,10 +77,7 @@ namespace MonoGameTry
             // TEMP
             InitializeModel();
 
-            viewports = ViewportFactory.CreateViewPorts(_players, 
-                graphics.PreferredBackBufferWidth,
-                graphics.PreferredBackBufferHeight).ToList();
-
+            viewportManager.SetViewports(_players);
         }
 
         public void InitializeModel()
@@ -87,6 +89,8 @@ namespace MonoGameTry
             gameObjects.AddRange(courseObjectFactory.GenerateCourseArea());
             gameObjects.AddRange(_agentFactory.GenerateInitialCarAgents(_agentDensity));
             gameObjects.ForEach(go => go.Initialize());
+
+            InitializeCommands();
         }
 
         /// <summary>
@@ -105,18 +109,9 @@ namespace MonoGameTry
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
-            try
-            {
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                    Exit();
-            }
-            catch (Exception e)
-            {
-            }
-
+            HandleCommands(gameTime);
             UpdateModel(gameTime);
-            viewports.ForEach(vp => vp.Update());
+            viewportManager.Viewports.ForEach(vp => vp.Update());
             base.Update(gameTime);
         }
 
@@ -133,6 +128,19 @@ namespace MonoGameTry
             UpdateGameCourse(gameTime);
             CheckCollision(gameTime);
         }
+
+        private void InitializeCommands()
+        {
+            gameCommands.Add(new ExitCommand(Exit));
+            gameCommands.Add(new AutoViewportSelectionCommand(viewportManager, _players, playerFactory.HumanPlayerIndex));
+            gameCommands.Add(new ManualViewportSelectionCommand(viewportManager, _players));
+        }
+
+        private void HandleCommands(GameTime gameTime)
+        {
+            gameCommands.ForEach(command => command.Handle(gameTime));
+        }
+
         private void CheckCollision(GameTime gameTime)
         {
             collision = false;
@@ -239,7 +247,7 @@ namespace MonoGameTry
 
             Viewport original = graphics.GraphicsDevice.Viewport;
 
-            foreach (var viewport in viewports)
+            foreach (var viewport in viewportManager.Viewports)
             {
                 graphics.GraphicsDevice.Viewport = viewport.Viewport;
                 Draw(gameTime, viewport);
@@ -257,7 +265,6 @@ namespace MonoGameTry
         {
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, viewport, GraphicsDevice));
             // dashboard.DrawPlayerScores(GraphicsDevice, playerFactory.PlayersInfo);
-
         }
     }
 }
