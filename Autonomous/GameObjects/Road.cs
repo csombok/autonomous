@@ -25,10 +25,8 @@ namespace MonoGameTry.GameObjects
             _texture = content.Load<Texture2D>("road");
 
             _quadEffect = new BasicEffect(graphics.GraphicsDevice);
-            _quadEffect.EnableDefaultLighting();
             _quadEffect.TextureEnabled = true;
             _quadEffect.Texture = _texture;
-            _quadEffect.EnableDefaultLighting();
 
             _quad = new Quad(Vector3.Zero, Vector3.Up, Vector3.Backward, Width, QoadHeight);
 
@@ -55,12 +53,13 @@ namespace MonoGameTry.GameObjects
 
         private void DrawQuad(Matrix cworld, Matrix view, Matrix projection, GraphicsDevice device)
         {
+            _defaultLigthing.Apply(_quadEffect);
             _quadEffect.World = cworld;
             _quadEffect.View = view;
             _quadEffect.Projection = projection;
             _quadEffect.FogEnabled = true;
             _quadEffect.FogStart = 2;
-            _quadEffect.FogEnd = 100;
+            _quadEffect.FogEnd = 500;
             foreach (EffectPass pass in _quadEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
