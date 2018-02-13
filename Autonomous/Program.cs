@@ -23,7 +23,7 @@ namespace MonoGameTry
 
             else
             {
-                using (var game = new Game1(10000, 0.2f))
+                using (var game = new Game1(10000, 0.5f))
                 {
                     game.Run();
                 }

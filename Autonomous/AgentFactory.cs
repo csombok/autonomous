@@ -45,12 +45,13 @@ namespace MonoGameTry
             _busStopModel = content.Load<Model>("busstop\\bus_stop");
         }
 
-        public IEnumerable<GameObject> GenerateInitialCarAgents()
+        public IEnumerable<GameObject> GenerateInitialCarAgents(float agentDensity)
         {
+
             float y = 0;
             for (int i = 0; i < 10; i++)
             {
-                y += (float)random.NextDouble() * 30 + 100;
+                y += GetRandomDistance(agentDensity);
                 var index = random.Next(_agentCreators.Count);
                 yield return _agentCreators[index](false, y);
             }
@@ -58,16 +59,23 @@ namespace MonoGameTry
             y = 0;
             for (int i = 0; i < 10; i++)
             {
-                y += (float)random.NextDouble() * 30 + 100;
+                y += GetRandomDistance(agentDensity);
                 var index = random.Next(_agentCreators.Count);
                 yield return _agentCreators[index](true, y);
             }
 
         }
 
-        public GameObject GenerateRandomAgent(float minY, float maxY, bool opposite)
+        private float GetRandomDistance(float agentDensity)
         {
-            var y = (float)random.NextDouble() * (maxY-minY) + minY;
+            float minDist = 20 + (1 - agentDensity) * 20;
+            float maxDist = 60 + (1 - agentDensity) * 60;
+            return (float)random.NextDouble() * (maxDist-minDist) + minDist;
+        }
+
+        public GameObject GenerateRandomAgent(float miny, bool opposite, float agentDensity)
+        {
+            var y = GetRandomDistance(agentDensity) + miny;
             var index = random.Next(_agentCreators.Count);
             return _agentCreators[index](opposite, y);
         }
@@ -75,7 +83,7 @@ namespace MonoGameTry
         const float laneWidth = GameConstants.LaneWidth;
         public CarAgent CreateBarrier(bool opposite, float y)
         {
-            int lane = 0;
+            int lane = random.NextDouble() < 0.5 ? 0 : 1;
             var barrier = new CarAgent(_barrierModel, 90, laneWidth * 0.8f, 0.79f, opposite, GameObjectType.Roadblock, _gameStateProvider, null)
             {
                 VY = 0,

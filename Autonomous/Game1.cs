@@ -85,7 +85,7 @@ namespace MonoGameTry
             _players = playerFactory.LoadPlayers(_gameStateManager).ToList();
             gameObjects = new List<GameObject>(_players) { road };
             gameObjects.AddRange(courseObjectFactory.GenerateCourseArea());
-            gameObjects.AddRange(_agentFactory.GenerateInitialCarAgents());
+            gameObjects.AddRange(_agentFactory.GenerateInitialCarAgents(_agentDensity));
             gameObjects.ForEach(go => go.Initialize());
         }
 
@@ -169,7 +169,10 @@ namespace MonoGameTry
                 .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayerPosition)
                 .ToList();
 
-            newObjects.AddRange(GenerateAgents(_gameStateManager.GameStateInternal.FirstPlayerPosition, 10, 100));
+            int firstPlayerIndex =
+                _gameStateManager.GameStateInternal.GameObjects.IndexOf(
+                    _gameStateManager.GameStateInternal.GameObjects.Last(x => x is Car));
+            newObjects.AddRange(GenerateAgents(firstPlayerIndex));
             gameObjects.AddRange(newObjects);
             newObjects.ForEach(go => go.Initialize());
 
@@ -191,22 +194,40 @@ namespace MonoGameTry
             lastUpdate = gameTime.ElapsedGameTime;
         }
 
-        private IEnumerable<GameObject> GenerateAgents(float firstPlayerPosition, float minDistance, float maxDistance)
+        private IEnumerable<GameObject> GenerateAgents(int firstPlayerIndex)
         {
-            var sameDirY = _gameStateManager.GameStateInternal.GameObjects.Reverse()
-                .FirstOrDefault(o => !o.OppositeDirection)?.Y;
+            var objects = _gameStateManager.GameStateInternal.GameObjects;
+            float? sameDirY = null;
+            float? oppositeY = null;
 
-            var oppositeY = _gameStateManager.GameStateInternal.GameObjects.Reverse()
-                .FirstOrDefault(o => o.OppositeDirection)?.Y;
+
+            float firstPlayerPosition = objects[firstPlayerIndex].Y;
+
+            int closeCount = 0;
+            for (int i = objects.Count - 1; i > firstPlayerIndex; i--)
+            {
+                if (objects[i].OppositeDirection && oppositeY == null)
+                    oppositeY = objects[i].Y;
+
+                if (!objects[i].OppositeDirection && sameDirY == null)
+                {
+                    sameDirY = objects[i].Y;
+                }
+
+                if (!objects[i].OppositeDirection && objects[i].Y - firstPlayerPosition < 500)
+                {
+                    closeCount++;
+                }
+            }
 
             if (sameDirY - firstPlayerPosition < 500)
-                yield return _agentFactory.GenerateRandomAgent(sameDirY.GetValueOrDefault(firstPlayerPosition) + minDistance, sameDirY.GetValueOrDefault(firstPlayerPosition) + maxDistance , false);
+                yield return _agentFactory.GenerateRandomAgent(sameDirY.GetValueOrDefault(firstPlayerPosition), false, _agentDensity);
 
             if (oppositeY - firstPlayerPosition < 500)
-                yield return _agentFactory.GenerateRandomAgent(oppositeY.GetValueOrDefault(firstPlayerPosition) + minDistance, oppositeY.GetValueOrDefault(firstPlayerPosition) + maxDistance, true);
+                yield return _agentFactory.GenerateRandomAgent(oppositeY.GetValueOrDefault(firstPlayerPosition), true, _agentDensity);
 
-
-
+            if (closeCount < 2 + 10 * _agentDensity)
+                yield return _agentFactory.GenerateRandomAgent(firstPlayerPosition + 200, false, _agentDensity);
         }
         /// <summary>
         /// This is called when the game should draw itself.

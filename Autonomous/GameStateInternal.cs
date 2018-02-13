@@ -15,6 +15,7 @@ namespace MonoGameTry
         {
             get { return GameObjects.OfType<Car>().Max(t => t.Y); }
         }
+
         public float LastPlayerPosition
         {
             get { return GameObjects.OfType<Car>().Min(t => t.Y); }
