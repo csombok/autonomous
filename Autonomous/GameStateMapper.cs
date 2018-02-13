@@ -12,7 +12,7 @@ namespace MonoGameTry
     {
         public static GameState GameStateToPublic(GameStateInternal state)
         {
-            return new GameState(state.GameObjects.Select(GameObjectStateToPublic), state.Stopped);
+            return new GameState(state.GameObjects.Select(GameObjectStateToPublic).ToList(), state.Stopped);
         }
         private static GameObjectState GameObjectStateToPublic(GameObject gameObject)
         {

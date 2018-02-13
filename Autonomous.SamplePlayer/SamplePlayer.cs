@@ -46,7 +46,7 @@ namespace Autonomous.SamplePlayer
 
                 float distanceBetweenCars = Math.Abs(selfCenterY - otherCenterY) - self.BoundingBox.Height / 2 - objectInFront.BoundingBox.Height / 2;
                 float plusSafeDistance = 5;
-                if (distanceBetweenCars < selfDistancveToStop - otherDistanceToStop + plusSafeDistance)
+                if (distanceBetweenCars < selfDistancveToStop - otherDistanceToStop + plusSafeDistance && self.VY > 0)
                     accelerationY = -1;
             }
 
@@ -65,6 +65,7 @@ namespace Autonomous.SamplePlayer
 
         private float CalculateDistanceToStop(float v, float breakDeceleration)
         {
+            if (v == 0) return 0f;
             return 0.5f * v * v / breakDeceleration;
         }
 
@@ -72,7 +73,6 @@ namespace Autonomous.SamplePlayer
         {
             return objects
                           .Where(o => o.BoundingBox.Y > self.BoundingBox.Y)
-                          .OrderBy(o => o.BoundingBox.Y)
                           .FirstOrDefault(o => IsOverlappingHorizontally(self, o));
         }
 

@@ -136,10 +136,12 @@ namespace MonoGameTry.GameObjects
             float translateX = (boundingBox.Max.X + boundingBox.Min.X) / 2;
             float translateY = (boundingBox.Max.Z + boundingBox.Min.Z) / 2;
 
-            float speedRatio = VY / 10f;
+            float speedRatio = Math.Abs(VY) < 1 ? 0.1f : VY / 10f;
             float turnRotation = Math.Abs(speedRatio - 0) < 0.001f
                 ? 0
                 : VX * 2 / speedRatio;
+            if (turnRotation > 20) turnRotation = 20;
+            if (turnRotation < -20) turnRotation = -20;
 
             float rotate = OppositeDirection ? 180 : 0;
             var worldToView =

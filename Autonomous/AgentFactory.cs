@@ -83,7 +83,7 @@ namespace MonoGameTry
         const float laneWidth = GameConstants.LaneWidth;
         public CarAgent CreateBarrier(bool opposite, float y)
         {
-            int lane = random.NextDouble() < 0.5 ? 0 : 1;
+            int lane = random.NextDouble() < 0.7 ? 0 : 1;
             var barrier = new CarAgent(_barrierModel, 90, laneWidth * 0.8f, 0.79f, opposite, GameObjectType.Roadblock, _gameStateProvider, null)
             {
                 VY = 0,
