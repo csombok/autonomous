@@ -54,7 +54,7 @@ namespace MonoGameTry.Strategies
                 (lanes[0].IsInLane && lanes[0].IsInCrashZone && lanes[0].IsFrontCarOverlapping) || 
                 (lanes[1].IsInLane && lanes[1].IsInCrashZone && lanes[1].IsFrontCarOverlapping);
             float acceleration = 0.0f;
-            if (brake || GameObject.VY > targetSpeed)
+            if ((brake && GameObject.VY > 0) || GameObject.VY > targetSpeed)
                 acceleration = -1f;
             else if (Math.Abs(GameObject.VY - targetSpeed) < 2)
                 acceleration = 0f;
@@ -194,6 +194,7 @@ namespace MonoGameTry.Strategies
 
         protected float CalculateDistanceToStop(float v, float breakDeceleration)
         {
+            if (v == 0) return 0;
             return 0.5f * v * v / breakDeceleration;
         }
 

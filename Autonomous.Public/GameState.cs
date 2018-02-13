@@ -12,16 +12,16 @@ namespace Autonomous.Public
         /// </summary>
         /// <param name="gameObjectStates"></param>
         /// <param name="stopped"></param>
-        public GameState(IEnumerable<GameObjectState> gameObjectStates, bool stopped)
+        public GameState(IReadOnlyList<GameObjectState> gameObjectStates, bool stopped)
         {
             GameObjectStates = gameObjectStates;
             Stopped = stopped;
         }
 
         /// <summary>
-        /// State of all objects the player interacts with.
+        /// State of all objects the player interacts with, ordered by bounding box center ascending.
         /// </summary>
-        public IEnumerable<GameObjectState> GameObjectStates { get; private set; }
+        public IReadOnlyList<GameObjectState> GameObjectStates { get; private set; }
 
         /// <summary>
         /// True if the game is finished, otherwise false.
