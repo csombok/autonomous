@@ -218,7 +218,7 @@ namespace MonoGameTry.GameObjects
             {
                 if (this.Y <= other.Y)
                 {
-                    this.VY = 0;
+                    this.VY = other.VY * 0.2f;
                 }
                 else
                 {

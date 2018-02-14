@@ -255,7 +255,7 @@ namespace MonoGameTry
 
             graphics.GraphicsDevice.Viewport = original;
 
-            dashboard.DrawPlayerScores(graphics.GraphicsDevice, playerFactory.PlayersInfo);
+            dashboard.DrawPlayerScores(graphics.GraphicsDevice, _players);
 
             base.Draw(gameTime);
 
@@ -264,7 +264,7 @@ namespace MonoGameTry
         private void Draw(GameTime gameTime, ViewportWrapper viewport)
         {
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, viewport, GraphicsDevice));
-            // dashboard.DrawPlayerScores(GraphicsDevice, playerFactory.PlayersInfo);
+            dashboard.DrawPlayerScores(GraphicsDevice, _players);
         }
     }
 }
