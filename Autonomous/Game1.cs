@@ -33,6 +33,7 @@ namespace MonoGameTry
         private float _length;
         private float _agentDensity;
         private List<IGameCommand> gameCommands = new List<IGameCommand>();
+        private Texture2D background;
 
         public bool Stopped { get; set; }
 
@@ -71,6 +72,8 @@ namespace MonoGameTry
         /// </summary>
         protected override void LoadContent()
         {
+            background = Content.Load<Texture2D>("background");
+
             Road.LoadContent(Content, graphics);
 
             _agentFactory.LoadContent(Content);
@@ -247,6 +250,7 @@ namespace MonoGameTry
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(collision ? Color.Red : Color.CornflowerBlue);
+            DrawBackground();
 
             Viewport original = graphics.GraphicsDevice.Viewport;
 
@@ -261,7 +265,20 @@ namespace MonoGameTry
             dashboard.DrawPlayerScores(graphics.GraphicsDevice, _players);
 
             base.Draw(gameTime);
+        }
 
+        private void DrawBackground()
+        {
+            var backgroundSpriteBatch = new SpriteBatch(GraphicsDevice);
+
+            backgroundSpriteBatch.Begin();
+
+            backgroundSpriteBatch.Draw(background, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+
+            backgroundSpriteBatch.End();
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
 
         private void Draw(GameTime gameTime, ViewportWrapper viewport)

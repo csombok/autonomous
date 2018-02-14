@@ -45,6 +45,7 @@ namespace MonoGameTry
                     GetPlayerDashboardText(player),
                     new Vector2(10, i * 20),
                     GetColorByIndex(i));
+
                 i++;
             }
 
