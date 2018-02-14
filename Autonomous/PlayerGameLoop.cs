@@ -45,7 +45,7 @@ namespace MonoGameTry
                     }
                     catch (Exception e)
                     {
-                        // TODO
+                        Console.WriteLine(e);
                     }
 
                 }

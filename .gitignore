@@ -25,3 +25,11 @@
 /bin
 /Autonomous.SamplePlayer/obj/Debug
 /Autonomous.sln.DotSettings.user
+/Autonomous/obj/x64/Debug
+/Autonomous/bin/x64/Debug
+/Autonomous.ConcretePlayer1/obj/x64/Debug
+/Autonomous.ConcretePlayer2/obj/x64/Debug
+/Autonomous.HumanPlayer/bin/x64/Debug
+/Autonomous.HumanPlayer/obj/x64/Debug
+/Autonomous.SamplePlayer/bin/x64/Debug
+/Autonomous.SamplePlayer/obj/x64/Debug

@@ -48,6 +48,8 @@ namespace MonoGameTry
         public IEnumerable<GameObject> GenerateInitialCarAgents(float agentDensity)
         {
 
+            yield return CreateBarrier(false, 10);
+            yield break;
             float y = 0;
             for (int i = 0; i < 10; i++)
             {
@@ -83,7 +85,7 @@ namespace MonoGameTry
         const float laneWidth = GameConstants.LaneWidth;
         public CarAgent CreateBarrier(bool opposite, float y)
         {
-            int lane = random.NextDouble() < 0.7 ? 0 : 1;
+            int lane = random.NextDouble() < 0.7 ? 1 : 1;
             var barrier = new CarAgent(_barrierModel, 90, laneWidth * 0.8f, 0.79f, opposite, GameObjectType.Roadblock, _gameStateProvider, null)
             {
                 VY = 0,
