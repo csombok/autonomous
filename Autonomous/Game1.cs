@@ -34,6 +34,7 @@ namespace MonoGameTry
         private float _length;
         private float _agentDensity;
         private List<IGameCommand> gameCommands = new List<IGameCommand>();
+        private bool _slowdown;
 
         public bool Stopped { get; set; }
 
@@ -128,19 +129,34 @@ namespace MonoGameTry
             _gameStateManager.GameState = GameStateMapper.GameStateToPublic(internalState);
             _gameStateManager.GameStateCounter++;
 
-            if (internalState.FirstPlayerPosition >= finishline.Y)
-            {
-                Stopped = true;
-            }
+            CheckIfGameFinished(internalState);
 
-            if (internalState.FirstPlayerPosition >= finishline.Y+20)
-            {
-                Exit();
-            }
+            if (_slowdown)
+                gameTime.ElapsedGameTime = TimeSpan.FromMilliseconds(gameTime.ElapsedGameTime.TotalMilliseconds/5);
 
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
             UpdateGameCourse(gameTime);
             CheckCollision(gameTime);
+        }
+
+        private void CheckIfGameFinished(GameStateInternal internalState)
+        {
+            float firstPlayerFront = internalState.FirstPlayer.BoundingBox.Top;
+            if (firstPlayerFront >= finishline.Y - 10)
+            {
+                _slowdown = true;
+                viewportManager.SetViewports(new List<GameObject>() {finishline});
+            }
+
+            if (firstPlayerFront >= finishline.Y)
+            {
+                Stopped = true;
+            }
+
+            if (firstPlayerFront >= finishline.Y + 20)
+            {
+                Exit();
+            }
         }
 
         private void InitializeCommands()
@@ -188,7 +204,7 @@ namespace MonoGameTry
                 return;                
 
             var newObjects = courseObjectFactory
-                .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayerPosition)
+                .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayer.Y)
                 .ToList();
 
             int firstPlayerIndex =
@@ -198,7 +214,7 @@ namespace MonoGameTry
             gameObjects.AddRange(newObjects);
             newObjects.ForEach(go => go.Initialize());
 
-            var lastCarPosition = _gameStateManager.GameStateInternal.LastPlayerPosition;
+            var lastCarPosition = _gameStateManager.GameStateInternal.LastPlayer.Y;
 
             const float dinstanceToRemove = 50f;
 

@@ -19,19 +19,19 @@ namespace MonoGameTry
             set
             {
                 _gameObjects = value;
-                FirstPlayerPosition = value.Last(x => x is Car).Y;
-                LastPlayerPosition = value.First(x => x is Car).Y;
+                FirstPlayer = value.Last(x => x is Car) as Car;
+                LastPlayer = value.First(x => x is Car) as Car;
             }
         }
 
 
-        public float FirstPlayerPosition
+        public Car FirstPlayer
         {
             get;
             private set;
         }
 
-        public float LastPlayerPosition
+        public Car LastPlayer
         {
             get;
             private set;

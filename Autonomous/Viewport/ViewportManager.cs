@@ -16,9 +16,9 @@ namespace Autonomous.Viewport
 
         public List<ViewportWrapper> Viewports { get; private set; }
 
-        public void SetViewports(IList<Car> players)
+        public void SetViewports(IEnumerable<GameObject> gameObjects)
         {
-            Viewports = viewportFactory.CreateViewPorts(players).ToList();
+            Viewports = viewportFactory.CreateViewPorts(gameObjects).ToList();
         }
     }
 }
