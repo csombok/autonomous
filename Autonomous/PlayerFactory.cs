@@ -76,7 +76,7 @@ namespace MonoGameTry
                 string id = Guid.NewGuid().ToString();
                 PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
 
-                yield return new Car(model, id, gameStateManager, x);
+                yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, x);
                 i++;
             }
 

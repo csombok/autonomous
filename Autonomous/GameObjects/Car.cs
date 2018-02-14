@@ -10,8 +10,12 @@ namespace MonoGameTry.GameObjects
     {
         private readonly GameStateManager _gameStateManager;
         private TimeSpan _lastCollision = new TimeSpan();
+        public string PlayerName { get; private set; }
+        private float _damage = 1.0f;
 
-        public Car(Model model, string playerId, GameStateManager gameStateManager, float x=0)
+        public float Damage => _damage;
+
+        public Car(Model model, string playerId, string playerName, GameStateManager gameStateManager, float x = 0)
         {
             _gameStateManager = gameStateManager;
             Model = model;
@@ -21,15 +25,16 @@ namespace MonoGameTry.GameObjects
             MaxVY = GameConstants.PlayerMaxSpeed;
             Id = playerId;
             Type = GameObjectType.Player;
+            PlayerName = playerName;
         }
 
         public override void Update(TimeSpan elapsed)
         {
             var command = _gameStateManager.GetPlayerCommand(Id);
             AccelerationY = 0;
-            
+
             if (command.Acceleration > 0)
-                AccelerationY = Math.Min(command.Acceleration,1) * GameConstants.PlayerAcceleration;
+                AccelerationY = Math.Min(command.Acceleration, 1) * GameConstants.PlayerAcceleration;
             else
                 AccelerationY = Math.Max(command.Acceleration, -1) * GameConstants.PlayerDeceleration;
 
@@ -46,7 +51,8 @@ namespace MonoGameTry.GameObjects
             base.HandleCollision(other, gameTime);
             if ((gameTime.TotalGameTime - _lastCollision).TotalMilliseconds > 2000)
             {
-                this.MaxVY = this.MaxVY * 0.8f;
+                _damage = Math.Max((_damage * 0.9f), 0.5f);
+                this.MaxVY = GameConstants.PlayerMaxSpeed * _damage;
             }
 
             _lastCollision = gameTime.TotalGameTime;

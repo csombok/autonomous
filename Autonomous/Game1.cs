@@ -35,6 +35,7 @@ namespace MonoGameTry
         private float _agentDensity;
         private List<IGameCommand> gameCommands = new List<IGameCommand>();
         private bool _slowdown;
+        private Texture2D background;
 
         public bool Stopped { get; set; }
 
@@ -42,15 +43,18 @@ namespace MonoGameTry
         {
             _agentDensity = agentDensity;
             _length = length;
+
             graphics = new GraphicsDeviceManager(this);
-            //set the GraphicsDeviceManager's fullscreen property
-            //graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.ApplyChanges();
+
             Content.RootDirectory = "Content";
             _agentFactory = new AgentFactory(_gameStateManager);
             courseObjectFactory = new CourseObjectFactory();
             playerFactory = new PlayerFactory();
             dashboard = new Dashboard();
-            viewportManager = new ViewportManager(new ViewportFactory(graphics));            
+            viewportManager = new ViewportManager(new ViewportFactory(graphics));
         }
 
         /// <summary>
@@ -70,6 +74,8 @@ namespace MonoGameTry
         /// </summary>
         protected override void LoadContent()
         {
+            background = Content.Load<Texture2D>("background");
+
             Road.LoadContent(Content, graphics);
             FinishLine.LoadContent(Content, graphics);
 
@@ -201,7 +207,7 @@ namespace MonoGameTry
         private void UpdateGameCourse(GameTime gameTime)
         {
             if ((gameTime.TotalGameTime - lastUpdate).TotalMilliseconds < GameConstants.GameCourseUpdateFrequency)
-                return;                
+                return;
 
             var newObjects = courseObjectFactory
                 .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayer.Y)
@@ -223,7 +229,7 @@ namespace MonoGameTry
                              go.GetType() != typeof(Road) &&
                              go.GetType() != typeof(Car))
                 .Where(go =>
-                    go.BoundingBox.Top <= lastCarPosition && 
+                    go.BoundingBox.Top <= lastCarPosition &&
                     Math.Abs(go.BoundingBox.Top - lastCarPosition) > dinstanceToRemove
                 ).ToList();
 
@@ -274,6 +280,7 @@ namespace MonoGameTry
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(collision ? Color.Red : Color.CornflowerBlue);
+            DrawBackground();
 
             Viewport original = graphics.GraphicsDevice.Viewport;
 
@@ -285,16 +292,29 @@ namespace MonoGameTry
 
             graphics.GraphicsDevice.Viewport = original;
 
-            dashboard.DrawPlayerScores(graphics.GraphicsDevice, playerFactory.PlayersInfo);
+            dashboard.DrawPlayerScores(graphics.GraphicsDevice, _players);
 
             base.Draw(gameTime);
+        }
 
+        private void DrawBackground()
+        {
+            var backgroundSpriteBatch = new SpriteBatch(GraphicsDevice);
+
+            backgroundSpriteBatch.Begin();
+
+            backgroundSpriteBatch.Draw(background, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+
+            backgroundSpriteBatch.End();
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
 
         private void Draw(GameTime gameTime, ViewportWrapper viewport)
         {
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, viewport, GraphicsDevice));
-            // dashboard.DrawPlayerScores(GraphicsDevice, playerFactory.PlayersInfo);
+            dashboard.DrawPlayerScores(GraphicsDevice, _players);
         }
     }
 }
