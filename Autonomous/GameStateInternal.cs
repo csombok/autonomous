@@ -10,15 +10,31 @@ namespace MonoGameTry
     public class GameStateInternal
     {
         public bool Stopped { get; set; }
-        public IList<GameObject> GameObjects { get; set; }
+
+        private IList<GameObject> _gameObjects;
+
+        public IList<GameObject> GameObjects
+        {
+            get => _gameObjects;
+            set
+            {
+                _gameObjects = value;
+                FirstPlayerPosition = value.Last(x => x is Car).Y;
+                LastPlayerPosition = value.First(x => x is Car).Y;
+            }
+        }
+
+
         public float FirstPlayerPosition
         {
-            get { return GameObjects.OfType<Car>().Max(t => t.Y); }
+            get;
+            private set;
         }
 
         public float LastPlayerPosition
         {
-            get { return GameObjects.OfType<Car>().Min(t => t.Y); }
+            get;
+            private set;
         }
     }
     public interface IGameStateProvider

@@ -21,6 +21,7 @@ namespace MonoGameTry
         private ViewportManager viewportManager;
         private List<GameObject> gameObjects = new List<GameObject>();
         private Road road;
+        private FinishLine finishline;
         private AgentFactory _agentFactory;
         private CourseObjectFactory courseObjectFactory;
         private PlayerFactory playerFactory;
@@ -69,6 +70,7 @@ namespace MonoGameTry
         protected override void LoadContent()
         {
             Road.LoadContent(Content, graphics);
+            FinishLine.LoadContent(Content, graphics);
 
             _agentFactory.LoadContent(Content);
             courseObjectFactory.LoadContent(Content);
@@ -83,9 +85,9 @@ namespace MonoGameTry
         public void InitializeModel()
         {
             road = new Road();
-
+            finishline = new FinishLine() {Y = _length};
             _players = playerFactory.LoadPlayers(_gameStateManager).ToList();
-            gameObjects = new List<GameObject>(_players) { road };
+            gameObjects = new List<GameObject>(_players) { road, finishline };
             gameObjects.AddRange(courseObjectFactory.GenerateCourseArea());
             gameObjects.AddRange(_agentFactory.GenerateInitialCarAgents(_agentDensity));
             gameObjects.ForEach(go => go.Initialize());
@@ -112,6 +114,7 @@ namespace MonoGameTry
             HandleCommands(gameTime);
             UpdateModel(gameTime);
             viewportManager.Viewports.ForEach(vp => vp.Update());
+            
             base.Update(gameTime);
         }
 
@@ -124,6 +127,17 @@ namespace MonoGameTry
             _gameStateManager.GameStateInternal = internalState;
             _gameStateManager.GameState = GameStateMapper.GameStateToPublic(internalState);
             _gameStateManager.GameStateCounter++;
+
+            if (internalState.FirstPlayerPosition >= finishline.Y)
+            {
+                Stopped = true;
+            }
+
+            if (internalState.FirstPlayerPosition >= finishline.Y+20)
+            {
+                Exit();
+            }
+
             gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
             UpdateGameCourse(gameTime);
             CheckCollision(gameTime);
