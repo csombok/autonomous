@@ -40,15 +40,18 @@ namespace MonoGameTry
         {
             _agentDensity = agentDensity;
             _length = length;
+
             graphics = new GraphicsDeviceManager(this);
-            //set the GraphicsDeviceManager's fullscreen property
-            //graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.ApplyChanges();
+
             Content.RootDirectory = "Content";
             _agentFactory = new AgentFactory(_gameStateManager);
             courseObjectFactory = new CourseObjectFactory();
             playerFactory = new PlayerFactory();
             dashboard = new Dashboard();
-            viewportManager = new ViewportManager(new ViewportFactory(graphics));            
+            viewportManager = new ViewportManager(new ViewportFactory(graphics));
         }
 
         /// <summary>
@@ -171,7 +174,7 @@ namespace MonoGameTry
         private void UpdateGameCourse(GameTime gameTime)
         {
             if ((gameTime.TotalGameTime - lastUpdate).TotalMilliseconds < GameConstants.GameCourseUpdateFrequency)
-                return;                
+                return;
 
             var newObjects = courseObjectFactory
                 .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayerPosition)
@@ -193,7 +196,7 @@ namespace MonoGameTry
                              go.GetType() != typeof(Road) &&
                              go.GetType() != typeof(Car))
                 .Where(go =>
-                    go.BoundingBox.Top <= lastCarPosition && 
+                    go.BoundingBox.Top <= lastCarPosition &&
                     Math.Abs(go.BoundingBox.Top - lastCarPosition) > dinstanceToRemove
                 ).ToList();
 
