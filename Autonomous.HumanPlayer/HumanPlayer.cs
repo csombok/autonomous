@@ -8,8 +8,6 @@ namespace Autonomous.HumanPlayer
     [ExportMetadata("PlayerName", "Human")]
     public class HumanPlayer : IPlayer
     {
-        public string TeamName => "Human";
-
         public void Finish()
         {
         }

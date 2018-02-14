@@ -11,10 +11,6 @@ namespace Autonomous.Public
     public interface IPlayer
     {
         /// <summary>
-        /// Just a name.
-        /// </summary>
-        string TeamName { get; }
-        /// <summary>
         /// Called when the game starts. <paramref name="playerId"/> will be used
         /// to identify <see cref="GameObjectState"/> belongs to the player.
         /// </summary>

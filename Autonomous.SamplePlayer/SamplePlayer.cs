@@ -7,11 +7,9 @@ using Autonomous.Public;
 namespace Autonomous.SamplePlayer
 {
     [Export(typeof(IPlayer))]
-    [ExportMetadata("PlayerName", "Human")]
+    [ExportMetadata("PlayerName", "Example")]
     public class SamplePlayer : IPlayer
     {
-        public string TeamName => "Sample";
-
         private string _playerId;
 
         public void Finish()
