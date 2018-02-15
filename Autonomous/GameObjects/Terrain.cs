@@ -10,21 +10,16 @@ namespace MonoGameTry.GameObjects
 {
     public class Terrain : GameObject
     {
-        private float rotation;
-        private readonly float scale;
-
-        public Terrain(Model model_, float x, float y, float rotation = 270, float scale = 12f)
+        public Terrain(Model model_, float x, float y)
+            : base(model_, false)
         {
-            this.Model = model_;
             X = x;
             Y = y;
-            this.rotation = rotation;
-            this.scale = scale;
         }
 
         public override void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
         {
-            var world = Matrix.CreateRotationY(MathHelper.ToRadians(rotation)) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(-100, -2f, -Y));
+            var world = Matrix.CreateRotationY(MathHelper.ToRadians(270)) * Matrix.CreateScale(12f) * Matrix.CreateTranslation(new Vector3(-100, -2f, -Y));
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -40,8 +35,5 @@ namespace MonoGameTry.GameObjects
             }
         }
 
-        public override void Update(TimeSpan elapsed)
-        {
-        }
     }
 }

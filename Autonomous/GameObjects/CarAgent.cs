@@ -17,12 +17,12 @@ namespace MonoGameTry.GameObjects
         private IControlStrategy _strategy;
 
         public CarAgent(Model model, float modelRotate, float width, float height, bool opposite, GameObjectType type,  IGameStateProvider gameStateProvider, IControlStrategy drivingStrategy)
+            : base(model, true)
         {
             _gameStateProvider = gameStateProvider;
-            Model = model;
-            ModelRotate = modelRotate;
             Width = width;
             HardCodedHeight = height;
+            ModelRotate = modelRotate;            
             OppositeDirection = opposite;
             if (drivingStrategy != null)
             {
@@ -33,7 +33,7 @@ namespace MonoGameTry.GameObjects
             Id = Guid.NewGuid().ToString();
         }
 
-        public override void Update(TimeSpan elapsed)
+        public override void Update(GameTime gameTime)
         {
             if (_strategy != null)
             {
@@ -45,7 +45,7 @@ namespace MonoGameTry.GameObjects
                 VX = state.HorizontalSpeed;
             }
 
-            base.Update(elapsed);
+            base.Update(gameTime);
         }
     }
 }

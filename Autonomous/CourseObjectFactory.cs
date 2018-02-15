@@ -31,7 +31,7 @@ namespace MonoGameTry
         {
             var newObjects = new List<GameObject>();
             newObjects.AddRange(GenerateTrees(positionY));
-            //newObjects.AddRange(GenerateBarriers(positionY));
+            newObjects.AddRange(GenerateBarriers(positionY));
             newObjects.AddRange(GenerateCity(positionY));
             newObjects.AddRange(GenerateTerrain(positionY));
             newObjects.AddRange(GenerateBuildings(positionY));
@@ -75,8 +75,8 @@ namespace MonoGameTry
 
         private IEnumerable<Barrier> GenerateBarriers(float areaPositionY = 0, int count = 20)
         {
-            float firtBarrierPositionY = 700;
-            float lastBarrierPositionY = 2000;
+            float firtBarrierPositionY = 400;
+            float lastBarrierPositionY = 900;
             float positionX = 6.3f;
             float frequency = 1.8f;
 

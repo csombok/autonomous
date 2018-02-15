@@ -1,13 +1,10 @@
-﻿using Autonomous.Public;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameTry.GameObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonoGameTry
 {
@@ -20,7 +17,7 @@ namespace MonoGameTry
         public Dashboard()
         {
             _colors = new List<Color>
-            {   Color.White,
+            {   Color.LightCyan,
                 Color.Orange,
                 Color.LightBlue,
                 Color.LightGreen
@@ -32,22 +29,14 @@ namespace MonoGameTry
             font = content.Load<SpriteFont>("Score"); // Use the name of your sprite font file here instead of 'Score'.
         }
 
-        public void DrawPlayerScores(GraphicsDevice graphics, IEnumerable<Car> players)
+        public void Draw(GraphicsDevice graphics, IEnumerable<Car> players)
         {
             if (spriteBatch == null)
                 spriteBatch = new SpriteBatch(graphics);
 
             spriteBatch.Begin();
-            int i = 0;
-            foreach (var player in players)
-            {
-                spriteBatch.DrawString(font, 
-                    GetPlayerDashboardText(player),
-                    new Vector2(10, i * 20),
-                    GetColorByIndex(i));
 
-                i++;
-            }
+            DrawScores(graphics, players);
 
             spriteBatch.End();
 
@@ -57,6 +46,37 @@ namespace MonoGameTry
 
         }
 
+        private void DrawScores(GraphicsDevice graphics, IEnumerable<Car> players)
+        {
+            DrawRectangle(graphics, 400, players.Count() * 25);
+
+            int i = 0;
+            foreach (var player in players)
+            {
+                var color = player.Stopped ? Color.Red : GetColorByIndex(i);
+                spriteBatch.DrawString(font,
+                    GetPlayerDashboardText(player),
+                    new Vector2(10, 5 + i * 20),
+                    color);
+
+                i++;
+            }
+        }
+
+        private void DrawRectangle(GraphicsDevice graphics, int width, int height)
+        {
+            Texture2D rect = new Texture2D(graphics, width, height);
+            Color[] data = new Color[width * height];
+
+            Vector2 coor = new Vector2(0, 0);
+            spriteBatch.Draw(rect, coor, Color.Black);
+
+            for (int j = 0; j < data.Length; ++j)
+                data[j] = Color.FromNonPremultiplied(0, 0, 0, 100);
+
+            rect.SetData(data);
+        }
+
         private Color GetColorByIndex(int index)
         {
             return _colors[Math.Min(index, _colors.Count - 1)];
@@ -64,9 +84,13 @@ namespace MonoGameTry
 
         private static string GetPlayerDashboardText(Car player)
         {
-            return $"{player.PlayerName}: {Math.Round(player.Y)}m Speed:" +
-                $" {Math.Round(player.VY * 4)}km/h" +
-                $" Damage: {100 - Math.Round(player.Damage * 100)}%";
+            var status = player.Stopped
+                ? "STOPPED"
+                : $"{Math.Round(player.Y)}m Speed: " +
+                    $"{Math.Round(player.VY * 4)}km/h" +
+                    $" Damage: {Math.Round(player.Damage * 100)}%";
+
+            return $"{player.PlayerName}: {status}";
         }
 
     }

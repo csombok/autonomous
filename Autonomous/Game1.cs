@@ -26,7 +26,6 @@ namespace MonoGameTry
         private PlayerFactory playerFactory;
         private Dashboard dashboard;
 
-        private bool collision;
         private GameStateManager _gameStateManager = new GameStateManager();
         private List<Car> _players;
         private TimeSpan lastUpdate;
@@ -130,7 +129,7 @@ namespace MonoGameTry
             _gameStateManager.GameStateInternal = internalState;
             _gameStateManager.GameState = GameStateMapper.GameStateToPublic(internalState);
             _gameStateManager.GameStateCounter++;
-            gameObjects.ForEach(go => go.Update(gameTime.ElapsedGameTime));
+            gameObjects.ForEach(go => go.Update(gameTime));
             UpdateGameCourse(gameTime);
             CheckCollision(gameTime);
         }
@@ -138,7 +137,10 @@ namespace MonoGameTry
         private void InitializeCommands()
         {
             gameCommands.Add(new ExitCommand(Exit));
-            gameCommands.Add(new AutoViewportSelectionCommand(viewportManager, _players, playerFactory.HumanPlayerIndex));
+            if (playerFactory.HumanPlayerIndex == -1)
+            {
+                gameCommands.Add(new AutoViewportSelectionCommand(viewportManager, _players, playerFactory.HumanPlayerIndex));
+            }
             gameCommands.Add(new ManualViewportSelectionCommand(viewportManager, _players));
         }
 
@@ -149,27 +151,16 @@ namespace MonoGameTry
 
         private void CheckCollision(GameTime gameTime)
         {
-            collision = false;
             foreach (var player in _players)
             {
                 var agentsInCollision = gameObjects
                     .OfType<CarAgent>()
-                    .Where(x => CollisionDetector.IsCollision(x, player))
-                    .ToList();
+                    .Where(x => CollisionDetector.IsCollision(x, player));
 
-                agentsInCollision.ForEach(agent =>
+                foreach (var agent in agentsInCollision)
                 {
                     agent.HandleCollision(player, gameTime);
                     player.HandleCollision(agent, gameTime);
-                });
-
-                collision |= agentsInCollision.Any();
-                if (!collision)
-                {
-                    if (player.X - player.Width / 2 < -6)
-                        collision = true;
-                    if (player.X + player.Width / 2 > 6)
-                        collision = true;
                 }
             }
         }
@@ -249,7 +240,7 @@ namespace MonoGameTry
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(collision ? Color.Red : Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             DrawBackground();
 
             Viewport original = graphics.GraphicsDevice.Viewport;
@@ -262,7 +253,7 @@ namespace MonoGameTry
 
             graphics.GraphicsDevice.Viewport = original;
 
-            dashboard.DrawPlayerScores(graphics.GraphicsDevice, _players);
+            dashboard.Draw(graphics.GraphicsDevice, _players);
 
             base.Draw(gameTime);
         }
@@ -284,7 +275,7 @@ namespace MonoGameTry
         private void Draw(GameTime gameTime, ViewportWrapper viewport)
         {
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, viewport, GraphicsDevice));
-            dashboard.DrawPlayerScores(GraphicsDevice, _players);
+            dashboard.Draw(GraphicsDevice, _players);
         }
     }
 }

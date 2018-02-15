@@ -10,23 +10,17 @@ namespace MonoGameTry.GameObjects
 {
     public class City : GameObject
     {
-        private float rotation;
-        private readonly float scale;
-
-        public City(Model model_, float x, float y, float rotation = 0, float scale = 0.35f)
+        public City(Model model_, float x, float y): base(model_, false )
         {
-            this.Model = model_;
             X = x;
             Y = y;
-            this.rotation = rotation;
-            this.scale = scale;
         }
 
         public override void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
         {
             if (!IsInView(viewport))
                 return;
-            var world = Matrix.CreateRotationY(MathHelper.ToRadians(rotation)) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(X, -16f, -Y));
+            var world = Matrix.CreateRotationY(MathHelper.ToRadians(0)) * Matrix.CreateScale(0.35f) * Matrix.CreateTranslation(new Vector3(X, -16f, -Y));
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -40,10 +34,6 @@ namespace MonoGameTry.GameObjects
 
                 mesh.Draw();
             }
-        }
-
-        public override void Update(TimeSpan elapsed)
-        {
         }
     }
 }

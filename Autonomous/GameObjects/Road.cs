@@ -16,9 +16,11 @@ namespace MonoGameTry.GameObjects
         private static BasicEffect _quadEffect;
         private static Quad _quad;
 
-        private const float Width = GameConstants.RoadWidth;
-        private const float QoadHeight = Width;
+        private const float RoadWidth = GameConstants.RoadWidth;
+        private const float QoadHeight = RoadWidth;
 
+        public Road(): base(false)
+        { }
 
         public static void LoadContent(ContentManager content, GraphicsDeviceManager graphics)
         {
@@ -28,8 +30,7 @@ namespace MonoGameTry.GameObjects
             _quadEffect.TextureEnabled = true;
             _quadEffect.Texture = _texture;
 
-            _quad = new Quad(Vector3.Zero, Vector3.Up, Vector3.Backward, Width, QoadHeight);
-
+            _quad = new Quad(Vector3.Zero, Vector3.Up, Vector3.Backward, RoadWidth, QoadHeight);
         }
 
         public override void Initialize()
@@ -44,11 +45,6 @@ namespace MonoGameTry.GameObjects
                 var world = Matrix.CreateTranslation(new Vector3(0, 0, firstQuad + -i * QoadHeight));
                 DrawQuad(world, viewport.View, viewport.Projection, device);
             }
-        }
-
-        public override void Update(TimeSpan elapsed)
-        {
-            
         }
 
         private void DrawQuad(Matrix cworld, Matrix view, Matrix projection, GraphicsDevice device)

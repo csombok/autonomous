@@ -10,18 +10,10 @@ namespace MonoGameTry.GameObjects
 {
     public class Barrier : GameObject
     {
-        private float rotation;
-        private readonly float scale;
-
         public Barrier(Model model, float x, float y)
-            : base(model, x, y, 0)
+            : base(model, false)
         {
             Width = 0.5f;
-        }
-
-
-        public override void Update(TimeSpan elapsed)
-        {
         }
     }
 }

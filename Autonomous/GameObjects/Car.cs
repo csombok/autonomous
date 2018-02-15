@@ -11,11 +11,12 @@ namespace MonoGameTry.GameObjects
         private readonly GameStateManager _gameStateManager;
         private TimeSpan _lastCollision = new TimeSpan();
         public string PlayerName { get; private set; }
-        private float _damage = 1.0f;
+        private float _damage = 0f;
 
         public float Damage => _damage;
 
         public Car(Model model, string playerId, string playerName, GameStateManager gameStateManager, float x = 0)
+            : base(model, true)
         {
             _gameStateManager = gameStateManager;
             Model = model;
@@ -26,9 +27,10 @@ namespace MonoGameTry.GameObjects
             Id = playerId;
             Type = GameObjectType.Player;
             PlayerName = playerName;
+            MaxX = 6f;
         }
 
-        public override void Update(TimeSpan elapsed)
+        public override void Update(GameTime gameTime)
         {
             var command = _gameStateManager.GetPlayerCommand(Id);
             AccelerationY = 0;
@@ -43,19 +45,41 @@ namespace MonoGameTry.GameObjects
                 VX -= GameConstants.PlayerHoriztontalSpeed;
             if (command.MoveRight)
                 VX += GameConstants.PlayerHoriztontalSpeed;
-            base.Update(elapsed);
+
+            base.Update(gameTime);
+
+            if (MaxX.HasValue && X - Width / 2 < -MaxX)
+            {
+                X = -MaxX.Value + Width / 2;
+                HandleCollision(null, gameTime);
+            }
+
+            if (MaxX.HasValue && X + Width / 2 > MaxX)
+            {
+                X = MaxX.Value - Width / 2;
+                HandleCollision(null, gameTime);
+            }
         }
 
         public override void HandleCollision(GameObject other, GameTime gameTime)
         {
             base.HandleCollision(other, gameTime);
-            if ((gameTime.TotalGameTime - _lastCollision).TotalMilliseconds > 2000)
+            if ((gameTime.TotalGameTime - _lastCollision).TotalMilliseconds > 1000)
             {
-                _damage = Math.Max((_damage * 0.9f), 0.5f);
-                this.MaxVY = GameConstants.PlayerMaxSpeed * _damage;
-            }
+                _damage = Math.Min((_damage + 0.1f), 1f);
+                var maxSpeed = GameConstants.PlayerMaxSpeed;
+                float speedLoss = (maxSpeed * _damage / 3);
+                this.MaxVY = _damage == 1f ? 0 :  maxSpeed - speedLoss;
 
-            _lastCollision = gameTime.TotalGameTime;
+                if(other== null)
+                {
+                    VY = VY / 2;
+                }
+
+                VY = Math.Min(VY, MaxVY);
+
+                _lastCollision = gameTime.TotalGameTime;
+            }            
         }
     }
 }

@@ -14,13 +14,21 @@ namespace MonoGameTry.GameObjects
     public class GameObject
     {
         protected LigthingEffect _defaultLigthing = new LigthingEffect();
+        private readonly bool agentObject;
 
         public float X { get; set; }
+
         public float Y { get; set; }
+
         public float VY { get; set; }
+
         public float VX { get; set; }
 
         public float MaxVY { get; set; }
+
+        public float? MaxX { get; set; }
+
+        public bool Stopped => MaxVY == 0;
 
         public float Width { get; protected set; }
 
@@ -35,8 +43,8 @@ namespace MonoGameTry.GameObjects
                 return new RectangleF(X - Width / 2, Y - Height / 2, Width, Height);
             }
         }
-        public bool OppositeDirection { get; protected set; }
 
+        public bool OppositeDirection { get; protected set; }
 
         public float AccelerationY { get; protected set; }
 
@@ -50,27 +58,24 @@ namespace MonoGameTry.GameObjects
 
         protected float ModelRotate { get; set; }
 
-        public GameObject(Model model, float x, float y, float rotate)
+        public GameObject(Model model, bool agentObject)
         {
             Model = model;
-            X = x;
-            Y = y;
-            ModelRotate = rotate;
-        }
-
-        public GameObject() : this(null, 0, 0, 0)
-        {
+            this.agentObject = agentObject;
             MaxVY = 50f / 3.6f;
-            VX = 0;
-            VY = 0;
         }
 
-        public virtual void Update(TimeSpan elapsed)
+        public GameObject(bool agentObject): this(null, agentObject) { }
+
+        public virtual void Update(GameTime gameTime)
         {
-            float elapsedSeconds = (float)elapsed.TotalMilliseconds / 1000f;
+            if (!agentObject) return;
+
+            float elapsedSeconds = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000f;
             VY += AccelerationY * elapsedSeconds;
-            //if (VY < 0)
-            //    VY = 0;
+            if (VY < 0)
+                VY = 0;
+
             if (VY > MaxVY)
                 VY = MaxVY;
 
@@ -89,7 +94,7 @@ namespace MonoGameTry.GameObjects
         protected bool IsInView(ViewportWrapper viewport)
         {
             float cameraY = -viewport.CameraPosition.Z;
-            return this.Y > cameraY - 10 && this.Y < cameraY + 200;
+            return this.Y > cameraY - 10 && this.Y < cameraY + 400;
 
 
         }
@@ -124,7 +129,7 @@ namespace MonoGameTry.GameObjects
             float scaleX = Width / (boundingBox.Max.X - boundingBox.Min.X);
             Height = (boundingBox.Max.Z - boundingBox.Min.Z) * scaleX;
 
-            if (Math.Abs(Height-HardCodedHeight) > 0.01 && HardCodedHeight > 0)
+            if (Math.Abs(Height - HardCodedHeight) > 0.01 && HardCodedHeight > 0)
                 Console.WriteLine($"{Width} - {Height} - {HardCodedHeight}");
 
         }
