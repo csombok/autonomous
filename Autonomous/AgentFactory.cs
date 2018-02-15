@@ -48,8 +48,6 @@ namespace MonoGameTry
         public IEnumerable<GameObject> GenerateInitialCarAgents(float agentDensity)
         {
 
-            yield return CreateBarrier(false, 10);
-            yield break;
             float y = 0;
             for (int i = 0; i < 10; i++)
             {

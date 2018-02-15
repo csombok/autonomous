@@ -51,7 +51,9 @@ namespace MonoGameTry
 
         static ViewportWrapper CreateViewPort(GameObject gameObject, int x, int y, int width, int height)
         {
-              return new GameObjectViewport(x, y, width, height, gameObject);
+            if (gameObject is FinishLine)
+                return new FinishLineViewport(x, y, width, height, gameObject);
+            return new GameObjectViewport(x, y, width, height, gameObject);
         }
     }
 }

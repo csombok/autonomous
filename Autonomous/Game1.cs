@@ -21,6 +21,7 @@ namespace MonoGameTry
         private ViewportManager viewportManager;
         private List<GameObject> gameObjects = new List<GameObject>();
         private Road road;
+        private FinishLine finishline;
         private AgentFactory _agentFactory;
         private CourseObjectFactory courseObjectFactory;
         private PlayerFactory playerFactory;
@@ -32,6 +33,7 @@ namespace MonoGameTry
         private float _length;
         private float _agentDensity;
         private List<IGameCommand> gameCommands = new List<IGameCommand>();
+        private bool _slowdown;
         private Texture2D background;
 
         public bool Stopped { get; set; }
@@ -74,6 +76,7 @@ namespace MonoGameTry
             background = Content.Load<Texture2D>("background");
 
             Road.LoadContent(Content, graphics);
+            FinishLine.LoadContent(Content, graphics);
 
             _agentFactory.LoadContent(Content);
             courseObjectFactory.LoadContent(Content);
@@ -88,9 +91,9 @@ namespace MonoGameTry
         public void InitializeModel()
         {
             road = new Road();
-
+            finishline = new FinishLine() {Y = _length};
             _players = playerFactory.LoadPlayers(_gameStateManager).ToList();
-            gameObjects = new List<GameObject>(_players) { road };
+            gameObjects = new List<GameObject>(_players) { road, finishline };
             gameObjects.AddRange(courseObjectFactory.GenerateCourseArea());
             gameObjects.AddRange(_agentFactory.GenerateInitialCarAgents(_agentDensity));
             gameObjects.ForEach(go => go.Initialize());
@@ -117,6 +120,7 @@ namespace MonoGameTry
             HandleCommands(gameTime);
             UpdateModel(gameTime);
             viewportManager.Viewports.ForEach(vp => vp.Update());
+            
             base.Update(gameTime);
         }
 
@@ -129,9 +133,35 @@ namespace MonoGameTry
             _gameStateManager.GameStateInternal = internalState;
             _gameStateManager.GameState = GameStateMapper.GameStateToPublic(internalState);
             _gameStateManager.GameStateCounter++;
+
+            CheckIfGameFinished(internalState);
+
+            if (_slowdown)
+                gameTime.ElapsedGameTime = TimeSpan.FromMilliseconds(gameTime.ElapsedGameTime.TotalMilliseconds/5);
+
             gameObjects.ForEach(go => go.Update(gameTime));
             UpdateGameCourse(gameTime);
             CheckCollision(gameTime);
+        }
+
+        private void CheckIfGameFinished(GameStateInternal internalState)
+        {
+            float firstPlayerFront = internalState.FirstPlayer.BoundingBox.Top;
+            if (firstPlayerFront >= finishline.Y - 10)
+            {
+                _slowdown = true;
+                viewportManager.SetViewports(new List<GameObject>() {finishline});
+            }
+
+            if (firstPlayerFront >= finishline.Y)
+            {
+                Stopped = true;
+            }
+
+            if (firstPlayerFront >= finishline.Y + 20)
+            {
+                Exit();
+            }
         }
 
         private void InitializeCommands()
@@ -171,7 +201,7 @@ namespace MonoGameTry
                 return;
 
             var newObjects = courseObjectFactory
-                .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayerPosition)
+                .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayer.Y)
                 .ToList();
 
             int firstPlayerIndex =
@@ -181,7 +211,7 @@ namespace MonoGameTry
             gameObjects.AddRange(newObjects);
             newObjects.ForEach(go => go.Initialize());
 
-            var lastCarPosition = _gameStateManager.GameStateInternal.LastPlayerPosition;
+            var lastCarPosition = _gameStateManager.GameStateInternal.LastPlayer.Y;
 
             const float dinstanceToRemove = 50f;
 
