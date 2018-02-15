@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGameTry.GameObjects
+namespace Autonomous.GameObjects
 {
     public class Barrier : GameObject
     {

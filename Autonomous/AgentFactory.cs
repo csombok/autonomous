@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Autonomous.Public;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameTry.GameObjects;
-using MonoGameTry.Strategies;
+using Autonomous.GameObjects;
+using Autonomous.Strategies;
 
-namespace MonoGameTry
+namespace Autonomous
 {
     class AgentFactory
     {

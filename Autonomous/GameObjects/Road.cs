@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autonomous.Public;
+using Autonomous.Viewports;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGameTry.GameObjects
+namespace Autonomous.GameObjects
 {
     class Road : GameObject
     {

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using MonoGameTry.GameObjects;
+﻿using Microsoft.Xna.Framework;
+using Autonomous.GameObjects;
 
-namespace MonoGameTry
+namespace Autonomous.Viewports
 {
     class GameObjectViewport : ViewportWrapper
     {

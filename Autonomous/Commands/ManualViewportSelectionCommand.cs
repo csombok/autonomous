@@ -1,7 +1,7 @@
-﻿using Autonomous.Viewport;
+﻿using Autonomous.Viewports;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGameTry.GameObjects;
+using Autonomous.GameObjects;
 using System;
 using System.Collections.Generic;
 

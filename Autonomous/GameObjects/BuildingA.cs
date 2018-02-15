@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGameTry.GameObjects
+namespace Autonomous.GameObjects
 {
     public class BuildingA : GameObject
     {

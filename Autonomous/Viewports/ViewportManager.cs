@@ -1,9 +1,8 @@
-﻿using MonoGameTry;
-using MonoGameTry.GameObjects;
+﻿using Autonomous.GameObjects;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Autonomous.Viewport
+namespace Autonomous.Viewports
 {
     class ViewportManager
     {

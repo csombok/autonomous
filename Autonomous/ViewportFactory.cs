@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGameTry.GameObjects;
+using Autonomous.GameObjects;
+using Autonomous.Viewports;
 
-namespace MonoGameTry
+namespace Autonomous
 {
     class ViewportFactory
     {

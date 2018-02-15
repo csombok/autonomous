@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autonomous.Public;
-using MonoGameTry.GameObjects;
+using Autonomous.GameObjects;
 
-namespace MonoGameTry.Strategies
+namespace Autonomous.Strategies
 {
     class KeepSafetyDistance : IControlStrategy
     {

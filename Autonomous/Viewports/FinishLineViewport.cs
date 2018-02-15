@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using MonoGameTry.GameObjects;
+using Autonomous.GameObjects;
 
-namespace MonoGameTry
+namespace Autonomous.Viewports
 {
     class FinishLineViewport : ViewportWrapper
     {

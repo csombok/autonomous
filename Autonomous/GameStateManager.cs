@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autonomous.Public;
 
-namespace MonoGameTry
+namespace Autonomous
 {
     public class GameStateManager : IGameStateProvider
     {

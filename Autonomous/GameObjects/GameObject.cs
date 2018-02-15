@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Autonomous.Public;
+using Autonomous.Viewports;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGameTry.GameObjects
+namespace Autonomous.GameObjects
 {
     public class GameObject
     {

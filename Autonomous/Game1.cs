@@ -4,13 +4,13 @@ using System.Linq;
 using System.Windows.Input;
 using Autonomous.Commands;
 using Autonomous.Public;
-using Autonomous.Viewport;
+using Autonomous.Viewports;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGameTry.GameObjects;
+using Autonomous.GameObjects;
 
-namespace MonoGameTry
+namespace Autonomous
 {
     /// <summary>
     /// This is the main type for your game.

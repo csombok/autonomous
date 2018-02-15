@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Autonomous.Public;
 using Microsoft.Xna.Framework;
 
-namespace MonoGameTry.GameObjects
+namespace Autonomous.GameObjects
 {
     public class Car : GameObject
     {

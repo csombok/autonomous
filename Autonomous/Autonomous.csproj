@@ -71,8 +71,8 @@
     <Compile Include="Commands\ExitCommand.cs" />
     <Compile Include="Commands\IGameCommand.cs" />
     <Compile Include="GameObjects\FinishLine.cs" />
-    <Compile Include="Viewport\FinishLineViewport.cs" />
-    <Compile Include="Viewport\ViewportManager.cs" />
+    <Compile Include="Viewports\FinishLineViewport.cs" />
+    <Compile Include="Viewports\ViewportManager.cs" />
     <Compile Include="CourseObjectFactory.cs" />
     <Compile Include="Dashboard.cs" />
     <Compile Include="Game1.cs" />
@@ -98,12 +98,12 @@
     <Compile Include="Strategies\KeepSafetyDistance.cs" />
     <Compile Include="Strategies\ControlState.cs" />
     <Compile Include="ViewportFactory.cs" />
-    <Compile Include="Viewport\BirdsEyeViewport.cs" />
-    <Compile Include="Viewport\GameObjectViewport.cs" />
+    <Compile Include="Viewports\BirdsEyeViewport.cs" />
+    <Compile Include="Viewports\GameObjectViewport.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quad.cs" />
-    <Compile Include="Viewport\ViewportWrapper.cs" />
+    <Compile Include="Viewports\ViewportWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

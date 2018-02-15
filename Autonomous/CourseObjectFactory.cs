@@ -4,10 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
-using MonoGameTry.GameObjects;
-using MonoGameTry.Strategies;
+using Autonomous.GameObjects;
+using Autonomous.Strategies;
 
-namespace MonoGameTry
+namespace Autonomous
 {
     class CourseObjectFactory
     {

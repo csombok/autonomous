@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace MonoGameTry
+namespace Autonomous
 {
 #if WINDOWS || LINUX
     /// <summary>

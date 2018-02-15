@@ -1,14 +1,14 @@
 ﻿using Autonomous.Public;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameTry.GameObjects;
+using Autonomous.GameObjects;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 
-namespace MonoGameTry
+namespace Autonomous
 {
     public class PlayerFactory
     {

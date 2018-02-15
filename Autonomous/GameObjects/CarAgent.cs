@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGameTry.Strategies;
+using Autonomous.Strategies;
 using Autonomous.Public;
 
-namespace MonoGameTry.GameObjects
+namespace Autonomous.GameObjects
 {
     public class CarAgent : GameObject
     {
