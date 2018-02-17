@@ -130,12 +130,14 @@ namespace Autonomous
             var agentObjects = this.gameObjects
                 .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)).OrderBy(g => g.Y);
             var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped };
+            CheckIfGameFinished(internalState);
+            if (Stopped)
+                internalState.Stopped = Stopped;
 
             _gameStateManager.GameStateInternal = internalState;
             _gameStateManager.GameState = GameStateMapper.GameStateToPublic(internalState);
             _gameStateManager.GameStateCounter++;
 
-            CheckIfGameFinished(internalState);
 
             if (_slowdown)
                 gameTime.ElapsedGameTime = TimeSpan.FromMilliseconds(gameTime.ElapsedGameTime.TotalMilliseconds/5);

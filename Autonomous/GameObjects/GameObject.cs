@@ -111,6 +111,7 @@ namespace Autonomous.GameObjects
                     effect.World = world;
                     effect.View = viewport.View;
                     effect.Projection = viewport.Projection;
+                    effect.EnableDefaultLighting();
                     _defaultLigthing.Apply(effect);
                 }
 

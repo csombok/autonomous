@@ -53,7 +53,7 @@ namespace Autonomous
                     }
                 }
             });
-
+            t.IsBackground = true;
             t.Start();
         }
     }
