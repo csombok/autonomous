@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Autonomous.Strategies
+namespace Autonomous.Impl.Strategies
 {
     public class ControlState
     {

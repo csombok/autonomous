@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Autonomous.GameObjects;
+using Autonomous.Impl.GameObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Autonomous
+namespace Autonomous.Impl
 {
     class Dashboard
     {

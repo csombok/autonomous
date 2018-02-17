@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace Autonomous.GameObjects
+namespace Autonomous.Impl.GameObjects
 {
     static class CollisionDetector
     {

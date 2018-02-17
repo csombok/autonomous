@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace Autonomous.GameObjects
+namespace Autonomous.Impl.GameObjects
 {
     public class Tree : GameObject
     {

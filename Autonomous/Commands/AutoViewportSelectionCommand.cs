@@ -1,11 +1,11 @@
-﻿using Autonomous.Viewports;
-using Microsoft.Xna.Framework;
-using Autonomous.GameObjects;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Autonomous.Impl.GameObjects;
+using Autonomous.Impl.Viewports;
 
-namespace Autonomous.Commands
+namespace Autonomous.Impl.Commands
 {
     class AutoViewportSelectionCommand : IGameCommand
     {

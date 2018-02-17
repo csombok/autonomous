@@ -1,14 +1,14 @@
 ﻿using Autonomous.Public;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Autonomous.GameObjects;
+using Autonomous.Impl.GameObjects;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 
-namespace Autonomous
+namespace Autonomous.Impl
 {
     public class PlayerFactory
     {
@@ -58,7 +58,7 @@ namespace Autonomous
             //An aggregate catalog that combines multiple catalogs  
             var catalog = new AggregateCatalog();
             //Adds all the parts found in the same assembly as the Program class  
-            catalog.Catalogs.Add(new AssemblyCatalog(typeof(Program).Assembly));
+            catalog.Catalogs.Add(new AssemblyCatalog(typeof(PlayerFactory).Assembly));
 
             catalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory));
 

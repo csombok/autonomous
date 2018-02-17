@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Autonomous.GameObjects;
-using Autonomous.Viewports;
+using Autonomous.Impl.GameObjects;
+using Autonomous.Impl.Viewports;
 
-namespace Autonomous
+namespace Autonomous.Impl
 {
     class ViewportFactory
     {

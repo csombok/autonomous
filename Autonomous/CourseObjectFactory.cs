@@ -4,10 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
-using Autonomous.GameObjects;
-using Autonomous.Strategies;
+using Autonomous.Impl.GameObjects;
 
-namespace Autonomous
+namespace Autonomous.Impl
 {
     class CourseObjectFactory
     {

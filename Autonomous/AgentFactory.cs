@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Autonomous.Public;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Autonomous.GameObjects;
-using Autonomous.Strategies;
+using Autonomous.Impl.GameObjects;
+using Autonomous.Impl.Strategies;
 
-namespace Autonomous
+namespace Autonomous.Impl
 {
     class AgentFactory
     {

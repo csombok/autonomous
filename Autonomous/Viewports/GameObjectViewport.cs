@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Autonomous.GameObjects;
+using Autonomous.Impl.GameObjects;
 
-namespace Autonomous.Viewports
+namespace Autonomous.Impl.Viewports
 {
     class GameObjectViewport : ViewportWrapper
     {

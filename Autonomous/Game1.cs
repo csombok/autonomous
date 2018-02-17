@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using Autonomous.Commands;
+using Autonomous.Impl.Commands;
 using Autonomous.Public;
-using Autonomous.Viewports;
+using Autonomous.Impl.Viewports;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Autonomous.GameObjects;
+using Autonomous.Impl.GameObjects;
 
-namespace Autonomous
+namespace Autonomous.Impl
 {
     /// <summary>
     /// This is the main type for your game.

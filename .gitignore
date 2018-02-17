@@ -40,3 +40,5 @@
 /Autonomous.HumanPlayer/bin/Release
 /Autonomous/obj/Release
 /Autonomous/bin/Windows/AnyCPU/Release
+/Autonomous.Runner/obj/Debug
+/Autonomous.Runner/bin/Debug

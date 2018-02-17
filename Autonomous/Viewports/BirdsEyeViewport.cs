@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Autonomous.GameObjects;
+using Autonomous.Impl.GameObjects;
 
-namespace Autonomous.Viewports
+namespace Autonomous.Impl.Viewports
 {
     class BirdsEyeViewport : ViewportWrapper
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Autonomous.Public;
 
-namespace Autonomous
+namespace Autonomous.Impl
 {
     class PlayerGameLoop
     {

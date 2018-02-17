@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Autonomous.GameObjects
+namespace Autonomous.Impl.GameObjects
 {
     public class Barrier : GameObject
     {

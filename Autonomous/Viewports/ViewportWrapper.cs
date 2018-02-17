@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Autonomous.Viewports
+namespace Autonomous.Impl.Viewports
 {
     public abstract class ViewportWrapper
     {

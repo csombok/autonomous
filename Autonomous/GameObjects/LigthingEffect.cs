@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Autonomous.GameObjects
+namespace Autonomous.Impl.GameObjects
 {
     public class LigthingEffect
     {

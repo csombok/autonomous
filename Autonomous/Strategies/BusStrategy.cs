@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autonomous.Public;
-using Autonomous.GameObjects;
+using Autonomous.Impl.GameObjects;
 
-namespace Autonomous.Strategies
+namespace Autonomous.Impl.Strategies
 {
     class BusStrategy : OvertakingStrategy
     {

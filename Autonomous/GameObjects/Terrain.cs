@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Autonomous.Viewports;
+using Autonomous.Impl.Viewports;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Autonomous.GameObjects
+namespace Autonomous.Impl.GameObjects
 {
     public class Terrain : GameObject
     {

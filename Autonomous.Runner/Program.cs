@@ -2,14 +2,14 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Autonomous.Impl;
 using Microsoft.Xna.Framework;
 
 namespace Autonomous
 {
-#if WINDOWS || LINUX
-    /// <summary>
-    /// The main class.
-    /// </summary>
+/// <summary>
+/// The main class.
+/// </summary>
     public static class Program
     {
         /// <summary>
@@ -36,10 +36,10 @@ namespace Autonomous
             {
                 game.InitializeModel();
                 var sw = Stopwatch.StartNew();
-                int lastTick = (int) (sw.Elapsed.TotalMilliseconds * timeAccelerationFactor);
+                int lastTick = (int)(sw.Elapsed.TotalMilliseconds * timeAccelerationFactor);
                 while (!game.Stopped)
                 {
-                    int frameStart = (int)(sw.Elapsed.TotalMilliseconds* timeAccelerationFactor);
+                    int frameStart = (int)(sw.Elapsed.TotalMilliseconds * timeAccelerationFactor);
                     var elapsed = frameStart - lastTick;
                     lastTick = frameStart;
                     game.UpdateModel(new GameTime(TimeSpan.FromMilliseconds(frameStart), TimeSpan.FromMilliseconds(elapsed)));
@@ -47,5 +47,4 @@ namespace Autonomous
             }
         }
     }
-#endif
 }

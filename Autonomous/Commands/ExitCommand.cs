@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Autonomous.Commands
+namespace Autonomous.Impl.Commands
 {
     class ExitCommand : IGameCommand
     {

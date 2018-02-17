@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Autonomous
+namespace Autonomous.Impl
 {
     public struct Quad
     {

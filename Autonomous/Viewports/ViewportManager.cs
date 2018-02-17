@@ -1,8 +1,8 @@
-﻿using Autonomous.GameObjects;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Autonomous.Impl.GameObjects;
 
-namespace Autonomous.Viewports
+namespace Autonomous.Impl.Viewports
 {
     class ViewportManager
     {

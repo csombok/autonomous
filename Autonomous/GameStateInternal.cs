@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Autonomous.GameObjects;
+using Autonomous.Impl.GameObjects;
 
-namespace Autonomous
+namespace Autonomous.Impl
 {
     public class GameStateInternal
     {
