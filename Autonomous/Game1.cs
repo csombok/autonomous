@@ -35,6 +35,7 @@ namespace Autonomous
         private List<IGameCommand> gameCommands = new List<IGameCommand>();
         private bool _slowdown;
         private Texture2D background;
+        private FrameCounter _frameCounter = new FrameCounter();
 
         public bool Stopped { get; set; }
 
@@ -204,9 +205,7 @@ namespace Autonomous
                 .GenerateCourseArea(_gameStateManager.GameStateInternal.FirstPlayer.Y)
                 .ToList();
 
-            int firstPlayerIndex =
-                _gameStateManager.GameStateInternal.GameObjects.IndexOf(
-                    _gameStateManager.GameStateInternal.GameObjects.Last(x => x is Car));
+            int firstPlayerIndex = _gameStateManager.GameStateInternal.FirstPlayerIndex;
             newObjects.AddRange(GenerateAgents(firstPlayerIndex));
             gameObjects.AddRange(newObjects);
             newObjects.ForEach(go => go.Initialize());
@@ -273,6 +272,12 @@ namespace Autonomous
             GraphicsDevice.Clear(Color.CornflowerBlue);
             DrawBackground();
 
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            _frameCounter.Update(deltaTime);
+
+            var fps = string.Format("FPS: {0}", _frameCounter.AverageFramesPerSecond);
+
             Viewport original = graphics.GraphicsDevice.Viewport;
 
             foreach (var viewport in viewportManager.Viewports)
@@ -283,7 +288,7 @@ namespace Autonomous
 
             graphics.GraphicsDevice.Viewport = original;
 
-            dashboard.Draw(graphics.GraphicsDevice, _players);
+            dashboard.Draw(graphics.GraphicsDevice, _players, fps);
 
             base.Draw(gameTime);
         }
@@ -305,7 +310,6 @@ namespace Autonomous
         private void Draw(GameTime gameTime, ViewportWrapper viewport)
         {
             gameObjects.ForEach(go => go.Draw(gameTime.ElapsedGameTime, viewport, GraphicsDevice));
-            dashboard.Draw(GraphicsDevice, _players);
         }
     }
 }

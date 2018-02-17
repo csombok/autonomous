@@ -19,8 +19,18 @@ namespace Autonomous
             set
             {
                 _gameObjects = value;
-                FirstPlayer = value.Last(x => x is Car) as Car;
-                LastPlayer = value.First(x => x is Car) as Car;
+                for (int i = 0; i < _gameObjects.Count; i++)
+                {
+                    if (!(_gameObjects[i] is Car))
+                        continue;
+                    if (LastPlayer == null)
+                    {
+                        LastPlayer = _gameObjects[i] as Car;
+                        FirstPlayerIndex = i;
+                    }
+                    FirstPlayer = _gameObjects[i] as Car;
+                    FirstPlayerIndex = i;
+                }
             }
         }
 
@@ -30,6 +40,8 @@ namespace Autonomous
             get;
             private set;
         }
+
+        public int FirstPlayerIndex { get; private set; }
 
         public Car LastPlayer
         {
