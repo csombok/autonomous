@@ -13,8 +13,10 @@ namespace Autonomous
         private SpriteFont font;
         private SpriteBatch spriteBatch;
         private List<Color> _colors;
+        private readonly int width;
+        private readonly int height;
 
-        public Dashboard()
+        public Dashboard(int width, int height)
         {
             _colors = new List<Color>
             {   Color.LightCyan,
@@ -22,11 +24,37 @@ namespace Autonomous
                 Color.LightBlue,
                 Color.LightGreen
             };
+            this.width = width;
+            this.height = height;
         }
 
         public void LoadContent(ContentManager content)
         {
             font = content.Load<SpriteFont>("Score"); // Use the name of your sprite font file here instead of 'Score'.
+        }
+
+        public void DrawStatus(GraphicsDevice graphics, GameObject playerObject, int playerIndex)
+        {
+            var player = playerObject as Car;
+
+            if (player == null) return;
+
+            if (spriteBatch == null)
+                spriteBatch = new SpriteBatch(graphics);
+
+            spriteBatch.Begin();
+
+            string text = $"Camera: {player.PlayerName}";
+
+            var color = player.Stopped ? Color.Red : GetColorByIndex(playerIndex);
+            spriteBatch.DrawString(font, text, new Vector2(width / 2 - 50, 10), color, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(font, text, new Vector2(width / 2 - 49, 11), Color.Black, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+            spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
+
         }
 
         public void Draw(GraphicsDevice graphics, IEnumerable<Car> players, string fps)
@@ -48,7 +76,7 @@ namespace Autonomous
 
         private void DrawScores(GraphicsDevice graphics, IEnumerable<Car> players, string fps)
         {
-            DrawRectangle(graphics, 400, players.Count() * 25 + 25);
+            DrawRectangle(graphics, 400, players.Count() * 25 + 25, 0, 0);
 
             int i = 0;
             foreach (var player in players)
@@ -66,12 +94,12 @@ namespace Autonomous
 
         }
 
-        private void DrawRectangle(GraphicsDevice graphics, int width, int height)
+        private void DrawRectangle(GraphicsDevice graphics, int width, int height, int x, int y)
         {
             Texture2D rect = new Texture2D(graphics, width, height);
             Color[] data = new Color[width * height];
 
-            Vector2 coor = new Vector2(0, 0);
+            Vector2 coor = new Vector2(x, y);
             spriteBatch.Draw(rect, coor, Color.Black);
 
             for (int j = 0; j < data.Length; ++j)

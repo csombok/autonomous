@@ -53,7 +53,7 @@ namespace Autonomous
             _agentFactory = new AgentFactory(_gameStateManager);
             courseObjectFactory = new CourseObjectFactory();
             playerFactory = new PlayerFactory();
-            dashboard = new Dashboard();
+            dashboard = new Dashboard(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             viewportManager = new ViewportManager(new ViewportFactory(graphics));
         }
 
@@ -280,10 +280,13 @@ namespace Autonomous
 
             Viewport original = graphics.GraphicsDevice.Viewport;
 
+            int viewPortIndex = 0;
             foreach (var viewport in viewportManager.Viewports)
             {
                 graphics.GraphicsDevice.Viewport = viewport.Viewport;
                 Draw(gameTime, viewport);
+                dashboard.DrawStatus(graphics.GraphicsDevice, viewport.GameObject, viewPortIndex);
+                ++viewPortIndex;
             }
 
             graphics.GraphicsDevice.Viewport = original;

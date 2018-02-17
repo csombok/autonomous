@@ -12,7 +12,8 @@ namespace Autonomous.Viewports
     {
         private GameObject _gameObject;
 
-        public BirdsEyeViewport(int x, int y, int width, int height, GameObject gameObject) : base(x, y, width, height)
+        public BirdsEyeViewport(int x, int y, int width, int height, GameObject gameObject) 
+            : base(x, y, width, height, gameObject)
         {
             _gameObject = gameObject;
             float w = 20f;
