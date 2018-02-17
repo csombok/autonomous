@@ -282,13 +282,6 @@
 /processorParam:TextureFormat=Color
 /build:road.jpg
 
-#begin Score.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Score.spritefont
-
 #begin BusStop/bus_stop.obj
 /importer:OpenAssetImporter
 /processor:ModelProcessor
@@ -381,4 +374,25 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:finish_line2.PNG
+
+#begin fonts/FontDashboard.large.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/FontDashboard.large.spritefont
+
+#begin fonts/FontDashboard.medium.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/FontDashboard.medium.spritefont
+
+#begin fonts/FontDashboard.small.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/FontDashboard.small.spritefont
 

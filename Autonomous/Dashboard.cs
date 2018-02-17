@@ -10,13 +10,13 @@ namespace Autonomous
 {
     class Dashboard
     {
-        private SpriteFont font;
+        private SpriteFont fontSmall;
+        private SpriteFont fontMedium;
+        private SpriteFont fontLarge;
         private SpriteBatch spriteBatch;
         private List<Color> _colors;
-        private readonly int width;
-        private readonly int height;
 
-        public Dashboard(int width, int height)
+        public Dashboard()
         {
             _colors = new List<Color>
             {   Color.LightCyan,
@@ -24,13 +24,38 @@ namespace Autonomous
                 Color.LightBlue,
                 Color.LightGreen
             };
-            this.width = width;
-            this.height = height;
         }
 
         public void LoadContent(ContentManager content)
         {
-            font = content.Load<SpriteFont>("Score"); // Use the name of your sprite font file here instead of 'Score'.
+            fontSmall = content.Load<SpriteFont>("fonts/FontDashboard.small");
+            fontMedium = content.Load<SpriteFont>("fonts/FontDashboard.medium");
+            fontLarge = content.Load<SpriteFont>("fonts/FontDashboard.large");
+        }
+
+        public void DrawStart(GraphicsDevice graphics)
+        {
+            DrawText(graphics, "START");
+        }
+        
+        public void DrawEnd(GraphicsDevice graphics)
+        {
+            DrawText(graphics, "FINISH");
+        }
+
+        public void DrawText(GraphicsDevice graphics, string text)
+        {
+            if (spriteBatch == null)
+                spriteBatch = new SpriteBatch(graphics);
+
+            spriteBatch.Begin();
+
+            spriteBatch.DrawString(fontLarge, text, new Vector2(graphics.Viewport.Width / 2 - 50, graphics.Viewport.Height / 2), Color.White);
+            spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
         }
 
         public void DrawStatus(GraphicsDevice graphics, GameObject playerObject, int playerIndex)
@@ -41,14 +66,14 @@ namespace Autonomous
 
             if (spriteBatch == null)
                 spriteBatch = new SpriteBatch(graphics);
-
+                   
             spriteBatch.Begin();
 
             string text = $"Camera: {player.PlayerName}";
 
             var color = player.Stopped ? Color.Red : GetColorByIndex(playerIndex);
-            spriteBatch.DrawString(font, text, new Vector2(width / 2 - 50, 10), color, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(font, text, new Vector2(width / 2 - 49, 11), Color.Black, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 50, 10), color);
+            spriteBatch.DrawString(fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 49, 11), Color.Black);
             spriteBatch.End();
 
             graphics.BlendState = BlendState.Opaque;
@@ -82,7 +107,7 @@ namespace Autonomous
             foreach (var player in players)
             {
                 var color = player.Stopped ? Color.Red : GetColorByIndex(i);
-                spriteBatch.DrawString(font,
+                spriteBatch.DrawString(fontSmall,
                     GetPlayerDashboardText(player),
                     new Vector2(10, 5 + i * 20),
                     color);
@@ -90,7 +115,7 @@ namespace Autonomous
                 i++;
             }
 
-            spriteBatch.DrawString(font, fps, new Vector2(10, 5 + players.Count() * 20), Color.Green);
+            spriteBatch.DrawString(fontSmall, fps, new Vector2(10, 5 + players.Count() * 20), Color.Green);
 
         }
 
