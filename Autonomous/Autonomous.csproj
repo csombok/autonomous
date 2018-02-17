@@ -72,6 +72,8 @@
     <Compile Include="Commands\IGameCommand.cs" />
     <Compile Include="FrameCounter.cs" />
     <Compile Include="GameObjects\FinishLine.cs" />
+    <Compile Include="Utilities\FloatExtensions.cs" />
+    <Compile Include="Viewports\CameraSetup.cs" />
     <Compile Include="Viewports\FinishLineViewport.cs" />
     <Compile Include="Viewports\ViewportManager.cs" />
     <Compile Include="CourseObjectFactory.cs" />

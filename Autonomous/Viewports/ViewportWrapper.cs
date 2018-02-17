@@ -35,5 +35,10 @@ namespace Autonomous.Viewports
             UpdateCore();
             View = Matrix.CreateLookAt(CameraPosition, LookAt, CameraOrientation);            
         }
+
+        public virtual void UseCameraSetup(CameraSetup setup)
+        {
+
+        }
     }
 }
