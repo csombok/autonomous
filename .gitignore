@@ -34,3 +34,9 @@
 /Autonomous.SamplePlayer/bin/x64/Debug
 /Autonomous.SamplePlayer/obj/x64/Debug
 /Autonomous/Content/Buildings/Building2
+/Autonomous.SamplePlayer/obj/Release
+/Autonomous.SamplePlayer/bin/Release
+/Autonomous.HumanPlayer/obj/Release
+/Autonomous.HumanPlayer/bin/Release
+/Autonomous/obj/Release
+/Autonomous/bin/Windows/AnyCPU/Release

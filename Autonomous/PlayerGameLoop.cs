@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Autonomous.Public;
@@ -12,28 +13,31 @@ namespace Autonomous
     {
         public static void StartGameLoop(IPlayer player, string playerId, GameStateManager gameStateManager)
         {
-            Task task = new Task(() =>
+            try
             {
-                try
-                {
-                    player.Initialize(playerId);
-                }
-                catch (Exception e)
-                {
-                    // TODO
-                }
+                player.Initialize(playerId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
+            Thread t = new Thread(() => 
+            
+            {
                 bool stopped = false;
                 int lastState = -1;
                 while (!stopped)
                 {
+                    stopped = gameStateManager.GameState?.Stopped ?? false;
                     if (gameStateManager.GameStateCounter == lastState)
                     {
-                        Task.Delay(20);
+                        Thread.Sleep(50);
                         continue;
                     }
 
                     lastState = gameStateManager.GameStateCounter;
+
                     var state = gameStateManager.GameState;
                     if (state == null)
                         continue;
@@ -47,11 +51,10 @@ namespace Autonomous
                     {
                         Console.WriteLine(e);
                     }
-
                 }
             });
 
-            task.Start();
+            t.Start();
         }
     }
 }
