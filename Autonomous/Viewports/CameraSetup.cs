@@ -1,4 +1,4 @@
-﻿namespace Autonomous.Viewports
+﻿namespace Autonomous.Impl.Viewports
 {
     public class CameraSetup
     {

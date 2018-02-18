@@ -1,4 +1,5 @@
-﻿using Autonomous.GameObjects;
+﻿using Autonomous.Impl.GameObjects;
+using Autonomous.Impl.Viewports;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

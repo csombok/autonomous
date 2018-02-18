@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Autonomous.Utilities
+namespace Autonomous.Impl.Utilities
 {
     public static class FloatExtensions
     {
