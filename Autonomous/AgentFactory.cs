@@ -16,6 +16,8 @@ namespace Autonomous.Impl
         private Model _barrierModel;
         private Model _prideModel;
         private Model _peugeotModel;
+        private Model _porsheModel;
+        private Model _porshe911Model;
         private Model _busStopModel;
         private IGameStateProvider _gameStateProvider;
         private Random random = new Random();
@@ -28,6 +30,8 @@ namespace Autonomous.Impl
             _agentCreators.Add(CreateBarrier);
             _agentCreators.Add(CreateVan);
             _agentCreators.Add(CreateLambo);
+            _agentCreators.Add(CreatePorshe);
+            _agentCreators.Add(CreatePorshe911);
             _agentCreators.Add(CreateBus);
             _agentCreators.Add(CreatePeugeot);
             _agentCreators.Add(CreatePride);
@@ -43,6 +47,8 @@ namespace Autonomous.Impl
             _prideModel = content.Load<Model>("cars\\pride\\pride_400");
             _peugeotModel = content.Load<Model>("cars\\glx_400\\glx_400");
             _busStopModel = content.Load<Model>("busstop\\bus_stop");
+            _porsheModel = content.Load<Model>("Cars/Porshe/carrgt");
+            _porshe911Model = content.Load<Model>("Cars/Porshe911/Porsche_911_GT2");
         }
 
         public IEnumerable<GameObject> GenerateInitialCarAgents(float agentDensity)
@@ -147,6 +153,25 @@ namespace Autonomous.Impl
             float v = ((float)random.NextDouble() * 20 + 90) / 3.6f;
             return CreateVehicleAgent(_lamboModel, lane, opposite, y, width, height, v, 180);
         }
+
+        public CarAgent CreatePorshe911(bool opposite, float y)
+        {
+            int lane = 1;
+            const float width = 2f;
+            const float height = 4.25f;
+            float v = ((float)random.NextDouble() * 20 + 90) / 3.6f;
+            return CreateVehicleAgent(_porshe911Model, lane, opposite, y, width, height, v, 180);
+        }
+
+        public CarAgent CreatePorshe(bool opposite, float y)
+        {
+            int lane = 1;
+            const float width = 2f;
+            const float height = 4.25f;
+            float v = ((float)random.NextDouble() * 20 + 90) / 3.6f;
+            return CreateVehicleAgent(_porsheModel, lane, opposite, y, width, height, v, 180);
+        }
+
 
         public CarAgent CreateBus(bool opposite, float y)
         {
