@@ -14,7 +14,8 @@ namespace Autonomous.Impl
         private Model barrierModel;
         private Model cityModel;
         private Model terrainModel;
-        private Model buildingModel;
+        private Model buildingModelA;
+        private Model buildingModelB;
         private readonly Dictionary<Type, float> lastObjectPositions = new Dictionary<Type, float>();
 
         public void LoadContent(ContentManager content)
@@ -23,7 +24,8 @@ namespace Autonomous.Impl
             barrierModel = content.Load<Model>("barrier");
             cityModel = content.Load<Model>("City/The City");
             terrainModel = content.Load<Model>("mountain/mountains");
-            buildingModel = content.Load<Model>("BuildingA");
+            buildingModelA = content.Load<Model>("BuildingA");
+            buildingModelB = content.Load<Model>("Buildings/BuildingC/Build");
         }
 
         public IEnumerable<GameObject> GenerateCourseArea(float positionY = 0)
@@ -128,9 +130,10 @@ namespace Autonomous.Impl
             const float buildingsStartPositionLeftY = 600f;
             const float buildingsStartPositionRightY = 420f;
             const float frequency = 30f;
-
+            
             if (buildingsStartPositionRightY < areaPositionY && IsNewObjectGenerationRequried<BuildingA>(areaPositionY))
             {
+                var random = new Random(1000);
                 for (int i = 0; i < count; i++)
                 {
                     float positionY = GetNextPosition<BuildingA>(frequency, buildingsStartPositionRightY);
@@ -139,12 +142,14 @@ namespace Autonomous.Impl
                     float x = i % 4 == 0 ? 11 : 13;
                     float widthLeft = i % 2 == 0 ? 6f : 7f;
                     float widthRight = i % 3 == 0 ? 7f : 6f;
+                    
+                    var model = random.Next(0, 200) % 2 == 0 ? buildingModelB : buildingModelA;
 
                     if (positionY >= buildingsStartPositionLeftY)
-                        yield return new BuildingA(buildingModel, x, positionY, rotationLeft, widthLeft);
+                        yield return new BuildingA(model, x, positionY, rotationLeft, widthLeft);
 
                     if (positionY >= buildingsStartPositionRightY)
-                        yield return new BuildingA(buildingModel, -x, positionY, rotationRight, widthRight);
+                        yield return new BuildingA(model, -x, positionY, rotationRight, widthRight);
 
                 }
             }
@@ -157,7 +162,7 @@ namespace Autonomous.Impl
                 return true;
             }
 
-            return Math.Abs(positionY - lastPositionY) < 100f;
+            return Math.Abs(positionY - lastPositionY) < 300f;
         }
 
         private float GetNextPosition<T>(float offsetY, float initialPosition = 0f) where T : GameObject

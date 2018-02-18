@@ -271,8 +271,7 @@ namespace Autonomous.Impl
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            DrawBackground();
+            GraphicsDevice.Clear(Color.FromNonPremultiplied(78,55,38,255));
 
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -286,6 +285,7 @@ namespace Autonomous.Impl
             foreach (var viewport in viewportManager.Viewports)
             {
                 graphics.GraphicsDevice.Viewport = viewport.Viewport;
+                DrawBackground();
                 Draw(gameTime, viewport);
                 dashboard.DrawStatus(graphics.GraphicsDevice, viewport.GameObject, viewPortIndex);
 
@@ -316,7 +316,7 @@ namespace Autonomous.Impl
 
             backgroundSpriteBatch.Begin();
 
-            backgroundSpriteBatch.Draw(background, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            backgroundSpriteBatch.Draw(background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 2), Color.White);
 
             backgroundSpriteBatch.End();
             GraphicsDevice.BlendState = BlendState.Opaque;

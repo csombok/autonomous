@@ -97,9 +97,8 @@ namespace Autonomous.Impl.GameObjects
         {
             float cameraY = -viewport.CameraPosition.Z;
             return this.Y > cameraY - 10 && this.Y < cameraY + 400;
-
-
         }
+
         public virtual void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
         {
             if (!IsInView(viewport))
