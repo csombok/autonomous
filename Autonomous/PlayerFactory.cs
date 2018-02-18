@@ -18,6 +18,9 @@ namespace Autonomous.Impl
         private CompositionContainer _container;
         private Model porsheModel;
         private Model lamborginiModel;
+        private Model porshe911;
+        private IList<Model> carModels;
+        private int carModelIndex = 0;
 
         public IEnumerable<IPlayerData> PlayersInfo
         {
@@ -51,6 +54,14 @@ namespace Autonomous.Impl
         {
             porsheModel = content.Load<Model>("Cars/Porshe/carrgt");
             lamborginiModel = content.Load<Model>("Lambo/Lamborghini_Aventador");
+            porshe911 = content.Load<Model>("Cars/Porshe911/Porsche_911_GT2");
+
+            carModels = new List<Model>
+            {
+                lamborginiModel,
+                porshe911,
+                porsheModel
+            };
         }
 
         public IEnumerable<Car> LoadPlayers(GameStateManager gameStateManager)
@@ -68,18 +79,24 @@ namespace Autonomous.Impl
             //Fill the imports of this object  
             this._container.ComposeParts(this);
 
-            int i = 0;
+            int playerIndex = 0;
             foreach (var player in this.players)
             {
-                var model = i % 2 == 0 ? lamborginiModel : porsheModel;
-                var x = GameConstants.LaneWidth *1.5f - i * GameConstants.LaneWidth;
+                var model = GetNextCar();
+                var x = GameConstants.LaneWidth *1.5f - playerIndex * GameConstants.LaneWidth;
                 string id = Guid.NewGuid().ToString();
                 PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
 
                 yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, x);
-                i++;
+                playerIndex++;
             }
-
+        }
+        
+        private Model GetNextCar()
+        {
+            var model = carModels[carModelIndex];
+            carModelIndex = (++carModelIndex) % carModels.Count;
+            return model;
         }
 
     }
