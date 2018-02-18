@@ -16,8 +16,9 @@ namespace Autonomous.Impl
         }
         private static GameObjectState GameObjectStateToPublic(GameObject gameObject)
         {
+            Car car = gameObject as Car;
             return new GameObjectState(gameObject.Id, gameObject.Type, gameObject.BoundingBox, gameObject.VX,
-               gameObject.OppositeDirection ? -gameObject.VY : gameObject.VY);
+               gameObject.OppositeDirection ? -gameObject.VY : gameObject.VY, car?.Damage ?? 0);
         }
     }
 }

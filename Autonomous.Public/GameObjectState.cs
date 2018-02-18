@@ -13,7 +13,7 @@
         /// <param name="boundingBox"></param>
         /// <param name="vx"></param>
         /// <param name="vy"></param>
-        public GameObjectState(string id, GameObjectType type, RectangleF boundingBox, float vx, float vy)
+        public GameObjectState(string id, GameObjectType type, RectangleF boundingBox, float vx, float vy, float damage)
         {
             Id = id;
             GameObjectType = type;
@@ -41,6 +41,11 @@
         /// Type of the object.
         /// </summary>
         public GameObjectType GameObjectType { get; private set; }
+
+        /// <summary>
+        /// Damage (0-1).
+        /// </summary>
+        public float Damage { get; private set; }
 
         /// <summary>
         /// Id of the object.
