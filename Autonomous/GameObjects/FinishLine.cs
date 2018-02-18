@@ -37,6 +37,7 @@ namespace Autonomous.Impl.GameObjects
 
         public override void Initialize()
         {
+            this.Type = GameObjectType.FinishLine;
         }
 
         public override void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)

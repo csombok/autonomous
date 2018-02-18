@@ -24,6 +24,10 @@
         /// <summary>
         /// Bus stop, outside of the road.
         /// </summary>
-        BusStop
+        BusStop,
+        /// <summary>
+        /// Line at the end of the track.
+        /// </summary>
+        FinishLine
     }
 }
