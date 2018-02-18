@@ -5,6 +5,7 @@ using Autonomous.Impl.GameObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Autonomous.Impl
 {
@@ -119,18 +120,24 @@ namespace Autonomous.Impl
 
         }
 
+        private Texture2D rect;
+        private Vector2 coor;
         private void DrawRectangle(GraphicsDevice graphics, int width, int height, int x, int y)
         {
-            Texture2D rect = new Texture2D(graphics, width, height);
-            Color[] data = new Color[width * height];
+            if (rect == null)
+            {
+                rect = new Texture2D(graphics, width, height);
+                Color[] data = new Color[width * height];
 
-            Vector2 coor = new Vector2(x, y);
+                coor = new Vector2(x, y);
+
+                for (int j = 0; j < data.Length; ++j)
+                    data[j] = Color.FromNonPremultiplied(0, 0, 0, 100);
+
+                rect.SetData(data);
+            }
             spriteBatch.Draw(rect, coor, Color.Black);
 
-            for (int j = 0; j < data.Length; ++j)
-                data[j] = Color.FromNonPremultiplied(0, 0, 0, 100);
-
-            rect.SetData(data);
         }
 
         private Color GetColorByIndex(int index)
