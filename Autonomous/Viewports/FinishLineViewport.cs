@@ -12,7 +12,8 @@ namespace Autonomous.Impl.Viewports
     {
         private GameObject _gameObject;
 
-        public FinishLineViewport(int x, int y, int width, int height, GameObject gameObject) : base(x, y, width, height)
+        public FinishLineViewport(int x, int y, int width, int height, GameObject gameObject) 
+            : base(x, y, width, height, gameObject)
         {
             _gameObject = gameObject;
 

@@ -92,7 +92,7 @@ namespace Autonomous.Impl
         public void InitializeModel()
         {
             road = new Road();
-            finishline = new FinishLine() {Y = _length};
+            finishline = new FinishLine() { Y = _length };
             _players = playerFactory.LoadPlayers(_gameStateManager).ToList();
             gameObjects = new List<GameObject>(_players) { road, finishline };
             gameObjects.AddRange(courseObjectFactory.GenerateCourseArea());
@@ -121,7 +121,7 @@ namespace Autonomous.Impl
             HandleCommands(gameTime);
             UpdateModel(gameTime);
             viewportManager.Viewports.ForEach(vp => vp.Update());
-            
+
             base.Update(gameTime);
         }
 
@@ -140,7 +140,7 @@ namespace Autonomous.Impl
 
 
             if (_slowdown)
-                gameTime.ElapsedGameTime = TimeSpan.FromMilliseconds(gameTime.ElapsedGameTime.TotalMilliseconds/5);
+                gameTime.ElapsedGameTime = TimeSpan.FromMilliseconds(gameTime.ElapsedGameTime.TotalMilliseconds / 5);
 
             gameObjects.ForEach(go => go.Update(gameTime));
             UpdateGameCourse(gameTime);
@@ -153,7 +153,7 @@ namespace Autonomous.Impl
             if (firstPlayerFront >= finishline.Y - 10)
             {
                 _slowdown = true;
-                viewportManager.SetViewports(new List<GameObject>() {finishline});
+                viewportManager.SetViewports(new List<GameObject>() { finishline });                
             }
 
             if (firstPlayerFront >= finishline.Y)
@@ -282,10 +282,16 @@ namespace Autonomous.Impl
 
             Viewport original = graphics.GraphicsDevice.Viewport;
 
+            int viewPortIndex = 0;
             foreach (var viewport in viewportManager.Viewports)
             {
                 graphics.GraphicsDevice.Viewport = viewport.Viewport;
                 Draw(gameTime, viewport);
+                dashboard.DrawStatus(graphics.GraphicsDevice, viewport.GameObject, viewPortIndex);
+
+                DrawDashboard(gameTime);
+
+                ++viewPortIndex;
             }
 
             graphics.GraphicsDevice.Viewport = original;
@@ -293,6 +299,15 @@ namespace Autonomous.Impl
             dashboard.Draw(graphics.GraphicsDevice, _players, fps);
 
             base.Draw(gameTime);
+        }
+
+        private void DrawDashboard(GameTime gameTime)
+        {
+            if (!Stopped && gameTime.TotalGameTime.TotalSeconds < 3)
+                dashboard.DrawStart(graphics.GraphicsDevice);
+
+            if (Stopped)
+                dashboard.DrawEnd(graphics.GraphicsDevice);
         }
 
         private void DrawBackground()

@@ -15,6 +15,7 @@ namespace Autonomous.Impl.Commands
         private readonly int changeInterval;
         private TimeSpan lastViewportChange = new TimeSpan();
         private int activePlayerIndex;
+        private int activeCameraIndex;
 
         public AutoViewportSelectionCommand(ViewportManager viewportManager, List<Car> players, int humanPlayerIndex, int changeInterval = 10000)
         {
@@ -42,12 +43,24 @@ namespace Autonomous.Impl.Commands
                         playersInFocus.Add(players[activePlayerIndex]);
                 }
 
-                viewportManager.SetViewports(playersInFocus);
+                viewportManager.SetViewports(playersInFocus, GetActiveCamera());
 
                 activePlayerIndex = (++activePlayerIndex) % (players.Count + 1);
 
                 lastViewportChange = gameTime.TotalGameTime;
             }
+        }
+
+        public CameraSetup GetActiveCamera()
+        {
+            var setup = CameraSetup.CameraDefault;
+
+            if (activeCameraIndex % 3 == 0) setup = CameraSetup.CameraInside;
+
+            if (activeCameraIndex % 4 == 0) setup = CameraSetup.CameraRear;
+
+            ++activeCameraIndex;
+            return setup;
         }
     }
 }

@@ -17,7 +17,12 @@ namespace Autonomous.Impl.Viewports
 
         public void SetViewports(IEnumerable<GameObject> gameObjects)
         {
-            Viewports = viewportFactory.CreateViewPorts(gameObjects).ToList();
+            SetViewports(gameObjects, CameraSetup.CameraDefault);
+        }
+
+        public void SetViewports(IEnumerable<GameObject> gameObjects, CameraSetup cameraSetup)
+        {
+            Viewports = viewportFactory.CreateViewPorts(gameObjects, cameraSetup).ToList();
         }
     }
 }

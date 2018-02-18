@@ -37,6 +37,16 @@ namespace Autonomous.Impl.Commands
                 if (Keyboard.GetState().IsKeyDown(Keys.F5))
                     viewportManager.SetViewports(players);
 
+                if (Keyboard.GetState().IsKeyDown(Keys.F6))
+                    viewportManager.Viewports.ForEach(vp => vp.UseCameraSetup(CameraSetup.CameraDefault));
+
+                if (Keyboard.GetState().IsKeyDown(Keys.F7))
+                    viewportManager.Viewports.ForEach(vp => vp.UseCameraSetup(CameraSetup.CameraInside));
+
+                if (Keyboard.GetState().IsKeyDown(Keys.F8))
+                    viewportManager.Viewports.ForEach(vp => vp.UseCameraSetup(CameraSetup.CameraRear));
+
+
             }
             catch (Exception)
             {

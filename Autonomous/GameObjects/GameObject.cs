@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Autonomous.Public;
+using Autonomous.Impl.Utilities;
 using Autonomous.Impl.Viewports;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -66,7 +67,7 @@ namespace Autonomous.Impl.GameObjects
             MaxVY = 50f / 3.6f;
         }
 
-        public GameObject(bool agentObject): this(null, agentObject) { }
+        public GameObject(bool agentObject) : this(null, agentObject) { }
 
         public virtual void Update(GameTime gameTime)
         {
@@ -147,14 +148,16 @@ namespace Autonomous.Impl.GameObjects
             float turnRotation = Math.Abs(speedRatio - 0) < 0.001f
                 ? 0
                 : VX * 2 / speedRatio;
-            if (turnRotation > 20) turnRotation = 20;
-            if (turnRotation < -20) turnRotation = -20;
+
+            turnRotation = turnRotation.SignedMax(18);
+            float turnRotationZ = (turnRotation / 1.4f).SignedMax(4);
 
             float rotate = OppositeDirection ? 180 : 0;
             var worldToView =
                 Matrix.CreateRotationY(MathHelper.ToRadians(ModelRotate - turnRotation)) *
                 Matrix.CreateTranslation(-translateX, -translateZ, translateY) *
                 Matrix.CreateRotationY(MathHelper.ToRadians(rotate)) *
+                Matrix.CreateRotationZ(MathHelper.ToRadians(turnRotationZ)) *
                 Matrix.CreateScale(scaleX) *
                 Matrix.CreateTranslation(new Vector3(X, 0, -Y));
             return worldToView;
@@ -237,5 +240,7 @@ namespace Autonomous.Impl.GameObjects
                 this.VY = 0;
             }
         }
+
+        
     }
 }

@@ -10,7 +10,9 @@ namespace Autonomous.Impl
 {
     class Dashboard
     {
-        private SpriteFont font;
+        private SpriteFont fontSmall;
+        private SpriteFont fontMedium;
+        private SpriteFont fontLarge;
         private SpriteBatch spriteBatch;
         private List<Color> _colors;
 
@@ -26,7 +28,58 @@ namespace Autonomous.Impl
 
         public void LoadContent(ContentManager content)
         {
-            font = content.Load<SpriteFont>("Score"); // Use the name of your sprite font file here instead of 'Score'.
+            fontSmall = content.Load<SpriteFont>("fonts/FontDashboard.small");
+            fontMedium = content.Load<SpriteFont>("fonts/FontDashboard.medium");
+            fontLarge = content.Load<SpriteFont>("fonts/FontDashboard.large");
+        }
+
+        public void DrawStart(GraphicsDevice graphics)
+        {
+            DrawText(graphics, "START");
+        }
+        
+        public void DrawEnd(GraphicsDevice graphics)
+        {
+            DrawText(graphics, "FINISH");
+        }
+
+        public void DrawText(GraphicsDevice graphics, string text)
+        {
+            if (spriteBatch == null)
+                spriteBatch = new SpriteBatch(graphics);
+
+            spriteBatch.Begin();
+
+            spriteBatch.DrawString(fontLarge, text, new Vector2(graphics.Viewport.Width / 2 - 50, graphics.Viewport.Height / 2), Color.White);
+            spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
+        }
+
+        public void DrawStatus(GraphicsDevice graphics, GameObject playerObject, int playerIndex)
+        {
+            var player = playerObject as Car;
+
+            if (player == null) return;
+
+            if (spriteBatch == null)
+                spriteBatch = new SpriteBatch(graphics);
+                   
+            spriteBatch.Begin();
+
+            string text = $"Camera: {player.PlayerName}";
+
+            var color = player.Stopped ? Color.Red : GetColorByIndex(playerIndex);
+            spriteBatch.DrawString(fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 50, 10), color);
+            spriteBatch.DrawString(fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 49, 11), Color.Black);
+            spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
+
         }
 
         public void Draw(GraphicsDevice graphics, IEnumerable<Car> players, string fps)
@@ -48,13 +101,13 @@ namespace Autonomous.Impl
 
         private void DrawScores(GraphicsDevice graphics, IEnumerable<Car> players, string fps)
         {
-            DrawRectangle(graphics, 400, players.Count() * 25 + 25);
+            DrawRectangle(graphics, 400, players.Count() * 25 + 25, 0, 0);
 
             int i = 0;
             foreach (var player in players)
             {
                 var color = player.Stopped ? Color.Red : GetColorByIndex(i);
-                spriteBatch.DrawString(font,
+                spriteBatch.DrawString(fontSmall,
                     GetPlayerDashboardText(player),
                     new Vector2(10, 5 + i * 20),
                     color);
@@ -62,16 +115,16 @@ namespace Autonomous.Impl
                 i++;
             }
 
-            spriteBatch.DrawString(font, fps, new Vector2(10, 5 + players.Count() * 20), Color.Green);
+            spriteBatch.DrawString(fontSmall, fps, new Vector2(10, 5 + players.Count() * 20), Color.Green);
 
         }
 
-        private void DrawRectangle(GraphicsDevice graphics, int width, int height)
+        private void DrawRectangle(GraphicsDevice graphics, int width, int height, int x, int y)
         {
             Texture2D rect = new Texture2D(graphics, width, height);
             Color[] data = new Color[width * height];
 
-            Vector2 coor = new Vector2(0, 0);
+            Vector2 coor = new Vector2(x, y);
             spriteBatch.Draw(rect, coor, Color.Black);
 
             for (int j = 0; j < data.Length; ++j)
