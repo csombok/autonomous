@@ -128,7 +128,7 @@ namespace Autonomous.Impl
         public void UpdateModel(GameTime gameTime)
         {
             var agentObjects = this.gameObjects
-                .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent)).OrderBy(g => g.Y);
+                .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent) || go.GetType() == typeof(FinishLine)).OrderBy(g => g.Y);
             var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped };
             CheckIfGameFinished(internalState);
             if (Stopped)
