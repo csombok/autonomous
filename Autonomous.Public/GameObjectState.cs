@@ -20,6 +20,7 @@
             BoundingBox = boundingBox;
             VX = vx;
             VY = vy;
+            Damage = damage;
         }
 
         /// <summary>
