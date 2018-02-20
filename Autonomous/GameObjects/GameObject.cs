@@ -103,8 +103,16 @@ namespace Autonomous.Impl.GameObjects
         {
             if (!IsInView(viewport))
                 return;
+
             var world = TransformModelToWorld();
 
+            DrawModel(viewport, world);
+
+            DrawShadow(viewport, device, world);
+        }
+
+        private void DrawModel(ViewportWrapper viewport, Matrix world)
+        {
             foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -118,12 +126,15 @@ namespace Autonomous.Impl.GameObjects
 
                 mesh.Draw();
             }
+        }
 
-            // Draw shadow, using the stencil buffer to prevent drawing overlapping
-            // polygons
+        private void DrawShadow(ViewportWrapper viewport, GraphicsDevice device, Matrix world)
+        {
+            // Draw shadow, using the stencil buffer to prevent drawing overlapping polygons
 
             // Clear stencil buffer to zero.
             device.Clear(ClearOptions.Stencil, Color.Black, 0.5f, 0);
+
             device.DepthStencilState = new DepthStencilState
             {
                 StencilEnable = true,
@@ -131,7 +142,7 @@ namespace Autonomous.Impl.GameObjects
                 ReferenceStencil = 0,
                 StencilFunction = CompareFunction.Equal,
                 // Increment the stencil buffer if we draw
-                StencilPass = StencilOperation.Increment,                
+                StencilPass = StencilOperation.Increment,
             };
 
             device.BlendState = new BlendState
@@ -141,7 +152,6 @@ namespace Autonomous.Impl.GameObjects
                 ColorDestinationBlend = Blend.DestinationColor,
             };
 
-
             // Create a Plane using three points on the Quad
             var basicEffect = new BasicEffect(device);
             basicEffect.EnableDefaultLighting();
@@ -149,12 +159,12 @@ namespace Autonomous.Impl.GameObjects
             basicEffect.DiffuseColor = Vector3.Up;
             var shadowLightDir = basicEffect.DirectionalLight0.Direction;
 
-            // Use the wall plane to create a shadow matrix, and make the shadow slightly
-            // higher than the wall.  The shadow is based on the strongest light
+            // Use plane based on model to create a shadow matrix, and make the shadow slightly
+            // The shadow is based on the strongest light
             Quad quad = new Quad(new Vector3(X, 0.01f, -Y), Vector3.Up, Vector3.Backward, Width + 10, Height + 10);
             var plane = new Plane(quad.UpperLeft, quad.UpperRight, quad.LowerLeft);
             var shadow = Matrix.CreateShadow(shadowLightDir, plane) *
-                Matrix.CreateTranslation(quad.Normal / 100);
+                         Matrix.CreateTranslation(quad.Normal / 100);
 
             // Draw the shadow without lighting
             foreach (ModelMesh mesh in Model.Meshes)
@@ -173,20 +183,14 @@ namespace Autonomous.Impl.GameObjects
                 }
                 mesh.Draw();
             }
-            
-            // Return render states to normal            
 
-            // turn stencilling off
+            // Return render states to normal, turn stencilling off
             device.DepthStencilState = new DepthStencilState
             {
                 StencilEnable = false
             };
 
-            device.BlendState = new BlendState
-            {              
-            };
-            // turn alpha blending off
-            //device.RenderState.AlphaBlendEnable = false;
+            device.BlendState = new BlendState();
         }
 
         public virtual void Initialize()
