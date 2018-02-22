@@ -44,7 +44,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\bin\x64\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -70,6 +70,10 @@
     <Compile Include="Commands\IGameCommand.cs" />
     <Compile Include="FrameCounter.cs" />
     <Compile Include="GameObjects\FinishLine.cs" />
+    <Compile Include="Scoring\PlayerScore.cs" />
+    <Compile Include="Scoring\ScoreCalculator.cs" />
+    <Compile Include="Scoring\ScoreCsvExporter.cs" />
+    <Compile Include="Scoring\ScoreFormatter.cs" />
     <Compile Include="Utilities\FloatExtensions.cs" />
     <Compile Include="Viewports\CameraSetup.cs" />
     <Compile Include="Viewports\FinishLineViewport.cs" />
