@@ -149,7 +149,7 @@ namespace Autonomous.Impl
 
         private void CheckIfGameFinished(GameStateInternal internalState)
         {
-            float firstPlayerFront = internalState.FirstPlayer.BoundingBox.Top;
+            float firstPlayerFront = internalState.FirstPlayer.BoundingBox.Bottom;
             if (firstPlayerFront >= finishline.Y - 10)
             {
                 _slowdown = true;
