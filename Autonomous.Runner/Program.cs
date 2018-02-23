@@ -80,7 +80,7 @@ namespace Autonomous
             }
 
             var trafficStr = GetArg(args, "-traffic");
-            float mintraffic = 1000f, maxtraffic = 1000f;
+            float mintraffic = 0.2f, maxtraffic = 0.2f;
             if (trafficStr != null)
             {
                 var parts = trafficStr.Split('-');
