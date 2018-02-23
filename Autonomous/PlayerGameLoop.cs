@@ -52,6 +52,7 @@ namespace Autonomous.Impl
                         Console.WriteLine(e);
                     }
                 }
+                player.Finish();
             });
             t.IsBackground = true;
             t.Start();
