@@ -168,12 +168,13 @@ namespace Autonomous.Impl
 
             if (firstPlayerFront >= _finishline.Y)
             {
+                ExportPlayerScores(gameTimeTotalGameTime);
+
                 Stopped = true;
             }
 
             if (firstPlayerFront >= _finishline.Y + 20)
             {
-                ExportPlayerScores(gameTimeTotalGameTime);
                 Exit();
             }
         }
