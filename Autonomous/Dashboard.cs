@@ -5,33 +5,32 @@ using Autonomous.Impl.GameObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+using Autonomous.Impl.Scoring;
 
 namespace Autonomous.Impl
 {
-    class Dashboard
+    internal class Dashboard
     {
-        private SpriteFont fontSmall;
-        private SpriteFont fontMedium;
-        private SpriteFont fontLarge;
-        private SpriteBatch spriteBatch;
-        private List<Color> _colors;
+        private readonly ScoreCalculator _scoreCalculator;
+        private readonly ScoreFormatter _scoreFormatter;
+        private SpriteFont _fontSmall;
+        private SpriteFont _fontMedium;
+        private SpriteFont _fontLarge;
+        private SpriteBatch _spriteBatch;
+        private Texture2D _rect;
+        private Vector2 _coor;
 
-        public Dashboard()
+        public Dashboard(ScoreCalculator scoreCalculator, ScoreFormatter scoreFormatter)
         {
-            _colors = new List<Color>
-            {   Color.LightCyan,
-                Color.Orange,
-                Color.LightBlue,
-                Color.LightGreen
-            };
+            _scoreCalculator = scoreCalculator;
+            _scoreFormatter = scoreFormatter;
         }
 
         public void LoadContent(ContentManager content)
         {
-            fontSmall = content.Load<SpriteFont>("fonts/FontDashboard.small");
-            fontMedium = content.Load<SpriteFont>("fonts/FontDashboard.medium");
-            fontLarge = content.Load<SpriteFont>("fonts/FontDashboard.large");
+            _fontSmall = content.Load<SpriteFont>("fonts/FontDashboard.small");
+            _fontMedium = content.Load<SpriteFont>("fonts/FontDashboard.medium");
+            _fontLarge = content.Load<SpriteFont>("fonts/FontDashboard.large");
         }
 
         public void DrawStart(GraphicsDevice graphics)
@@ -46,36 +45,31 @@ namespace Autonomous.Impl
 
         public void DrawText(GraphicsDevice graphics, string text)
         {
-            if (spriteBatch == null)
-                spriteBatch = new SpriteBatch(graphics);
+            if (_spriteBatch == null)
+                _spriteBatch = new SpriteBatch(graphics);
 
-            spriteBatch.Begin();
+            _spriteBatch.Begin();
 
-            spriteBatch.DrawString(fontLarge, text, new Vector2(graphics.Viewport.Width / 2 - 50, graphics.Viewport.Height / 2), Color.White);
-            spriteBatch.End();
+            _spriteBatch.DrawString(_fontLarge, text, new Vector2(graphics.Viewport.Width / 2 - 50, graphics.Viewport.Height / 2), Color.White);
+            _spriteBatch.End();
 
             graphics.BlendState = BlendState.Opaque;
             graphics.RasterizerState = RasterizerState.CullCounterClockwise;
             graphics.DepthStencilState = DepthStencilState.Default;
         }
 
-        public void DrawStatus(GraphicsDevice graphics, GameObject playerObject, int playerIndex)
+        public void DrawPlayerName(GraphicsDevice graphics, Car player, int playerIndex)
         {
-            var player = playerObject as Car;
-
-            if (player == null) return;
-
-            if (spriteBatch == null)
-                spriteBatch = new SpriteBatch(graphics);
+            if (_spriteBatch == null)
+                _spriteBatch = new SpriteBatch(graphics);
                    
-            spriteBatch.Begin();
+            _spriteBatch.Begin();
 
             string text = $"Camera: {player.PlayerName}";
 
-            var color = player.Stopped ? Color.Red : GetColorByIndex(playerIndex);
-            spriteBatch.DrawString(fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 50, 10), color);
-            spriteBatch.DrawString(fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 49, 11), Color.Black);
-            spriteBatch.End();
+            _spriteBatch.DrawString(_fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 50, 10), player.Color);
+            _spriteBatch.DrawString(_fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 49, 11), Color.Black);
+            _spriteBatch.End();
 
             graphics.BlendState = BlendState.Opaque;
             graphics.RasterizerState = RasterizerState.CullCounterClockwise;
@@ -83,16 +77,23 @@ namespace Autonomous.Impl
 
         }
 
-        public void Draw(GraphicsDevice graphics, IEnumerable<Car> players, string fps)
+        public void Draw(GraphicsDevice graphics, IList<Car> players, string fps, TimeSpan totalGameTime)
         {
-            if (spriteBatch == null)
-                spriteBatch = new SpriteBatch(graphics);
+            if (_spriteBatch == null)
+                _spriteBatch = new SpriteBatch(graphics);
 
-            spriteBatch.Begin();
+            _spriteBatch.Begin();
 
-            DrawScores(graphics, players, fps);
+            const int width = 400;
+            int height = players.Count() * 25 + 25;
 
-            spriteBatch.End();
+            DrawRectangle(graphics, width, height, 0, 0);
+
+            DrawScores(players, totalGameTime);
+
+            DrawFps(positionY: 5 + players.Count() * 20, fps: fps);
+
+            _spriteBatch.End();
 
             graphics.BlendState = BlendState.Opaque;
             graphics.RasterizerState = RasterizerState.CullCounterClockwise;
@@ -100,60 +101,50 @@ namespace Autonomous.Impl
 
         }
 
-        private void DrawScores(GraphicsDevice graphics, IEnumerable<Car> players, string fps)
+        private void DrawFps(float positionY, string fps)
         {
-            DrawRectangle(graphics, 400, players.Count() * 25 + 25, 0, 0);
+            _spriteBatch.DrawString(_fontSmall, fps, new Vector2(10, positionY), Color.Green);
+        }
 
-            int i = 0;
-            foreach (var player in players)
+        private void DrawScores(IList<Car> players, TimeSpan totalGameTime)
+        {
+            if (players == null) return;
+
+            var playerScores = _scoreCalculator.GetPlayerScores(players, totalGameTime);
+
+            int line = 0;
+            foreach (var score in playerScores)
             {
-                var color = player.Stopped ? Color.Red : GetColorByIndex(i);
-                spriteBatch.DrawString(fontSmall,
-                    GetPlayerDashboardText(player),
-                    new Vector2(10, 5 + i * 20),
+                var player = players.FirstOrDefault(p =>
+                    p.PlayerName.Equals(score.PlayerName, StringComparison.InvariantCultureIgnoreCase));
+
+                var color = player?.Color ?? Color.Azure;
+
+                _spriteBatch.DrawString(_fontSmall,
+                    _scoreFormatter.GetFormattedScore(score),
+                    new Vector2(10, 5 + line * 20),
                     color);
 
-                i++;
+                ++line;
             }
-
-            spriteBatch.DrawString(fontSmall, fps, new Vector2(10, 5 + players.Count() * 20), Color.Green);
-
         }
 
-        private Texture2D rect;
-        private Vector2 coor;
         private void DrawRectangle(GraphicsDevice graphics, int width, int height, int x, int y)
         {
-            if (rect == null)
+            if (_rect == null)
             {
-                rect = new Texture2D(graphics, width, height);
+                _rect = new Texture2D(graphics, width, height);
                 Color[] data = new Color[width * height];
 
-                coor = new Vector2(x, y);
+                _coor = new Vector2(x, y);
 
                 for (int j = 0; j < data.Length; ++j)
                     data[j] = Color.FromNonPremultiplied(0, 0, 0, 100);
 
-                rect.SetData(data);
+                _rect.SetData(data);
             }
-            spriteBatch.Draw(rect, coor, Color.Black);
+            _spriteBatch.Draw(_rect, _coor, Color.Black);
 
-        }
-
-        private Color GetColorByIndex(int index)
-        {
-            return _colors[Math.Min(index, _colors.Count - 1)];
-        }
-
-        private static string GetPlayerDashboardText(Car player)
-        {
-            var status = player.Stopped
-                ? "STOPPED"
-                : $"{Math.Round(player.Y)}m Speed: " +
-                    $"{Math.Round(player.VY * 4)}km/h" +
-                    $" Damage: {Math.Round(player.Damage * 100)}%";
-
-            return $"{player.PlayerName}: {status}";
         }
 
     }

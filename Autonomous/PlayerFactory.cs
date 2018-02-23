@@ -7,26 +7,38 @@ using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using Microsoft.Xna.Framework;
 
 namespace Autonomous.Impl
 {
     public class PlayerFactory
     {
         [ImportMany]
-        IEnumerable<Lazy<IPlayer, IPlayerData>> players;
+        IEnumerable<Lazy<IPlayer, IPlayerData>> _players;
 
         private CompositionContainer _container;
-        private Model porsheModel;
-        private Model lamborginiModel;
-        private Model porshe911;
-        private IList<Model> carModels;
-        private int carModelIndex = 0;
+        private Model _porsheModel;
+        private Model _lamborginiModel;
+        private Model _porshe911Model;
+        private IList<Model> _carModels;
+        private int _carModelIndex = 0;
+        private readonly List<Color> _colors;
+
+        public PlayerFactory()
+        {
+            _colors = new List<Color>
+            {   Color.LightCyan,
+                Color.Orange,
+                Color.LightBlue,
+                Color.LightGreen
+            };
+        }
 
         public IEnumerable<IPlayerData> PlayersInfo
         {
             get
             {
-                foreach (Lazy<IPlayer, IPlayerData> player in players)
+                foreach (Lazy<IPlayer, IPlayerData> player in _players)
                 {
                     yield return player.Metadata;
                 }
@@ -52,15 +64,15 @@ namespace Autonomous.Impl
 
         public void LoadContent(ContentManager content)
         {
-            porsheModel = content.Load<Model>("Cars/Porshe/carrgt");
-            lamborginiModel = content.Load<Model>("Lambo/Lamborghini_Aventador");
-            porshe911 = content.Load<Model>("Cars/Porshe911/Porsche_911_GT2");
+            _porsheModel = content.Load<Model>("Cars/Porshe/carrgt");
+            _lamborginiModel = content.Load<Model>("Lambo/Lamborghini_Aventador");
+            _porshe911Model = content.Load<Model>("Cars/Porshe911/Porsche_911_GT2");
 
-            carModels = new List<Model>
+            _carModels = new List<Model>
             {
-                lamborginiModel,
-                porshe911,
-                porsheModel
+                _lamborginiModel,
+                _porshe911Model,
+                _porsheModel
             };
         }
 
@@ -80,23 +92,29 @@ namespace Autonomous.Impl
             this._container.ComposeParts(this);
 
             int playerIndex = 0;
-            foreach (var player in this.players)
+            foreach (var player in this._players)
             {
                 var model = GetNextCar();
-                var x = GameConstants.LaneWidth *1.5f - playerIndex * GameConstants.LaneWidth;
+                var x = GameConstants.LaneWidth * 1.5f - playerIndex * GameConstants.LaneWidth;
                 string id = Guid.NewGuid().ToString();
                 PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
+                var color = GetColorByIndex(playerIndex);
 
-                yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, x);
+                yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, color, x);
                 playerIndex++;
             }
         }
-        
+
         private Model GetNextCar()
         {
-            var model = carModels[carModelIndex];
-            carModelIndex = (++carModelIndex) % carModels.Count;
+            var model = _carModels[_carModelIndex];
+            _carModelIndex = (++_carModelIndex) % _carModels.Count;
             return model;
+        }
+
+        private Color GetColorByIndex(int index)
+        {
+            return _colors[Math.Min(index, _colors.Count - 1)];
         }
 
     }

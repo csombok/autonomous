@@ -70,6 +70,10 @@
     <Compile Include="Commands\IGameCommand.cs" />
     <Compile Include="FrameCounter.cs" />
     <Compile Include="GameObjects\FinishLine.cs" />
+    <Compile Include="Scoring\PlayerScore.cs" />
+    <Compile Include="Scoring\ScoreCalculator.cs" />
+    <Compile Include="Scoring\ScoreCsvExporter.cs" />
+    <Compile Include="Scoring\ScoreFormatter.cs" />
     <Compile Include="Utilities\FloatExtensions.cs" />
     <Compile Include="Viewports\CameraSetup.cs" />
     <Compile Include="Viewports\FinishLineViewport.cs" />

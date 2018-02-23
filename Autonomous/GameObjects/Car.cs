@@ -10,15 +10,13 @@ namespace Autonomous.Impl.GameObjects
     {
         private readonly GameStateManager _gameStateManager;
         private TimeSpan _lastCollision = new TimeSpan();
-        public string PlayerName { get; private set; }
-        private float _damage = 0f;
+        public string PlayerName { get; }
 
-        public float Damage => _damage;
-
-        public Car(Model model, string playerId, string playerName, GameStateManager gameStateManager, float x = 0)
+        public Car(Model model, string playerId, string playerName, GameStateManager gameStateManager, Color color, float x = 0)
             : base(model, true)
         {
             _gameStateManager = gameStateManager;
+            Color = color;
             Model = model;
             Width = 1.7f;
             ModelRotate = 180;
@@ -29,6 +27,9 @@ namespace Autonomous.Impl.GameObjects
             PlayerName = playerName;
             MaxX = 6f;
         }
+
+        public Color Color { get; }
+        public float Damage { get; private set; } = 0f;
 
         public override void Update(GameTime gameTime)
         {
@@ -64,14 +65,16 @@ namespace Autonomous.Impl.GameObjects
         public override void HandleCollision(GameObject other, GameTime gameTime)
         {
             base.HandleCollision(other, gameTime);
-            if ((gameTime.TotalGameTime - _lastCollision).TotalMilliseconds > 1000)
+            const double collisionPenalityInterval = 1000;
+            if ((gameTime.TotalGameTime - _lastCollision).TotalMilliseconds > collisionPenalityInterval)
             {
-                _damage = Math.Min((_damage + 0.1f), 1f);
+                Damage = Math.Min((Damage + 0.1f), 1f);                
+                const float speedLossFactor = 3f;
                 var maxSpeed = GameConstants.PlayerMaxSpeed;
-                float speedLoss = (maxSpeed * _damage / 3);
-                this.MaxVY = _damage == 1f ? 0 :  maxSpeed - speedLoss;
+                float speedLoss = (maxSpeed * Damage / speedLossFactor);
+                MaxVY = Math.Abs(Damage - 1f) < 0.0001f ? 0 : maxSpeed - speedLoss;
 
-                if(other== null)
+                if (other == null)
                 {
                     VY = VY / 2;
                 }
@@ -79,7 +82,7 @@ namespace Autonomous.Impl.GameObjects
                 VY = Math.Min(VY, MaxVY);
 
                 _lastCollision = gameTime.TotalGameTime;
-            }            
+            }
         }
     }
 }
