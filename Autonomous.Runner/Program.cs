@@ -46,10 +46,7 @@ namespace Autonomous
                 return;
             }
 
-            using (var game = new Game1(1000, 0.5f))
-            {
-                game.Run();
-            }
+            RunGui(options);
         }
 
         private static void PrintHelp()
@@ -80,7 +77,7 @@ namespace Autonomous
             }
 
             var trafficStr = GetArg(args, "-traffic");
-            float mintraffic = 0.2f, maxtraffic = 0.2f;
+            float mintraffic = 0.1f, maxtraffic = 0.2f;
             if (trafficStr != null)
             {
                 var parts = trafficStr.Split('-');
