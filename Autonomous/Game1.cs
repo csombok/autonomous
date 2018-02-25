@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Input;
 using Autonomous.Impl.Commands;
 using Autonomous.Public;
 using Autonomous.Impl.Viewports;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Autonomous.Impl.GameObjects;
 using Autonomous.Impl.Scoring;
 
@@ -39,8 +37,10 @@ namespace Autonomous.Impl
         private readonly FrameCounter _frameCounter = new FrameCounter();
         private readonly ScoreCsvExporter _scoreCsvExporter;
         private readonly ScoreCalculator _scoreCalculator;
+        private TimeSpan failedAt;
 
-        public bool Stopped { get; set; }
+        public bool Stopped { get; private set; }
+        public bool Failed { get; private set; }
 
         public Game1(float length, float agentDensity)
         {
@@ -160,17 +160,27 @@ namespace Autonomous.Impl
             if (firstPlayerFront >= _finishline.Y - 10)
             {
                 _slowdown = true;
-                _viewportManager.SetViewports(new List<GameObject>() { _finishline });                
+                _viewportManager.SetViewports(new List<GameObject>() { _finishline });
             }
 
             if (firstPlayerFront >= _finishline.Y)
             {
                 ExportPlayerScores(gameTimeTotalGameTime);
-
                 Stopped = true;
             }
 
-            if (firstPlayerFront >= _finishline.Y + 20)
+            if (internalState.GameObjects.OfType<Car>().All(car => car.Stopped))
+            {
+                ExportPlayerScores(gameTimeTotalGameTime);
+                if (!Failed)
+                {
+                    failedAt = gameTimeTotalGameTime;
+                }
+                Stopped = Failed = true;
+            }
+
+            if ((firstPlayerFront >= _finishline.Y + 20)
+                || (Failed && (gameTimeTotalGameTime - failedAt).TotalMilliseconds > 2000))
             {
                 Exit();
             }
@@ -293,7 +303,7 @@ namespace Autonomous.Impl
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.FromNonPremultiplied(78,55,38,255));
+            GraphicsDevice.Clear(Color.FromNonPremultiplied(78, 55, 38, 255));
 
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -332,8 +342,12 @@ namespace Autonomous.Impl
             if (!Stopped && gameTime.TotalGameTime.TotalSeconds < 3)
                 _dashboard.DrawStart(_graphics.GraphicsDevice);
 
-            if (Stopped)
+            if (Stopped && !Failed)
                 _dashboard.DrawEnd(_graphics.GraphicsDevice);
+
+            if (Stopped && Failed)
+                _dashboard.DrawText(_graphics.GraphicsDevice, "GAME OVER!");
+
         }
 
         private void DrawBackground()

@@ -17,9 +17,10 @@ namespace Autonomous.Impl.Scoring
                 var distance = (int)Math.Round(player.Y);
                 var damageInPercent = (int)Math.Round(player.Damage * 100);
                 var speed = (int)Math.Round(player.VY * 4);
+                var score = player.Stopped || position > 3 ? 0 : (int)Math.Pow(2, 4 - position);
 
                 yield return new PlayerScore(player.PlayerName,
-                    distance, position, damageInPercent, speed, timeElapsed, player.Stopped);
+                    distance, position, damageInPercent, speed, timeElapsed, player.Stopped, score);
 
                 ++position;
             }

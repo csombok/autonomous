@@ -20,6 +20,7 @@ namespace Autonomous.Impl
         private Model _porsheModel;
         private Model _lamborginiModel;
         private Model _porshe911Model;
+        private Model _mazdaModel;
         private IList<Model> _carModels;
         private int _carModelIndex = 0;
         private readonly List<Color> _colors;
@@ -67,12 +68,14 @@ namespace Autonomous.Impl
             _porsheModel = content.Load<Model>("Cars/Porshe/carrgt");
             _lamborginiModel = content.Load<Model>("Lambo/Lamborghini_Aventador");
             _porshe911Model = content.Load<Model>("Cars/Porshe911/Porsche_911_GT2");
+            _mazdaModel = content.Load<Model>("Cars/mazda/Mazda_RX-8-By_Decan");
 
             _carModels = new List<Model>
             {
                 _lamborginiModel,
                 _porshe911Model,
-                _porsheModel
+                _porsheModel,
+                _mazdaModel
             };
         }
 

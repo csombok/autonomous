@@ -7,6 +7,7 @@ namespace Autonomous.Impl.Scoring
     internal class ScoreCsvExporter
     {
         private readonly string _filePath;
+        private bool _exported;
 
         public ScoreCsvExporter(string filePath)
         {
@@ -20,11 +21,13 @@ namespace Autonomous.Impl.Scoring
 
         public void ExportScoresToCsv(IEnumerable<PlayerScore> scores)
         {
+            if (_exported) return;
+
             var lines = new List<string>();
 
             if (!File.Exists(_filePath))
             {
-                lines.Add("Position,Name,Distance(m),Damage(%),Time(ms)");
+                lines.Add("Position,Name,Distance(m),Damage(%),Time(ms);Score");
             }
 
             foreach (var score in scores)
@@ -33,10 +36,12 @@ namespace Autonomous.Impl.Scoring
                           $"{score.PlayerName}," +
                           $"{score.Distance}," +
                           $"{score.DamageInPercent}," +
-                          $"{score.TimeElapsed.TotalMilliseconds}");
+                          $"{score.TimeElapsed.TotalMilliseconds}," +
+                          $"{score.Score}");
             }
 
             File.AppendAllLines(_filePath, lines);
+            _exported = true;
         }
     }
 }
