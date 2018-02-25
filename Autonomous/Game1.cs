@@ -156,7 +156,7 @@ namespace Autonomous.Impl
 
         private void CheckIfGameFinished(GameStateInternal internalState, TimeSpan gameTimeTotalGameTime)
         {
-            float firstPlayerFront = internalState.FirstPlayer.BoundingBox.Top;
+            float firstPlayerFront = internalState.FirstPlayer.BoundingBox.Bottom;
             if (firstPlayerFront >= _finishline.Y - 10)
             {
                 _slowdown = true;
@@ -165,12 +165,13 @@ namespace Autonomous.Impl
 
             if (firstPlayerFront >= _finishline.Y)
             {
+                ExportPlayerScores(gameTimeTotalGameTime);
+
                 Stopped = true;
             }
 
             if (firstPlayerFront >= _finishline.Y + 20)
             {
-                ExportPlayerScores(gameTimeTotalGameTime);
                 Exit();
             }
         }
