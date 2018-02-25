@@ -1,0 +1,19 @@
+#
+#
+#
+
+newmtl DrawCall10 Mesh Mesh_DrawCall10 Mesh_f0d3a11f_dds
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+
+newmtl DrawCall11 Mesh Mesh_DrawCall11 Mesh_Default - Lambert
+illum 1
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd 14EB49E2.jpg
+

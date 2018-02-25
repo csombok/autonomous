@@ -18,6 +18,12 @@ namespace Autonomous.Impl
         private Model _peugeotModel;
         private Model _porsheModel;
         private Model _porshe911Model;
+        private Model _taxiModel;
+        private Model _policeModel;
+        private Model _pickupModel;
+        private Model _cabrioModel;
+        private Model _sedanModel;
+        private Model _ambulanceModel;
         private Model _busStopModel;
         private IGameStateProvider _gameStateProvider;
         private Random random = new Random();
@@ -29,15 +35,22 @@ namespace Autonomous.Impl
 
             _agentCreators.Add(CreateBarrier);
             _agentCreators.Add(CreateVan);
-            _agentCreators.Add(CreateLambo);
-            _agentCreators.Add(CreatePorshe);
-            _agentCreators.Add(CreatePorshe911);
             _agentCreators.Add(CreateBus);
             _agentCreators.Add(CreatePeugeot);
             _agentCreators.Add(CreatePride);
             _agentCreators.Add(CreateBusStop);
-
+            _agentCreators.Add(CreateSedan);
+            _agentCreators.Add(CreateSedan);
+            _agentCreators.Add(CreateTaxi);
+            _agentCreators.Add(CreateTaxi);
+            _agentCreators.Add(CreatePolice);
+            _agentCreators.Add(CreatePolice);
+            _agentCreators.Add(CreatePickup);
+            _agentCreators.Add(CreateCabrio);
+            _agentCreators.Add(CreateAmbulance);
+            _agentCreators.Add(CreateAmbulance);
         }
+
         public void LoadContent(ContentManager content)
         {
             _vanModel = content.Load<Model>("kendo");
@@ -49,6 +62,12 @@ namespace Autonomous.Impl
             _busStopModel = content.Load<Model>("busstop\\bus_stop");
             _porsheModel = content.Load<Model>("Cars/Porshe/carrgt");
             _porshe911Model = content.Load<Model>("Cars/Porshe911/Porsche_911_GT2");
+            _taxiModel = content.Load<Model>("Cars/taxi/cars");
+            _policeModel = content.Load<Model>("Cars/police/cars");
+            _pickupModel = content.Load<Model>("Cars/pickup/cars");
+            _cabrioModel = content.Load<Model>("Cars/cabrio/cars");
+            _sedanModel = content.Load<Model>("Cars/blacksedan/cars");
+            _ambulanceModel = content.Load<Model>("Cars/ambulance/cars");
         }
 
         public IEnumerable<GameObject> GenerateInitialCarAgents(float agentDensity)
@@ -76,7 +95,7 @@ namespace Autonomous.Impl
         {
             float minDist = 20 + (1 - agentDensity) * 20;
             float maxDist = 60 + (1 - agentDensity) * 60;
-            return (float)random.NextDouble() * (maxDist-minDist) + minDist;
+            return (float)random.NextDouble() * (maxDist - minDist) + minDist;
         }
 
         public GameObject GenerateRandomAgent(float miny, bool opposite, float agentDensity)
@@ -124,6 +143,66 @@ namespace Autonomous.Impl
 
             float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_vanModel, lane, opposite, y, vanWidth, height, v, 90);
+        }
+
+        public CarAgent CreateTaxi(bool opposite, float y)
+        {
+            int lane = 0;
+            const float width = 1.8f;
+            const float height = 3.8f;
+
+            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            return CreateVehicleAgent(_taxiModel, lane, opposite, y, width, height, v, 180);
+        }
+
+        public CarAgent CreatePolice(bool opposite, float y)
+        {
+            int lane = 0;
+            const float width = 1.8f;
+            const float height = 3.8f;
+
+            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            return CreateVehicleAgent(_policeModel, lane, opposite, y, width, height, v, 180);
+        }
+
+        public CarAgent CreatePickup(bool opposite, float y)
+        {
+            int lane = 0;
+            const float width = 1.8f;
+            const float height = 3.8f;
+
+            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            return CreateVehicleAgent(_pickupModel, lane, opposite, y, width, height, v, 180);
+        }
+
+        public CarAgent CreateCabrio(bool opposite, float y)
+        {
+            int lane = 0;
+            const float width = 1.8f;
+            const float height = 3.8f;
+
+            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            return CreateVehicleAgent(_cabrioModel, lane, opposite, y, width, height, v, 180);
+        }
+
+        public CarAgent CreateSedan(bool opposite, float y)
+        {
+            int lane = 0;
+            const float width = 1.8f;
+            const float height = 3.8f;
+
+            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            return CreateVehicleAgent(_sedanModel, lane, opposite, y, width, height, v, 180);
+        }
+
+        public CarAgent CreateAmbulance(bool opposite, float y)
+        {
+            int lane = 0;
+            const float width = 2.1f;
+            const float height = 4f;
+
+            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            return CreateVehicleAgent(_ambulanceModel, lane, opposite, y, width, height, v, 180);
         }
 
         public CarAgent CreatePride(bool opposite, float y)
@@ -184,11 +263,11 @@ namespace Autonomous.Impl
             return CreateVehicleAgent(_busModel, lane, opposite, y, width, height, v, 180, drivingStrategy);
         }
 
-        private CarAgent CreateVehicleAgent(Model model, int lane, bool opposite, float y, float vanWidth, float height, float v, float rotation, IControlStrategy drivingStrategy=null)
+        private CarAgent CreateVehicleAgent(Model model, int lane, bool opposite, float y, float vanWidth, float height, float v, float rotation, IControlStrategy drivingStrategy = null)
         {
             if (drivingStrategy == null)
                 drivingStrategy = new OvertakingStrategy(v, lane, _gameStateProvider);
-            
+
             var van = new CarAgent(model, rotation, vanWidth, height, opposite, GameObjectType.Car, _gameStateProvider, drivingStrategy)
             {
                 VY = v,

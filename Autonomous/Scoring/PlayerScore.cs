@@ -4,7 +4,7 @@ namespace Autonomous.Impl.Scoring
 {
     public class PlayerScore
     {
-        public PlayerScore(string playerName, int distance, int position, int damageInPercent, int speed, TimeSpan timeElapsed, bool stopped)
+        public PlayerScore(string playerName, int distance, int position, int damageInPercent, int speed, TimeSpan timeElapsed, bool stopped, int score)
         {
             Distance = distance;
             Position = position;
@@ -13,6 +13,7 @@ namespace Autonomous.Impl.Scoring
             TimeElapsed = timeElapsed;
             Stopped = stopped;
             PlayerName = playerName;
+            Score = score;
         }
         
         public string PlayerName { get; }
@@ -22,5 +23,6 @@ namespace Autonomous.Impl.Scoring
         public int Speed { get; }
         public TimeSpan TimeElapsed { get; }
         public bool Stopped { get; }
+        public int Score { get; }
     }
 }
