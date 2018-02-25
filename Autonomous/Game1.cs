@@ -49,11 +49,8 @@ namespace Autonomous.Impl
 
             _graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = 640,
-                PreferredBackBufferHeight = 480
-
-                //PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
-                //PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height
+                PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
+                PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height
             };
             _graphics.ApplyChanges();
 
