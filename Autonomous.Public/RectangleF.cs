@@ -37,6 +37,16 @@ namespace Autonomous.Public
             }
         }
 
+        public float CenterX
+        {
+            get { return (Left + Right) / 2; }
+        }
+
+        public float CenterY
+        {
+            get { return (Top + Bottom) / 2; }
+        }
+
         /// <summary>Gets or sets the y-coordinate of the upper-left corner of this <see cref="T:System.Drawing.RectangleF" /> structure.</summary>
         /// <returns>The y-coordinate of the upper-left corner of this <see cref="T:System.Drawing.RectangleF" /> structure. The default is 0.</returns>
         /// <filterpriority>1</filterpriority>

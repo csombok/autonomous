@@ -147,9 +147,9 @@ namespace Autonomous.Impl
 
         public CarAgent CreateTaxi(bool opposite, float y)
         {
-            int lane = 0;
-            const float width = 1.8f;
-            const float height = 3.8f;
+            int lane = 1;
+            const float width = 1.81f;
+            const float height = 4.32f;
 
             float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_taxiModel, lane, opposite, y, width, height, v, 180);
@@ -157,9 +157,9 @@ namespace Autonomous.Impl
 
         public CarAgent CreatePolice(bool opposite, float y)
         {
-            int lane = 0;
-            const float width = 1.8f;
-            const float height = 3.8f;
+            int lane = 1;
+            const float width = 1.82f;
+            const float height = 4.4f;
 
             float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_policeModel, lane, opposite, y, width, height, v, 180);
@@ -168,8 +168,8 @@ namespace Autonomous.Impl
         public CarAgent CreatePickup(bool opposite, float y)
         {
             int lane = 0;
-            const float width = 1.8f;
-            const float height = 3.8f;
+            const float width = 1.83f;
+            const float height = 4.16f;
 
             float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_pickupModel, lane, opposite, y, width, height, v, 180);
@@ -178,8 +178,8 @@ namespace Autonomous.Impl
         public CarAgent CreateCabrio(bool opposite, float y)
         {
             int lane = 0;
-            const float width = 1.8f;
-            const float height = 3.8f;
+            const float width = 1.79f;
+            const float height = 3.79f;
 
             float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_cabrioModel, lane, opposite, y, width, height, v, 180);
@@ -189,7 +189,7 @@ namespace Autonomous.Impl
         {
             int lane = 0;
             const float width = 1.8f;
-            const float height = 3.8f;
+            const float height = 4.27f;
 
             float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_sedanModel, lane, opposite, y, width, height, v, 180);
@@ -198,8 +198,8 @@ namespace Autonomous.Impl
         public CarAgent CreateAmbulance(bool opposite, float y)
         {
             int lane = 0;
-            const float width = 2.1f;
-            const float height = 4f;
+            const float width = 2.11f;
+            const float height = 6.13f;
 
             float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_ambulanceModel, lane, opposite, y, width, height, v, 180);
