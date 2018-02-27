@@ -51,10 +51,10 @@ namespace Autonomous
 
         private static void PrintHelp()
         {
-            Console.WriteLine("Autonomous (quiet|tournament) -traffic:<traffic density (0-1)> -length:<course length> -timeAcceleration:<time boost>");
+            Console.WriteLine("Autonomous -(quiet|tournament) -traffic:<traffic density (0-1)> -length:<course length> -timeAcceleration:<time boost>");
             Console.WriteLine();
             Console.WriteLine("Autonomous -quiet -timeAcceleration:2      -- starts game in quiet mode time is 2 times faster");
-            Console.WriteLine("Autonomous -quiet -traffic:0.1-0.5 -length:1000-2000  -rounds:5    -- starts game in tournament mode, 5 round, course length is random between 1000 and 2000");
+            Console.WriteLine("Autonomous -tournament -traffic:0.1-0.5 -length:1000-2000  -rounds:5    -- starts game in tournament mode, 5 round, course length is random between 1000 and 2000");
         }
 
         private static GameOptions OptionsFromArguments(string[] args)
