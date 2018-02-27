@@ -46,7 +46,7 @@ namespace Autonomous
                 return;
             }
 
-            using (var game = new Game1(1000, 0.5f))
+            using (var game = new Game1(3000, 0.5f))
             {
                 game.Run();
             }

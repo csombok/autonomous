@@ -9,7 +9,8 @@ namespace Autonomous.Impl.GameObjects
     public class Car : GameObject
     {
         private readonly GameStateManager _gameStateManager;
-        private TimeSpan _lastCollision = new TimeSpan();
+        private TimeSpan _lastCollision;
+        private int _collisions;
         public string PlayerName { get; }
 
         public Car(Model model, string playerId, string playerName, GameStateManager gameStateManager, Color color, float x = 0)
@@ -30,6 +31,7 @@ namespace Autonomous.Impl.GameObjects
 
         public Color Color { get; }
         public float Damage { get; private set; } = 0f;
+        public TimeSpan? LastCollision => _lastCollision;
 
         public override void Update(GameTime gameTime)
         {
@@ -62,11 +64,16 @@ namespace Autonomous.Impl.GameObjects
             }
         }
 
+        public bool HadCollisionIn(GameTime gameTime, double interval)
+        {
+            return _collisions > 0 && (gameTime.TotalGameTime - _lastCollision).TotalMilliseconds < interval;
+        }
+
         public override void HandleCollision(GameObject other, GameTime gameTime)
         {
             base.HandleCollision(other, gameTime);
             const double collisionPenalityInterval = 1000;
-            if ((gameTime.TotalGameTime - _lastCollision).TotalMilliseconds > collisionPenalityInterval)
+            if (!HadCollisionIn(gameTime, collisionPenalityInterval))
             {
                 Damage = Math.Min((Damage + 0.1f), 1f);                
                 const float speedLossFactor = 3f;
@@ -81,6 +88,7 @@ namespace Autonomous.Impl.GameObjects
 
                 VY = Math.Min(VY, MaxVY);
 
+                ++_collisions;
                 _lastCollision = gameTime.TotalGameTime;
             }
         }

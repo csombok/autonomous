@@ -33,11 +33,26 @@ namespace Autonomous.Impl
             _fontLarge = content.Load<SpriteFont>("fonts/FontDashboard.large");
         }
 
+        public void DrawText(GraphicsDevice graphics, string text, Color color)
+        {
+            if (_spriteBatch == null)
+                _spriteBatch = new SpriteBatch(graphics);
+
+            _spriteBatch.Begin();
+
+            _spriteBatch.DrawString(_fontLarge, text, new Vector2(graphics.Viewport.Width / 2 - 50, graphics.Viewport.Height / 2),  color);
+            _spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
+        }
+
         public void DrawStart(GraphicsDevice graphics)
         {
             DrawText(graphics, "START");
         }
-        
+
         public void DrawEnd(GraphicsDevice graphics)
         {
             DrawText(graphics, "FINISH");
@@ -45,17 +60,7 @@ namespace Autonomous.Impl
 
         public void DrawText(GraphicsDevice graphics, string text)
         {
-            if (_spriteBatch == null)
-                _spriteBatch = new SpriteBatch(graphics);
-
-            _spriteBatch.Begin();
-
-            _spriteBatch.DrawString(_fontLarge, text, new Vector2(graphics.Viewport.Width / 2 - 50, graphics.Viewport.Height / 2), Color.White);
-            _spriteBatch.End();
-
-            graphics.BlendState = BlendState.Opaque;
-            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
-            graphics.DepthStencilState = DepthStencilState.Default;
+            DrawText(graphics, text, Color.White);
         }
 
         public void DrawPlayerName(GraphicsDevice graphics, Car player, int playerIndex)

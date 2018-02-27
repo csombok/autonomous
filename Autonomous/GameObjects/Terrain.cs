@@ -16,6 +16,7 @@ namespace Autonomous.Impl.GameObjects
         {
             X = x;
             Y = y;
+            ShadowDisabled = true;
         }
 
         public override void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)

@@ -319,12 +319,10 @@ namespace Autonomous.Impl
                 _graphics.GraphicsDevice.Viewport = viewport.Viewport;
                 DrawBackground();
                 Draw(gameTime, viewport);
-
                 if (viewport.GameObject is Car player)
                 {
-                    _dashboard.DrawPlayerName(_graphics.GraphicsDevice, player, viewPortIndex);
+                    DrawPlayerInformation(gameTime, viewPortIndex, player);
                 }
-
                 DrawDashboard(gameTime);
 
                 ++viewPortIndex;
@@ -335,6 +333,15 @@ namespace Autonomous.Impl
             _dashboard.Draw(_graphics.GraphicsDevice, _players, fps, gameTime.TotalGameTime);
 
             base.Draw(gameTime);
+        }
+
+        private void DrawPlayerInformation(GameTime gameTime, int viewPortIndex, Car player)
+        {
+            _dashboard.DrawPlayerName(_graphics.GraphicsDevice, player, viewPortIndex);
+            if (player.HadCollisionIn(gameTime, 2000))
+            {
+                _dashboard.DrawText(_graphics.GraphicsDevice, $"BANGGGG!", Color.Red);
+            }
         }
 
         private void DrawDashboard(GameTime gameTime)

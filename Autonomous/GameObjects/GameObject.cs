@@ -60,6 +60,8 @@ namespace Autonomous.Impl.GameObjects
 
         protected float ModelRotate { get; set; }
 
+        protected bool ShadowDisabled { get; set; }
+
         public GameObject(Model model, bool agentObject)
         {
             Model = model;
@@ -93,7 +95,7 @@ namespace Autonomous.Impl.GameObjects
             }
         }
 
-        protected bool IsInView(ViewportWrapper viewport)
+        protected bool IsInView(ViewportWrapper viewport, float distance)
         {
             float cameraY = -viewport.CameraPosition.Z;
             return this.Y > cameraY - 10 && this.Y < cameraY + 400;
@@ -101,14 +103,15 @@ namespace Autonomous.Impl.GameObjects
 
         public virtual void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
         {
-            if (!IsInView(viewport))
+            if (!IsInView(viewport, GameConstants.RenderingAreaY))
                 return;
 
             var world = TransformModelToWorld();
 
             DrawModel(viewport, world);
 
-            DrawShadow(viewport, device, world);
+            if (!ShadowDisabled && IsInView(viewport, GameConstants.ShadowRenderingAreaY))
+                DrawShadow(viewport, device, world);
         }
 
         private void DrawModel(ViewportWrapper viewport, Matrix world)
@@ -164,7 +167,7 @@ namespace Autonomous.Impl.GameObjects
             Quad quad = new Quad(new Vector3(X, 0.01f, -Y), Vector3.Up, Vector3.Backward, Width + 10, Height + 10);
             var plane = new Plane(quad.UpperLeft, quad.UpperRight, quad.LowerLeft);
             var shadow = Matrix.CreateShadow(shadowLightDir, plane) *
-                         Matrix.CreateTranslation(quad.Normal / 100);
+                         Matrix.CreateTranslation(quad.Normal / 80);
 
             // Draw the shadow without lighting
             foreach (ModelMesh mesh in Model.Meshes)

@@ -103,8 +103,8 @@ namespace Autonomous.Impl
                 PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
                 var color = GetColorByIndex(playerIndex);
 
-                yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, color, x);
                 playerIndex++;
+                yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, color, x);                
             }
         }
 

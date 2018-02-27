@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous.Impl", "Autonomous\Autonomous.Impl.csproj", "{6F439211-F2C5-4A1B-80D2-FB1D152A1E32}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous.SamplePlayer", "Autonomous.SamplePlayer\Autonomous.SamplePlayer.csproj", "{14813A42-35CC-4647-BEC2-7049FFEDED0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous", "Autonomous.Runner\Autonomous.csproj", "{9E7F2B1E-7CCB-400A-B9C2-1D4438020270}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autonomous.PlayerA", "Autonomous.PlayerA\Autonomous.PlayerA.csproj", "{74F51326-70D2-49D5-B5A5-54C79EBE6217}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,18 @@ Global
 		{9E7F2B1E-7CCB-400A-B9C2-1D4438020270}.Release|x64.Build.0 = Release|x64
 		{9E7F2B1E-7CCB-400A-B9C2-1D4438020270}.Release|x86.ActiveCfg = Release|Any CPU
 		{9E7F2B1E-7CCB-400A-B9C2-1D4438020270}.Release|x86.Build.0 = Release|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Debug|x64.Build.0 = Debug|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Debug|x86.Build.0 = Debug|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Release|x64.ActiveCfg = Release|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Release|x64.Build.0 = Release|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Release|x86.ActiveCfg = Release|Any CPU
+		{74F51326-70D2-49D5-B5A5-54C79EBE6217}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

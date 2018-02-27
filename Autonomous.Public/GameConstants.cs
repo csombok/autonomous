@@ -43,5 +43,15 @@ namespace Autonomous.Public
         /// </summary>
         public const int GameCourseUpdateFrequency = 500;
 
+        /// <summary>
+        /// Rendering area in Y axis
+        /// </summary>
+        public const float RenderingAreaY = 400;
+
+        /// <summary>
+        /// Shadow rendering area in Y axis
+        /// </summary>
+        public const float ShadowRenderingAreaY = 200;
+
     }
 }
