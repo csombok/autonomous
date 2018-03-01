@@ -46,12 +46,12 @@ namespace Autonomous.Public
         /// <summary>
         /// Rendering area in Y axis
         /// </summary>
-        public const float RenderingAreaY = 400;
+        public const float RenderingAreaY = 350f;
 
         /// <summary>
         /// Shadow rendering area in Y axis
         /// </summary>
-        public const float ShadowRenderingAreaY = 200;
+        public const float ShadowRenderingAreaY = 180f;
 
     }
 }

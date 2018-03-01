@@ -110,8 +110,12 @@ namespace Autonomous.Impl.GameObjects
 
             DrawModel(viewport, world);
 
-            if (!ShadowDisabled && IsInView(viewport, GameConstants.ShadowRenderingAreaY))
+            if (!ShadowDisabled &&
+                viewport.ShadowEffectEnabled &&
+                IsInView(viewport, GameConstants.ShadowRenderingAreaY))
+            {
                 DrawShadow(viewport, device, world);
+            }
         }
 
         private void DrawModel(ViewportWrapper viewport, Matrix world)

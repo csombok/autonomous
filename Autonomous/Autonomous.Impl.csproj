@@ -64,6 +64,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />
+    <Compile Include="CarGame.cs" />
     <Compile Include="Commands\ManualViewportSelectionCommand.cs" />
     <Compile Include="Commands\AutoViewportSelectionCommand.cs" />
     <Compile Include="Commands\ExitCommand.cs" />
@@ -80,7 +81,6 @@
     <Compile Include="Viewports\ViewportManager.cs" />
     <Compile Include="CourseObjectFactory.cs" />
     <Compile Include="Dashboard.cs" />
-    <Compile Include="Game1.cs" />
     <Compile Include="GameStateMapper.cs" />
     <Compile Include="GameObjects\Barrier.cs" />
     <Compile Include="GameObjects\Terrain.cs" />

@@ -15,7 +15,7 @@ namespace Autonomous.Impl
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class CarGame : Game
     {
         private readonly GraphicsDeviceManager _graphics;
         private readonly ViewportManager _viewportManager;
@@ -39,10 +39,7 @@ namespace Autonomous.Impl
         private readonly ScoreCalculator _scoreCalculator;
         private TimeSpan failedAt;
 
-        public bool Stopped { get; private set; }
-        public bool Failed { get; private set; }
-
-        public Game1(float length, float agentDensity)
+        public CarGame(float length, float agentDensity)
         {
             _agentDensity = agentDensity;
             _length = length;
@@ -63,6 +60,9 @@ namespace Autonomous.Impl
             _viewportManager = new ViewportManager(new ViewportFactory(_graphics));
             _scoreCsvExporter = new ScoreCsvExporter("results.csv");
         }
+
+        public bool Stopped { get; private set; }
+        public bool Failed { get; private set; }
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -202,10 +202,7 @@ namespace Autonomous.Impl
         private void InitializeCommands()
         {
             _gameCommands.Add(new ExitCommand(Exit));
-            if (_playerFactory.HumanPlayerIndex == -1)
-            {
-                _gameCommands.Add(new AutoViewportSelectionCommand(_viewportManager, _players, _playerFactory.HumanPlayerIndex));
-            }
+            _gameCommands.Add(new AutoViewportSelectionCommand(_viewportManager, _players, _playerFactory.HumanPlayerIndex));
             _gameCommands.Add(new ManualViewportSelectionCommand(_viewportManager, _players));
         }
 
@@ -297,6 +294,7 @@ namespace Autonomous.Impl
             if (closeCount < 2 + 10 * _agentDensity)
                 yield return _agentFactory.GenerateRandomAgent(firstPlayerPosition + 200, false, _agentDensity);
         }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>

@@ -13,8 +13,9 @@ namespace Autonomous.Impl.Viewports
         private float stepY;
         private float stepZ;
 
-        public GameObjectViewport(int x, int y, int width, int height, GameObject gameObject, CameraSetup cameraSetup) 
-            : base(x, y, width, height, gameObject)
+        public GameObjectViewport(int x, int y, int width, int height, 
+            GameObject gameObject, CameraSetup cameraSetup, bool shadowEffectEnabled) 
+            : base(x, y, width, height, gameObject, shadowEffectEnabled)
         {
             _gameObject = gameObject;
             Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(30), (float)width / height, 0.1f, 500f);

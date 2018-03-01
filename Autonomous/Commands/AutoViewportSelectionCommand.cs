@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Autonomous.Impl.GameObjects;
 using Autonomous.Impl.Viewports;
+using Microsoft.Xna.Framework.Input;
 
 namespace Autonomous.Impl.Commands
 {
@@ -16,6 +17,7 @@ namespace Autonomous.Impl.Commands
         private TimeSpan lastViewportChange = new TimeSpan();
         private int activePlayerIndex;
         private int activeCameraIndex;
+        private bool _enabled;
 
         public AutoViewportSelectionCommand(ViewportManager viewportManager, List<Car> players, int humanPlayerIndex, int changeInterval = 10000)
         {
@@ -27,6 +29,13 @@ namespace Autonomous.Impl.Commands
 
         public void Handle(GameTime gameTime)
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.F9))
+            {
+                ToogleEnabled();
+            }
+
+            if (!_enabled) return;
+
             if ((gameTime.TotalGameTime - lastViewportChange).TotalMilliseconds > changeInterval)
             {
                 var playersInFocus = new List<Car>();
@@ -49,6 +58,11 @@ namespace Autonomous.Impl.Commands
 
                 lastViewportChange = gameTime.TotalGameTime;
             }
+        }
+
+        private void ToogleEnabled()
+        {
+            _enabled = !_enabled;
         }
 
         public CameraSetup GetActiveCamera()

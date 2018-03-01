@@ -44,3 +44,6 @@
 /Autonomous.Runner/bin/Debug
 /Autonomous.Runner/obj/x64/Debug
 /Autonomous.PlayerA
+/Autonomous.Runner/bin/Release
+/Autonomous.Runner/obj/Release
+/Autonomous.Runner/Autonomous.csproj.user

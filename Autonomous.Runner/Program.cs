@@ -126,7 +126,7 @@ namespace Autonomous
             Random r= new Random();
             var length = (float) r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
             var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
-            using (var game = new Game1(length, traffic))
+            using (var game = new CarGame(length, traffic))
             {
                 game.InitializeModel();
                 var sw = Stopwatch.StartNew();
@@ -148,7 +148,7 @@ namespace Autonomous
             {
                 var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
                 var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
-                using (var game = new Game1(length, traffic))
+                using (var game = new CarGame(length, traffic))
                 {
                     game.Run();
                 }
@@ -161,7 +161,7 @@ namespace Autonomous
             var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
             var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
 
-            using (var game = new Game1(length, traffic))
+            using (var game = new CarGame(length, traffic))
             {
                 game.Run();
             }

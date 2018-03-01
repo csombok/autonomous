@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Autonomous.Impl.GameObjects;
 
 namespace Autonomous.Impl.Viewports
@@ -13,7 +8,7 @@ namespace Autonomous.Impl.Viewports
         private GameObject _gameObject;
 
         public FinishLineViewport(int x, int y, int width, int height, GameObject gameObject) 
-            : base(x, y, width, height, gameObject)
+            : base(x, y, width, height, gameObject, true)
         {
             _gameObject = gameObject;
 

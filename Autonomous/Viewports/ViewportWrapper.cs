@@ -7,12 +7,7 @@ namespace Autonomous.Impl.Viewports
 {
     public abstract class ViewportWrapper
     {
-        public Vector3 CameraPosition { get; protected set; }
-
-        public Vector3 LookAt { get; protected set; }
-
-        public Vector3 CameraOrientation { get; protected set; }
-        public ViewportWrapper(int x, int y, int width, int height, GameObject gameObject)
+        public ViewportWrapper(int x, int y, int width, int height, GameObject gameObject, bool shadowEffectEnabled)
         {
             Viewport = new Viewport()
             {
@@ -24,13 +19,23 @@ namespace Autonomous.Impl.Viewports
                 MaxDepth = 1
             };
             GameObject = gameObject;
+            ShadowEffectEnabled = shadowEffectEnabled;
         }
         public Viewport Viewport { get; private set; }
 
         public Matrix View { get; private set; }
 
+        public Vector3 CameraPosition { get; protected set; }
+
+        public Vector3 LookAt { get; protected set; }
+
+        public Vector3 CameraOrientation { get; protected set; }
+
         public Matrix Projection { get; protected set; }
+
         public GameObject GameObject { get; }
+
+        public bool ShadowEffectEnabled { get; }
 
         protected abstract void UpdateCore();
 
