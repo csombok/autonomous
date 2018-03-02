@@ -110,13 +110,79 @@ Check the *SamplePlayer* project to see how to implement a new player.
 ```
 
 # Game loop
-TODO
+
+In each iteration of the game loop players calculate the best action based on the provided game state.
+
+```csharp
+        public PlayerAction Update(GameState gameState)
+        {
+            // Add logic for game loop update
+        }
+```
+
+Note: Each player has a separate game loop which is independent from the main game loop. If the calculation logic is slow the player can less frequenlty than a faster algorithm.
 
 ### Game state
-TODO
+
+The GameState class contains all necessary information about the game in each iteration.
+
+```csharp
+    /// <summary>
+    /// State of the game. 
+    /// </summary>
+    public class GameState 
+    {
+        /// <summary>
+        /// State of all objects the player interacts with, ordered by bounding box center ascending.
+        /// </summary>
+        public IReadOnlyList<GameObjectState> GameObjectStates { get; private set; }
+
+        /// <summary>
+        /// True if the game is finished, otherwise false.
+        /// </summary>
+        public bool Stopped { get; private set; }
+    }
+
+```
+It contains the state (position, velocity etc.) of each object in the game area. Currently the following object types are supported:
+
+- Player (other and the current player itself)
+- Car (other cars on the road, not controlled by other players)
+- Roadblock (non-moving object on the road)
+- FinishLine (the end of the route)
+
+Players can get their own state by filtering the GameObjectStates list by the id provided in the Initialize method.
+
+```csharp
+var self = gameState.GameObjectStates.First(o => o.Id == _playerId);
+```
+
+Useful constants are defined in GameConstants class.
 
 ### Game control actions
-TODO
+
+Players return the action they want to perform in each iteration. The number of different choices are very limited:
+
+```csharp
+    /// <summary>
+    /// Action what the player performs in each loop.
+    /// </summary>
+    public class PlayerAction
+    {
+        /// <summary>
+        /// Set true to move left.
+        /// </summary>
+        public bool MoveLeft { get; set; }
+        /// <summary>
+        /// Set true to move right.
+        /// </summary>
+        public bool MoveRight { get; set; }
+        /// <summary>
+        /// Acceleration in range (-1, 1). 1: Full acceleration, -1 Full deceleration. 
+        /// </summary>
+        public float Acceleration { get; set; }
+
+```
 
 ### Collision and damage
 TODO
@@ -125,7 +191,10 @@ TODO
 
 After each game scores are saved to **results.csv** file in the following form:
 
-TODO
+TO
+
+Note: Each player has a separate game loop which is independent from the main game loop. If the calculation logic is slow the player can less frequenlty than a faster algorithm.
+DO
 
 Score logic:
 
