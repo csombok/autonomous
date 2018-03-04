@@ -27,38 +27,12 @@ autonomous.exe
 GUI mode: 
 ![GUI mode](autonomousgui.png)
 
-## Viewport & Camera selection
+# Run game in command line mode
 
-### Viewport selection
-
-GUI mode provides a manual viewport selection as follows:
-
-* **F1**: select 1st player's viewport only
-* **F2**: select 2nd player's viewport only
-* **F3**: select 3rd player's viewport only
-* **F4**: select 4th player's viewport only
-* **F5**: show all players 
-* **F9**: automatic viewport and camera mode
-
-### Camera views
-
-The following cameraviews can be selected:
-
-* **F6**: birdview camera
-* **F7**: inside camera
-* **F8**: rear camera
-
-# Run game in command cline mode
-
-You can run the application in CLI mode by passing *-quiet* CLI option.
-
-```
-autononous.exe -quiet 
-```
+You can run the application in CLI mode by passing CLI option as follows.
 
 ## CLI parameters
 
-* *-quiet*: CLI mode
 * *-timeAcceleration*: time acceleration to speed up testing
 * *-traffic*: traffic intensity (values: 0.1f - 1.0f defalt: 0.5f)
 * *-length*: course length (default: 1000f)
@@ -185,16 +159,27 @@ Players return the action they want to perform in each iteration. The number of 
 ```
 
 ### Collision and damage
-TODO
+
+After collisions players got damage and car's speed is decreased. 
+The following rules are applied afer each collisions:
+
+* Damage: **Damage(%) = Damage +10%**
+* Speed: 
+    - Head on collision: **Player Speed (Km/h) = 0**
+    - Rear collision: **Player Speed (Km/h) = Other car's speed * 0.2**
+* Maximum speed: **Maximum speed (Km/h) = Maximum speed * (Damage / 100 / 3)**
+
+**Note: If player damage hits 100% then player car is stopped and the round score will be zero.**
 
 # Scoring
 
 After each game scores are saved to **results.csv** file in the following form:
 
-TO
-
-Note: Each player has a separate game loop which is independent from the main game loop. If the calculation logic is slow the player can less frequenlty than a faster algorithm.
-DO
+Position | Name | Distance(m) | Damage(%) | Time(ms) | Score |
+--- | --- | --- | --- | --- | ---- |
+1 | PlayerA | 998 | 10 | 30366.7274 | 8
+2 | Human | 755 | 10 | 30366.7274 | 4
+3 | Example | 734 | 0 | 30366.7274 | 2
 
 Score logic:
 
@@ -202,3 +187,24 @@ Score logic:
 * 2nd position: **4pt**
 * 3rd position: **2pt**
 * 4th position: **0pt**
+
+## Viewport & Camera selection
+
+### Viewport selection
+
+GUI mode provides a manual viewport selection as follows:
+
+* **F1**: select 1st player's viewport only
+* **F2**: select 2nd player's viewport only
+* **F3**: select 3rd player's viewport only
+* **F4**: select 4th player's viewport only
+* **F5**: show all players 
+* **F9**: automatic viewport and camera mode
+
+### Camera views
+
+The following cameraviews can be selected:
+
+* **F6**: birdview camera
+* **F7**: inside camera
+* **F8**: rear camera
