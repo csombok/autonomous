@@ -17,7 +17,8 @@ git clone https://github.com/csombok/autonomous.git
 
 # Run game in interactive mode
 
-The easiest way to test player plugins is to run the game with GUI. 
+The easiest way to test your player plugin is to run the game with GUI. 
+
 Run with GUI:
 
 ```
@@ -29,14 +30,15 @@ GUI mode:
 
 # Run game in command line mode
 
-You can run the application in CLI mode by passing CLI option as follows.
+You can run the application in CLI mode and customization is available by passing CLI option as follows:
 
 ## CLI parameters
 
 * *-timeAcceleration*: time acceleration to speed up testing
 * *-traffic*: traffic intensity (values: 0.1f - 1.0f defalt: 0.5f)
 * *-length*: course length (default: 1000f)
-* *-tournamen*: tournament mode
+* *-tournament*: tournament mode multiple rounds in one run
+* *-rounds*: number of rounds in tournament mode
 
 ## Tournament mode
 
