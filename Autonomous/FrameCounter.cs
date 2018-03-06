@@ -25,8 +25,8 @@ namespace Autonomous.Impl
         {
             CurrentFramesPerSecond = 1.0f / deltaTime;
 
-            if (deltaTime > 0.1)
-                Console.WriteLine("too slow");
+            //if (deltaTime > 0.1)
+            //    Console.WriteLine("too slow");
             _sampleBuffer.Enqueue(CurrentFramesPerSecond);
 
             if (_sampleBuffer.Count > MAXIMUM_SAMPLES)
