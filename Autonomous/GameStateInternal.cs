@@ -10,6 +10,7 @@ namespace Autonomous.Impl
     public class GameStateInternal
     {
         public bool Stopped { get; set; }
+        public bool PlayerCollision { get; set; }
 
         private IList<GameObject> _gameObjects;
 

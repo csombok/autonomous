@@ -15,6 +15,8 @@ namespace Autonomous
         public float MaxTraffic { get; set; }
         public float TimeAcceleration { get; set; }
         public int Rounds { get; set; }
+
+        public bool PlayerCollision { get; set; }
     }
 
     /// <summary>
@@ -51,7 +53,7 @@ namespace Autonomous
 
         private static void PrintHelp()
         {
-            Console.WriteLine("Autonomous -(quiet|tournament) -traffic:<traffic density (0-1)> -length:<course length> -timeAcceleration:<time boost>");
+            Console.WriteLine("Autonomous -(quiet|tournament) -traffic:<traffic density (0-1)> -length:<course length> -timeAcceleration:<time boost> -playerCollision:(0|1)");
             Console.WriteLine();
             Console.WriteLine("Autonomous -quiet -timeAcceleration:2      -- starts game in quiet mode time is 2 times faster");
             Console.WriteLine("Autonomous -tournament -traffic:0.1-0.5 -length:1000-2000  -rounds:5    -- starts game in tournament mode, 5 round, course length is random between 1000 and 2000");
@@ -106,7 +108,16 @@ namespace Autonomous
             {
                 time = float.Parse(timeStr);
             }
-            return new GameOptions() {MinLength = minLength, MaxLength = maxLength, Rounds = round, TimeAcceleration = time, MinTraffic = mintraffic, MaxTraffic = maxtraffic};
+            bool playerCollision = false;
+            var collsionStr = GetArg(args, "-playerCollision");
+            if (collsionStr != null)
+            {
+                if (collsionStr == "1" || collsionStr.ToLower() == "true")
+                    playerCollision = true;
+
+            }
+
+            return new GameOptions() {MinLength = minLength, MaxLength = maxLength, Rounds = round, TimeAcceleration = time, MinTraffic = mintraffic, MaxTraffic = maxtraffic, PlayerCollision = playerCollision};
         }
 
         private static string GetArg(string[] args, string name)
@@ -115,7 +126,7 @@ namespace Autonomous
             {
 
                 var parts = arg.Split(':');
-                if (parts[0].ToLower() == name)
+                if (parts[0].ToLower() == name.ToLower())
                     return parts[1];
             }
             return null;
@@ -126,7 +137,7 @@ namespace Autonomous
             Random r= new Random();
             var length = (float) r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
             var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
-            using (var game = new CarGame(length, traffic))
+            using (var game = new CarGame(length, traffic, options.PlayerCollision))
             {
                 game.InitializeModel();
                 var sw = Stopwatch.StartNew();
@@ -148,7 +159,7 @@ namespace Autonomous
             {
                 var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
                 var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
-                using (var game = new CarGame(length, traffic))
+                using (var game = new CarGame(length, traffic, options.PlayerCollision))
                 {
                     game.Run();
                 }
@@ -161,7 +172,7 @@ namespace Autonomous
             var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
             var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
 
-            using (var game = new CarGame(length, traffic))
+            using (var game = new CarGame(length, traffic, options.PlayerCollision))
             {
                 game.Run();
             }

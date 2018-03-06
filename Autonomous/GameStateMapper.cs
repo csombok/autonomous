@@ -12,7 +12,7 @@ namespace Autonomous.Impl
     {
         public static GameState GameStateToPublic(GameStateInternal state)
         {
-            return new GameState(state.GameObjects.Select(GameObjectStateToPublic).ToList(), state.Stopped);
+            return new GameState(state.GameObjects.Select(GameObjectStateToPublic).ToList(), state.Stopped, state.PlayerCollision);
         }
         private static GameObjectState GameObjectStateToPublic(GameObject gameObject)
         {

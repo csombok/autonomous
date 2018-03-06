@@ -37,12 +37,14 @@ namespace Autonomous.Impl
         private readonly FrameCounter _frameCounter = new FrameCounter();
         private readonly ScoreCsvExporter _scoreCsvExporter;
         private readonly ScoreCalculator _scoreCalculator;
+        private readonly bool _playerCollision;
         private TimeSpan failedAt;
 
-        public CarGame(float length, float agentDensity)
+        public CarGame(float length, float agentDensity, bool playerCollision)
         {
             _agentDensity = agentDensity;
             _length = length;
+            _playerCollision = playerCollision;
 
             _graphics = new GraphicsDeviceManager(this)
             {
@@ -136,7 +138,7 @@ namespace Autonomous.Impl
         {
             var agentObjects = this._gameObjects
                 .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent) || go.GetType() == typeof(FinishLine)).OrderBy(g => g.Y);
-            var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped };
+            var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped, PlayerCollision = _playerCollision};
             CheckIfGameFinished(internalState, gameTime.TotalGameTime);
             if (Stopped)
                 internalState.Stopped = Stopped;

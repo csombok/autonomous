@@ -12,10 +12,11 @@ namespace Autonomous.Public
         /// </summary>
         /// <param name="gameObjectStates"></param>
         /// <param name="stopped"></param>
-        public GameState(IReadOnlyList<GameObjectState> gameObjectStates, bool stopped)
+        public GameState(IReadOnlyList<GameObjectState> gameObjectStates, bool stopped, bool playerCollision)
         {
             GameObjectStates = gameObjectStates;
             Stopped = stopped;
+            PlayerCollision = playerCollision;
         }
 
         /// <summary>
@@ -27,5 +28,10 @@ namespace Autonomous.Public
         /// True if the game is finished, otherwise false.
         /// </summary>
         public bool Stopped { get; private set; }
+
+        /// <summary>
+        /// True if the collision is detected between players.
+        /// </summary>
+        public bool PlayerCollision { get; private set; }
     }
 }
