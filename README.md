@@ -179,7 +179,7 @@ Game state and visualization uses a simple three axis coordinate system which is
 
 ![GUI mode](coordinates.png)
 
-Please find some usful constants below:
+Please find some useful game constants below:
 
 ```csharp
         /// <summary>
