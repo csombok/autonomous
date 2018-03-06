@@ -153,7 +153,7 @@ namespace Autonomous.Impl
 
             _gameObjects.ForEach(go => go.Update(gameTime));
             UpdateGameCourse(gameTime);
-            CheckCollision(gameTime);
+            CheckCollision(gameTime, _playerCollision);
         }
 
         private void CheckIfGameFinished(GameStateInternal internalState, TimeSpan gameTimeTotalGameTime)
@@ -213,7 +213,7 @@ namespace Autonomous.Impl
             _gameCommands.ForEach(command => command.Handle(gameTime));
         }
 
-        private void CheckCollision(GameTime gameTime)
+        private void CheckCollision(GameTime gameTime, bool handlePlayerCollision)
         {
             foreach (var player in _players)
             {
@@ -225,6 +225,19 @@ namespace Autonomous.Impl
                 {
                     agent.HandleCollision(player, gameTime);
                     player.HandleCollision(agent, gameTime);
+                }
+
+                if (handlePlayerCollision)
+                {
+                    var playersInCollision = _gameObjects
+                        .OfType<Car>()
+                        .Where(x => CollisionDetector.IsCollision(x, player));
+
+                    foreach (var other in playersInCollision)
+                    {
+                        other.HandleCollision(player, gameTime);
+                        player.HandleCollision(other, gameTime);
+                    }
                 }
             }
         }

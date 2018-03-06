@@ -35,6 +35,8 @@ namespace Autonomous.Impl.GameObjects
 
         public override void Update(GameTime gameTime)
         {
+            if (Stopped) return;
+
             var command = _gameStateManager.GetPlayerCommand(Id);
             AccelerationY = 0;
 
