@@ -98,13 +98,14 @@ namespace Autonomous.Impl
             foreach (var player in ShuffledPlayers)
             {
                 var model = GetNextCar();
-                var x = GameConstants.LaneWidth * 1.5f - playerIndex * GameConstants.LaneWidth;
+                var x = GameConstants.LaneWidth * GameConstants.PlayerWidth - playerIndex * GameConstants.LaneWidth;
+                var y = playerIndex * 2f;
                 string id = Guid.NewGuid().ToString();
                 PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
                 var color = GetColorByIndex(playerIndex);
 
                 playerIndex++;
-                yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, color, x);                
+                yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, color, x, y);                
             }
         }
 

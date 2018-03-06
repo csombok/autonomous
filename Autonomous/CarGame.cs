@@ -126,7 +126,7 @@ namespace Autonomous.Impl
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
-        {
+        {            
             HandleCommands(gameTime);
             UpdateModel(gameTime);
             _viewportManager.Viewports.ForEach(vp => vp.Update());
@@ -136,6 +136,9 @@ namespace Autonomous.Impl
 
         public void UpdateModel(GameTime gameTime)
         {
+            // Hold cars at the start line for 2 sec
+            if (gameTime.TotalGameTime.TotalMilliseconds < 2000) return;
+
             var agentObjects = this._gameObjects
                 .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent) || go.GetType() == typeof(FinishLine)).OrderBy(g => g.Y);
             var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped, PlayerCollision = _playerCollision};
@@ -231,7 +234,8 @@ namespace Autonomous.Impl
                 {
                     var playersInCollision = _gameObjects
                         .OfType<Car>()
-                        .Where(x => CollisionDetector.IsCollision(x, player));
+                        .Where(x => !x.Id.Equals(player.Id) 
+                                && CollisionDetector.IsCollision(x, player));
 
                     foreach (var other in playersInCollision)
                     {

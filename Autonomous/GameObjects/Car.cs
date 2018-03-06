@@ -13,15 +13,16 @@ namespace Autonomous.Impl.GameObjects
         private int _collisions;
         public string PlayerName { get; }
 
-        public Car(Model model, string playerId, string playerName, GameStateManager gameStateManager, Color color, float x = 0)
+        public Car(Model model, string playerId, string playerName, GameStateManager gameStateManager, Color color, float x = 0, float y = 0)
             : base(model, true)
         {
             _gameStateManager = gameStateManager;
             Color = color;
             Model = model;
-            Width = 1.7f;
+            Width = GameConstants.PlayerWidth;
             ModelRotate = 180;
             X = x;
+            Y = y;
             MaxVY = GameConstants.PlayerMaxSpeed;
             Id = playerId;
             Type = GameObjectType.Player;
