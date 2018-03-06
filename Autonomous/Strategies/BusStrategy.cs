@@ -35,7 +35,7 @@ namespace Autonomous.Impl.Strategies
             var busStop = GetClosestBusStopFast(_gameStateProvider.GameStateInternal.GameObjects);
             var distanceToStop = CalculateDistanceToStop(GameObject.VY, GameConstants.PlayerDeceleration);
 
-            if (busStop == null || Math.Abs(busStop.Y - GameObject.Y) > distanceToStop+0.2f)
+            if (busStop == null || Math.Abs(busStop.Y - GameObject.Y) > distanceToStop+0.2f || IsInLane(1, GameObject))
                 return base.Calculate();
 
             float vx = 0;

@@ -236,7 +236,7 @@ namespace Autonomous.Impl.Strategies
             return null;
         }
 
-        private bool IsInLane(int laneIndex, GameObject second)
+        protected bool IsInLane(int laneIndex, GameObject second)
         {
             float min = laneIndex == 0 ? GameConstants.LaneWidth*1.1f : GameConstants.LaneWidth*0.1f;
             float max = laneIndex == 0 ? GameConstants.LaneWidth*1.9f : GameConstants.LaneWidth*0.9f;
