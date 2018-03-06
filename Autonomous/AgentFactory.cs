@@ -40,14 +40,10 @@ namespace Autonomous.Impl
             _agentCreators.Add(CreatePride);
             _agentCreators.Add(CreateBusStop);
             _agentCreators.Add(CreateSedan);
-            _agentCreators.Add(CreateSedan);
             _agentCreators.Add(CreateTaxi);
-            _agentCreators.Add(CreateTaxi);
-            _agentCreators.Add(CreatePolice);
             _agentCreators.Add(CreatePolice);
             _agentCreators.Add(CreatePickup);
             _agentCreators.Add(CreateCabrio);
-            _agentCreators.Add(CreateAmbulance);
             _agentCreators.Add(CreateAmbulance);
         }
 
