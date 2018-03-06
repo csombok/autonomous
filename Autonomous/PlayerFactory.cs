@@ -95,7 +95,7 @@ namespace Autonomous.Impl
             this._container.ComposeParts(this);
 
             int playerIndex = 0;
-            foreach (var player in this._players)
+            foreach (var player in ShuffledPlayers)
             {
                 var model = GetNextCar();
                 var x = GameConstants.LaneWidth * 1.5f - playerIndex * GameConstants.LaneWidth;
@@ -105,6 +105,15 @@ namespace Autonomous.Impl
 
                 playerIndex++;
                 yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, color, x);                
+            }
+        }
+
+        private IEnumerable<Lazy<IPlayer, IPlayerData>> ShuffledPlayers
+        {
+            get
+            {
+                var random = new Random();
+                return _players.OrderBy(x => random.Next()).ToArray();
             }
         }
 
