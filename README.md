@@ -37,7 +37,7 @@ You can run the application in CLI mode and customization is available by passin
 
 Parameter | Description | Type | Default |
 --- | --- | --- | --- |
-*tournament* | tournament mode multiple rounds in one run | switch |  false |
+*tournament* | tournament mode to run game in multiple rounds | switch |  false |
 *traffic* | traffic intensity between 0 and 1 (example: -traffic:0.5-0.7)| float, interval | 0.5 |
 *length* | course length in meter (example: -length:1000-2000) | float, interval | 1000 |
 *rounds* | number of rounds in tournament mode | number | 1 |
