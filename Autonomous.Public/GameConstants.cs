@@ -53,5 +53,9 @@ namespace Autonomous.Public
         /// </summary>
         public const float ShadowRenderingAreaY = 180f;
 
+        /// <summary>
+        /// Player model width
+        /// </summary>
+        public const float PlayerWidth = 1.7f;
     }
 }
