@@ -11,7 +11,7 @@ The goal of the game is implementing a player and reach the finish line before t
 git clone https://github.com/csombok/autonomous.git
 ```
 3. Open solution in Visual Studio 2017
-4. Build solution with ***x64** configuration
+4. Build solution with **x64** configuration
 5. Run autonomous.exe (GUI mode)
 
 # Run game in interactive mode
