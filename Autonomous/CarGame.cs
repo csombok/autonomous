@@ -317,16 +317,22 @@ namespace Autonomous.Impl
             foreach (var viewport in _viewportManager.Viewports)
             {
                 _graphics.GraphicsDevice.Viewport = viewport.Viewport;
-                DrawBackground();
-                Draw(gameTime, viewport);
-                if (viewport.GameObject is Car player)
-                {
-                    DrawPlayerInformation(gameTime, viewPortIndex, player);
-                }
-                DrawDashboard(gameTime);
 
-                ++viewPortIndex;
-            }
+                if (!(viewport is BirdsEyeViewport))
+                    DrawBackground();
+                Draw(gameTime, viewport);
+
+                if (!(viewport is BirdsEyeViewport))
+                {
+                    if (viewport.GameObject is Car player)
+                    {
+                        DrawPlayerInformation(gameTime, viewPortIndex, player);
+                    }
+                    DrawDashboard(gameTime);
+
+                    ++viewPortIndex;
+                }
+            } 
 
             _graphics.GraphicsDevice.Viewport = original;
 

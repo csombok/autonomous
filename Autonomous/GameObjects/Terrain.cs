@@ -21,6 +21,9 @@ namespace Autonomous.Impl.GameObjects
 
         public override void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
         {
+            if (viewport is BirdsEyeViewport)
+                return;
+        
             var world = Matrix.CreateRotationY(MathHelper.ToRadians(270)) * Matrix.CreateScale(12f) * Matrix.CreateTranslation(new Vector3(-100, -2f, -Y));
 
             foreach (ModelMesh mesh in Model.Meshes)

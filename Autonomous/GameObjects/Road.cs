@@ -41,7 +41,11 @@ namespace Autonomous.Impl.GameObjects
         public override void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
         {
             var firstQuad = (int) (viewport.CameraPosition.Z / QoadHeight) * QoadHeight;
-            for (int i = 0; i < 20; i++)
+
+            bool birdsEye = viewport is BirdsEyeViewport;
+            var start = birdsEye ? -20 : 0;
+            var quadCount = birdsEye ? 40 : 20;
+            for (int i = start; i < quadCount; i++)
             {
                 var world = Matrix.CreateTranslation(new Vector3(0, 0, firstQuad + -i * QoadHeight));
                 DrawQuad(world, viewport.View, viewport.Projection, device);

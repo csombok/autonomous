@@ -22,16 +22,19 @@ namespace Autonomous.Impl
             if (numViewPorts < 1)
                 throw new InvalidOperationException("There is no player");
 
+            int sideViewWidth = graphics.PreferredBackBufferWidth / 10;
+            int playerViewportWidth = graphics.PreferredBackBufferWidth - sideViewWidth;
+
             if (numViewPorts == 1)
             {
-                int width = (int)graphics.PreferredBackBufferWidth;
+                int width = playerViewportWidth;
                 int height = (int) graphics.PreferredBackBufferHeight;
                 yield return CreateViewPort(objects.ElementAt(0), 0, 0, width, height, cameraSetup, true);
             }
 
             if (numViewPorts == 2)
             {
-                int width = (int)graphics.PreferredBackBufferWidth;
+                int width = playerViewportWidth;
                 int height = (int)graphics.PreferredBackBufferHeight /2;
                 yield return CreateViewPort(objects.ElementAt(0), 0, 0, width, height, cameraSetup, true);
                 yield return CreateViewPort(objects.ElementAt(1), 0, height, width, height, cameraSetup, true);
@@ -39,7 +42,7 @@ namespace Autonomous.Impl
 
             if (numViewPorts >= 3)
             {
-                int width = (int)graphics.PreferredBackBufferWidth / 2;
+                int width = playerViewportWidth / 2;
                 int height = (int)graphics.PreferredBackBufferHeight / 2;
                 yield return CreateViewPort(objects.ElementAt(0), 0, 0, width, height, cameraSetup, false);
                 yield return CreateViewPort(objects.ElementAt(1), 0, height, width, height, cameraSetup, false);
@@ -47,6 +50,7 @@ namespace Autonomous.Impl
                 if (objects.Count()>3)
                     yield return CreateViewPort(objects.ElementAt(3), width, height, width, height, cameraSetup, false);
             }
+            yield return new BirdsEyeViewport(playerViewportWidth, 0, sideViewWidth, graphics.PreferredBackBufferHeight, objects);
 
         }
 

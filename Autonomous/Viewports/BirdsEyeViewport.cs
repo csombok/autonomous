@@ -10,20 +10,21 @@ namespace Autonomous.Impl.Viewports
 {
     class BirdsEyeViewport : ViewportWrapper
     {
-        private GameObject _gameObject;
+        private IEnumerable<GameObject> _gameObjects;
 
-        public BirdsEyeViewport(int x, int y, int width, int height, GameObject gameObject) 
-            : base(x, y, width, height, gameObject, false)
+        public BirdsEyeViewport(int x, int y, int width, int height, IEnumerable<GameObject> gameObjects) 
+            : base(x, y, width, height, null, false)
         {
-            _gameObject = gameObject;
+            _gameObjects = gameObjects;
             float w = 20f;
             Projection = Matrix.CreateOrthographic(w, w*height/width, 0.1f, 500f);
         }
 
         protected override void UpdateCore()
         {
-            CameraPosition = new Vector3(0, 40, -_gameObject.Y-18);
-            LookAt = new Vector3(0, 0, -_gameObject.Y-18);
+            var firstY = _gameObjects.OrderByDescending(g => g.Y).First().Y;
+            CameraPosition = new Vector3(0, 40, -firstY+20);
+            LookAt = new Vector3(0, 0, -firstY+20);
             CameraOrientation = -Vector3.UnitZ;
         }
     }

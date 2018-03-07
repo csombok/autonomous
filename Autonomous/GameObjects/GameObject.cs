@@ -98,7 +98,11 @@ namespace Autonomous.Impl.GameObjects
         protected bool IsInView(ViewportWrapper viewport, float distance)
         {
             float cameraY = -viewport.CameraPosition.Z;
-            return this.Y > cameraY - 10 && this.Y < cameraY + 400;
+
+            if (viewport is BirdsEyeViewport)
+                return this.Y > cameraY - 200 && this.Y < cameraY + 200;
+            else
+                return this.Y > cameraY - 10 && this.Y < cameraY + 400;
         }
 
         public virtual void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
@@ -137,6 +141,8 @@ namespace Autonomous.Impl.GameObjects
 
         private void DrawShadow(ViewportWrapper viewport, GraphicsDevice device, Matrix world)
         {
+            if (viewport is BirdsEyeViewport)
+                return;
             // Draw shadow, using the stencil buffer to prevent drawing overlapping polygons
 
             // Clear stencil buffer to zero.
