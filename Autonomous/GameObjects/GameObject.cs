@@ -218,8 +218,8 @@ namespace Autonomous.Impl.GameObjects
             float scaleX = Width / (boundingBox.Max.X - boundingBox.Min.X);
             Height = (boundingBox.Max.Z - boundingBox.Min.Z) * scaleX;
 
-            if (Math.Abs(Height - HardCodedHeight) > 0.01 && HardCodedHeight > 0)
-                Console.WriteLine($"{Width} - {Height} - {HardCodedHeight}");
+            //if (Math.Abs(Height - HardCodedHeight) > 0.01 && HardCodedHeight > 0)
+            //    Console.WriteLine($"{Width} - {Height} - {HardCodedHeight}");
 
         }
 
