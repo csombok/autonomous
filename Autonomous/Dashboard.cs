@@ -71,17 +71,17 @@ namespace Autonomous.Impl
             _spriteBatch.Begin();
 
             var totalScores = _scoreCalculator.TotalScores;
-            const int offsetX = 50;
-            const int offsetY = 20;
-            const int lineHeight = 30;
+            const int offsetX = 100;
+            const int offsetY = 100;
+            const int lineHeight = 50;
 
-            _spriteBatch.DrawString(_fontMedium, "TOTAL SCORES", new Vector2(offsetX, offsetY), Color.White);
+            _spriteBatch.DrawString(_fontLarge, "TOTAL SCORES:", new Vector2(offsetX, offsetY), Color.White);
 
             int position = 1;
             foreach (var score in totalScores)
             {
                 score.Position = position;
-                _spriteBatch.DrawString(_fontMedium,
+                _spriteBatch.DrawString(_fontLarge,
                     _scoreFormatter.GetFormattedTotalScore(score),
                     new Vector2(offsetX, offsetY + position * lineHeight),
                     Color.White);
