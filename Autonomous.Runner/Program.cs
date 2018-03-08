@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Autonomous.Impl;
+using Autonomous.Public;
 using Microsoft.Xna.Framework;
 
 namespace Autonomous
@@ -115,6 +116,12 @@ namespace Autonomous
                 if (collsionStr == "1" || collsionStr.ToLower() == "true")
                     playerCollision = true;
 
+            }
+
+            var playerMaxSpeed = GetArg(args, "-playerMaxSpeed");
+            if (playerMaxSpeed != null)
+            {
+                GameConstants.PlayerMaxSpeed = float.Parse(playerMaxSpeed) / 3.6f;
             }
 
             return new GameOptions() {MinLength = minLength, MaxLength = maxLength, Rounds = round, TimeAcceleration = time, MinTraffic = mintraffic, MaxTraffic = maxtraffic, PlayerCollision = playerCollision};
