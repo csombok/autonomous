@@ -38,7 +38,9 @@ namespace Autonomous.Impl
         private readonly ScoreCsvExporter _scoreCsvExporter;
         private readonly ScoreCalculator _scoreCalculator;
         private readonly bool _playerCollision;
-        private TimeSpan failedAt;
+        private string _resultFilePath = "results.csv";
+        private const int GameEndTrasholdInMillisec = 3000;
+        private const int GameExitTrasholdInMillisec = 8000;
 
         public CarGame(float length, float agentDensity, bool playerCollision)
         {
@@ -48,8 +50,11 @@ namespace Autonomous.Impl
 
             _graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
-                PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height
+                //PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
+                //PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height,
+                PreferredBackBufferWidth = 640,
+                PreferredBackBufferHeight = 480
+
             };
             _graphics.ApplyChanges();
 
@@ -57,14 +62,15 @@ namespace Autonomous.Impl
             _agentFactory = new AgentFactory(_gameStateManager);
             _courseObjectFactory = new CourseObjectFactory();
             _playerFactory = new PlayerFactory();
-            _scoreCalculator = new ScoreCalculator();
+            _scoreCsvExporter = new ScoreCsvExporter(_resultFilePath);
+            var scoreCsvImporter = new ScoreCsvImporter(_resultFilePath);
+            _scoreCalculator = new ScoreCalculator(scoreCsvImporter);
             _dashboard = new Dashboard(_scoreCalculator, new ScoreFormatter());
             _viewportManager = new ViewportManager(new ViewportFactory(_graphics));
-            _scoreCsvExporter = new ScoreCsvExporter("results.csv");
         }
 
         public bool Stopped { get; private set; }
-        public bool Failed { get; private set; }
+        public TimeSpan StoppedAt { get; private set; }
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -126,7 +132,7 @@ namespace Autonomous.Impl
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
-        {            
+        {
             HandleCommands(gameTime);
             UpdateModel(gameTime);
             _viewportManager.Viewports.ForEach(vp => vp.Update());
@@ -141,7 +147,7 @@ namespace Autonomous.Impl
 
             var agentObjects = this._gameObjects
                 .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent) || go.GetType() == typeof(FinishLine)).OrderBy(g => g.Y);
-            var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped, PlayerCollision = _playerCollision};
+            var internalState = new GameStateInternal() { GameObjects = agentObjects.ToList(), Stopped = Stopped, PlayerCollision = _playerCollision };
             CheckIfGameFinished(internalState, gameTime.TotalGameTime);
             if (Stopped)
                 internalState.Stopped = Stopped;
@@ -171,25 +177,34 @@ namespace Autonomous.Impl
             if (firstPlayerFront >= _finishline.Y)
             {
                 ExportPlayerScores(gameTimeTotalGameTime);
-                Stopped = true;
+                Stop(gameTimeTotalGameTime);
             }
 
             if (internalState.GameObjects.OfType<Car>().All(car => car.Stopped))
             {
                 ExportPlayerScores(gameTimeTotalGameTime);
-                if (!Failed)
-                {
-                    failedAt = gameTimeTotalGameTime;
-                }
-                Stopped = Failed = true;
+                Stop(gameTimeTotalGameTime);
             }
 
-            if ((firstPlayerFront >= _finishline.Y + 20)
-                || (Failed && (gameTimeTotalGameTime - failedAt).TotalMilliseconds > 2000))
+            if (CanExit(gameTimeTotalGameTime))
             {
                 Exit();
             }
         }
+
+        private bool CanExit(TimeSpan totalGameTime)
+        {
+            return Stopped && (totalGameTime - StoppedAt).TotalMilliseconds > GameExitTrasholdInMillisec;
+        }
+
+        private void Stop(TimeSpan time)
+        {
+            if (Stopped) return;
+
+            Stopped = true;
+            StoppedAt = time;
+        }
+
 
         private void ExportPlayerScores(TimeSpan totalGameTime)
         {
@@ -234,7 +249,7 @@ namespace Autonomous.Impl
                 {
                     var playersInCollision = _gameObjects
                         .OfType<Car>()
-                        .Where(x => !x.Id.Equals(player.Id) 
+                        .Where(x => !x.Id.Equals(player.Id)
                                 && CollisionDetector.IsCollision(x, player));
 
                     foreach (var other in playersInCollision)
@@ -322,10 +337,14 @@ namespace Autonomous.Impl
         {
             GraphicsDevice.Clear(Color.FromNonPremultiplied(78, 55, 38, 255));
 
+            if (Stopped && (gameTime.TotalGameTime - StoppedAt).TotalMilliseconds > GameEndTrasholdInMillisec)
+            {
+                DrawDashboard(gameTime);
+                return;
+            }
+
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             _frameCounter.Update(deltaTime);
-
             var fps = $"FPS: {_frameCounter.AverageFramesPerSecond}";
 
             Viewport original = _graphics.GraphicsDevice.Viewport;
@@ -336,7 +355,10 @@ namespace Autonomous.Impl
                 _graphics.GraphicsDevice.Viewport = viewport.Viewport;
 
                 if (!(viewport is BirdsEyeViewport))
+                {
                     DrawBackground();
+                }
+
                 Draw(gameTime, viewport);
 
                 if (!(viewport is BirdsEyeViewport))
@@ -345,15 +367,19 @@ namespace Autonomous.Impl
                     {
                         DrawPlayerInformation(gameTime, viewPortIndex, player);
                     }
+
                     DrawDashboard(gameTime);
 
                     ++viewPortIndex;
                 }
-            } 
+            }
 
             _graphics.GraphicsDevice.Viewport = original;
 
-            _dashboard.Draw(_graphics.GraphicsDevice, _players, fps, gameTime.TotalGameTime);
+            if (!Stopped)
+            {
+                _dashboard.Draw(_graphics.GraphicsDevice, _players, fps, gameTime.TotalGameTime);
+            }
 
             base.Draw(gameTime);
         }
@@ -369,15 +395,33 @@ namespace Autonomous.Impl
 
         private void DrawDashboard(GameTime gameTime)
         {
-            if (!Stopped && gameTime.TotalGameTime.TotalSeconds < 3)
-                _dashboard.DrawStart(_graphics.GraphicsDevice);
+            if (Stopped)
+            {
+                bool failed = _gameStateManager.GameStateInternal.GameObjects.OfType<Car>().All(car => car.Stopped);
 
-            if (Stopped && !Failed)
-                _dashboard.DrawEnd(_graphics.GraphicsDevice);
-
-            if (Stopped && Failed)
-                _dashboard.DrawText(_graphics.GraphicsDevice, "GAME OVER!");
-
+                if ((gameTime.TotalGameTime - StoppedAt).TotalMilliseconds < GameEndTrasholdInMillisec)
+                {
+                    if (failed)
+                    {
+                        _dashboard.DrawText(_graphics.GraphicsDevice, "GAME OVER!");
+                    }
+                    else
+                    {
+                        _dashboard.DrawEnd(_graphics.GraphicsDevice);
+                    }
+                }
+                else
+                {
+                    _dashboard.DrawTotalScores(_graphics.GraphicsDevice);
+                }
+            }
+            else
+            {
+                if (gameTime.TotalGameTime.TotalMilliseconds < GameEndTrasholdInMillisec)
+                {
+                    _dashboard.DrawStart(_graphics.GraphicsDevice);
+                }
+            }
         }
 
         private void DrawBackground()

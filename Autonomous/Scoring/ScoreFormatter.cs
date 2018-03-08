@@ -13,5 +13,10 @@
                    $" Speed: {score.Speed}km/h" +
                    $" Damage: {score.DamageInPercent}%";
         }
+
+        public string GetFormattedTotalScore(PlayerTotalScore score)
+        {
+            return score == null ? string.Empty: $"{score.Position}. {score.PlayerName}: {score.TotalScore}";
+        }
     }
 }

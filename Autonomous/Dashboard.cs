@@ -63,6 +63,40 @@ namespace Autonomous.Impl
             DrawText(graphics, text, Color.White);
         }
 
+        public void DrawTotalScores(GraphicsDevice graphics)
+        {
+            if (_spriteBatch == null)
+                _spriteBatch = new SpriteBatch(graphics);
+
+            _spriteBatch.Begin();
+
+            var totalScores = _scoreCalculator.TotalScores;
+            const int offsetX = 50;
+            const int offsetY = 20;
+            const int lineHeight = 30;
+
+            _spriteBatch.DrawString(_fontMedium, "TOTAL SCORES", new Vector2(offsetX, offsetY), Color.White);
+
+            int position = 1;
+            foreach (var score in totalScores)
+            {
+                score.Position = position;
+                _spriteBatch.DrawString(_fontMedium,
+                    _scoreFormatter.GetFormattedTotalScore(score),
+                    new Vector2(offsetX, offsetY + position * lineHeight),
+                    Color.White);
+
+                ++position;
+            }
+
+            _spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
+        }
+
+
         public void DrawPlayerName(GraphicsDevice graphics, Car player, int playerIndex)
         {
             if (_spriteBatch == null)

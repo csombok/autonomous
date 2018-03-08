@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Autonomous.Impl.GameObjects;
 
 namespace Autonomous.Impl.Scoring
 {
     internal class ScoreCalculator
     {
+        private readonly ScoreCsvImporter _scoreImporter;
+
+        public ScoreCalculator(ScoreCsvImporter scoreImporter)
+        {
+            _scoreImporter = scoreImporter;
+        }
+
         public IEnumerable<PlayerScore> GetPlayerScores(IEnumerable<Car> players, TimeSpan timeElapsed)
         {
             var sortedPlayers = players.OrderByDescending(car => car.Y);
@@ -23,6 +31,18 @@ namespace Autonomous.Impl.Scoring
                     distance, position, damageInPercent, speed, timeElapsed, player.Stopped, score);
 
                 ++position;
+            }
+        }
+
+        public IEnumerable<PlayerTotalScore> TotalScores
+        {
+            get
+            {
+                return _scoreImporter
+                    .Scores
+                    .GroupBy(p => p.PlayerName)
+                    .Select(g => new PlayerTotalScore(g.Key, g.Sum(c => c.Score)))
+                    .OrderByDescending(p => p.TotalScore);
             }
         }
     }

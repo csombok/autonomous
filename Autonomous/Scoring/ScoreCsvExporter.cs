@@ -27,7 +27,7 @@ namespace Autonomous.Impl.Scoring
 
             if (!File.Exists(_filePath))
             {
-                lines.Add("Position,Name,Distance(m),Damage(%),Time(ms);Score");
+                lines.Add("Position,Name,Distance(m),Damage(%),Time(ms),Score");
             }
 
             foreach (var score in scores)
