@@ -31,7 +31,7 @@ namespace Autonomous.Public
         /// <summary>
         /// Maximum speed of players' car. (m/s)
         /// </summary>
-        public const float PlayerMaxSpeed = 180f / 3.6f;
+        public static float PlayerMaxSpeed = 180f / 3.6f;
 
         /// <summary>
         /// Speed of players' car in left/right direction. (m/s)

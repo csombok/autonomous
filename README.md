@@ -11,9 +11,8 @@ The goal of the game is implementing a player and reach the finish line before t
 git clone https://github.com/csombok/autonomous.git
 ```
 3. Open solution in Visual Studio 2017
-4. Build solution with AnyCPU configuration
-5. Build solution with x64 configuration
-6. Run autonomous.exe (GUI mode)
+4. Build solution with **x64** configuration
+5. Run autonomous.exe (GUI mode)
 
 # Run game in interactive mode
 
@@ -34,18 +33,21 @@ You can run the application in CLI mode and customization is available by passin
 
 ## CLI parameters
 
-* *-timeAcceleration*: time acceleration to speed up testing
-* *-traffic*: traffic intensity (values: 0.1f - 1.0f defalt: 0.5f)
-* *-length*: course length (default: 1000f)
-* *-tournament*: tournament mode multiple rounds in one run
-* *-rounds*: number of rounds in tournament mode
+
+Parameter | Description | Type | Default |
+--- | --- | --- | --- |
+*tournament* | tournament mode to run game in multiple rounds | switch |  false |
+*traffic* | traffic intensity between 0 and 1 (example: -traffic:0.5-0.7)| float, interval | 0.5 |
+*length* | course length in meter (example: -length:1000-2000) | float, interval | 1000 |
+*rounds* | number of rounds in tournament mode | number | 1 |
+*playerCollision* | enable collision detection between player cars (example: -playerCollision:1) | boolean | false |
 
 ## Tournament mode
 
 Tournament mode allows interactive game play for multiple players in multiple rounds in different scenarios.
 
 ```
-autononous.exe -tournament
+autononous.exe -tournament -rounds:5
 ```
 
 # Add new player
