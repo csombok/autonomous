@@ -48,8 +48,9 @@ namespace Autonomous.Impl.Commands
 
 
             }
-            catch (Exception)
+            catch
             {
+                // TODO: ignored
             }
         }
     }

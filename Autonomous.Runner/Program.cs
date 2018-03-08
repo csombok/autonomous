@@ -125,7 +125,14 @@ namespace Autonomous
                 GameConstants.PlayerMaxSpeed = float.Parse(playerMaxSpeed) / 3.6f;
             }
 
-            var playSounds = GetArg(args, "-sound") != null;
+            bool playSounds = false;
+            var playSoundsStr = GetArg(args, "-sound");
+            if (playSoundsStr != null)
+            {
+                if (playSoundsStr == "1" || playSoundsStr.ToLower() == "true")
+                    playSounds = true;
+
+            }
 
             return new GameOptions()
             {

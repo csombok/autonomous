@@ -10,21 +10,23 @@ namespace Autonomous.Impl.Commands
 {
     class AutoViewportSelectionCommand : IGameCommand
     {
-        private readonly ViewportManager viewportManager;
-        private readonly List<Car> players;
-        private readonly int humanPlayerIndex;
-        private readonly int changeInterval;
-        private TimeSpan lastViewportChange = new TimeSpan();
-        private int activePlayerIndex;
-        private int activeCameraIndex;
+        private readonly ViewportManager _viewportManager;
+        private readonly List<Car> _players;
+        private readonly int _humanPlayerIndex;
+        private readonly int _changeInterval;
+        private TimeSpan _lastViewportChange;
+        private int _activePlayerIndex;
+        private int _activeCameraIndex;
         private bool _enabled;
+        private bool _showAllPlayersMode = false;
 
-        public AutoViewportSelectionCommand(ViewportManager viewportManager, List<Car> players, int humanPlayerIndex, int changeInterval = 10000)
+        public AutoViewportSelectionCommand(ViewportManager viewportManager,
+            List<Car> players, int humanPlayerIndex, int changeInterval = 6000)
         {
-            this.viewportManager = viewportManager;
-            this.players = players;
-            this.humanPlayerIndex = humanPlayerIndex;
-            this.changeInterval = changeInterval;
+            _viewportManager = viewportManager;
+            _players = players;
+            _humanPlayerIndex = humanPlayerIndex;
+            _changeInterval = changeInterval;
         }
 
         public void Handle(GameTime gameTime)
@@ -36,27 +38,10 @@ namespace Autonomous.Impl.Commands
 
             if (!_enabled) return;
 
-            if ((gameTime.TotalGameTime - lastViewportChange).TotalMilliseconds > changeInterval)
+            if ((gameTime.TotalGameTime - _lastViewportChange).TotalMilliseconds > _changeInterval)
             {
-                var playersInFocus = new List<Car>();
-                if (activePlayerIndex == players.Count)
-                {
-                    playersInFocus = players;
-                }
-                else
-                {
-                    if (humanPlayerIndex != -1)
-                        playersInFocus.Add(players[humanPlayerIndex]);
-
-                    if (activePlayerIndex != humanPlayerIndex)
-                        playersInFocus.Add(players[activePlayerIndex]);
-                }
-
-                viewportManager.SetViewports(playersInFocus, GetActiveCamera());
-
-                activePlayerIndex = (++activePlayerIndex) % (players.Count + 1);
-
-                lastViewportChange = gameTime.TotalGameTime;
+                _viewportManager.SetViewports(GetActivePlayers(), GetActiveCamera());
+                _lastViewportChange = gameTime.TotalGameTime;
             }
         }
 
@@ -64,16 +49,38 @@ namespace Autonomous.Impl.Commands
         {
             _enabled = !_enabled;
         }
+        
+        private IEnumerable<Car> GetActivePlayers()
+        {
+            if (_players.All(p => p.Stopped)) return _players;
 
-        public CameraSetup GetActiveCamera()
+            var activePlayers = _players.Where(p => !p.Stopped).ToList();
+            if (_activePlayerIndex % 2 == 0 && _showAllPlayersMode)
+            {
+                ++_activePlayerIndex;
+                _showAllPlayersMode = false;
+                return activePlayers;
+            }
+
+            _showAllPlayersMode = true;                                
+            _activePlayerIndex = _activePlayerIndex >= activePlayers.Count() 
+                ? 0 
+                :_activePlayerIndex;
+
+            var players = new List < Car > { activePlayers[_activePlayerIndex] };
+            ++_activeCameraIndex;
+            return players;
+        }
+
+        private CameraSetup GetActiveCamera()
         {
             var setup = CameraSetup.CameraDefault;
 
-            if (activeCameraIndex % 3 == 0) setup = CameraSetup.CameraInside;
+            if (_activeCameraIndex % 3 == 0) setup = CameraSetup.CameraInside;
 
-            if (activeCameraIndex % 4 == 0) setup = CameraSetup.CameraRear;
+            if (_activeCameraIndex % 4 == 0) setup = CameraSetup.CameraRear;
 
-            ++activeCameraIndex;
+            ++_activeCameraIndex;
             return setup;
         }
     }
