@@ -77,6 +77,7 @@
     <Compile Include="Scoring\ScoreCsvExporter.cs" />
     <Compile Include="Scoring\ScoreCsvImporter.cs" />
     <Compile Include="Scoring\ScoreFormatter.cs" />
+    <Compile Include="Sounds\CarSoundEffect.cs" />
     <Compile Include="Utilities\FloatExtensions.cs" />
     <Compile Include="Viewports\CameraSetup.cs" />
     <Compile Include="Viewports\FinishLineViewport.cs" />

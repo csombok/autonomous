@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Autonomous.Impl.GameObjects;
 using Autonomous.Impl.Scoring;
+using Autonomous.Impl.Sounds;
 
 namespace Autonomous.Impl
 {
@@ -38,15 +39,19 @@ namespace Autonomous.Impl
         private readonly ScoreCsvExporter _scoreCsvExporter;
         private readonly ScoreCalculator _scoreCalculator;
         private readonly bool _playerCollision;
-        private string _resultFilePath = "results.csv";
+        private readonly bool _playSound;
+        private readonly CarSoundEffect _carSoundEffect;
+
         private const int GameEndTrasholdInMillisec = 3000;
         private const int GameExitTrasholdInMillisec = 8000;
+        private const string ResultFilePath = "results.csv";
 
-        public CarGame(float length, float agentDensity, bool playerCollision)
+        public CarGame(float length, float agentDensity, bool playerCollision, bool playSound)
         {
             _agentDensity = agentDensity;
             _length = length;
             _playerCollision = playerCollision;
+            _playSound = playSound;
 
             _graphics = new GraphicsDeviceManager(this)
             {
@@ -60,11 +65,12 @@ namespace Autonomous.Impl
             _agentFactory = new AgentFactory(_gameStateManager);
             _courseObjectFactory = new CourseObjectFactory();
             _playerFactory = new PlayerFactory();
-            _scoreCsvExporter = new ScoreCsvExporter(_resultFilePath);
-            var scoreCsvImporter = new ScoreCsvImporter(_resultFilePath);
+            _scoreCsvExporter = new ScoreCsvExporter(ResultFilePath);
+            var scoreCsvImporter = new ScoreCsvImporter(ResultFilePath);
             _scoreCalculator = new ScoreCalculator(scoreCsvImporter);
             _dashboard = new Dashboard(_scoreCalculator, new ScoreFormatter());
             _viewportManager = new ViewportManager(new ViewportFactory(_graphics));
+            _carSoundEffect = new CarSoundEffect();
         }
 
         public bool Stopped { get; private set; }
@@ -96,6 +102,8 @@ namespace Autonomous.Impl
             _courseObjectFactory.LoadContent(Content);
             _playerFactory.LoadContent(Content);
             _dashboard.LoadContent(Content);
+            if(_playSound) _carSoundEffect.Initialize(Content);
+
             // TEMP
             InitializeModel();
 

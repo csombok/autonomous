@@ -16,8 +16,8 @@ namespace Autonomous
         public float MaxTraffic { get; set; }
         public float TimeAcceleration { get; set; }
         public int Rounds { get; set; }
-
         public bool PlayerCollision { get; set; }
+        public bool PlaySounds { get; set; }
     }
 
     /// <summary>
@@ -38,14 +38,14 @@ namespace Autonomous
             }
 
             var options = OptionsFromArguments(args);
-                if (args.Length > 0 && args[0] == "-quiet")
+            if (args.Length > 0 && args[0] == "-quiet")
             {
                 RunInSilentMode(options);
                 return;
             }
             if (args.Length > 0 && args[0] == "-tournament")
             {
-               RunTournament(options);
+                RunTournament(options);
                 return;
             }
 
@@ -65,7 +65,8 @@ namespace Autonomous
             Random r = new Random();
             var lengthStr = GetArg(args, "-length");
             float minLength = 1000f, maxLength = 1000f;
-            if (lengthStr != null) { 
+            if (lengthStr != null)
+            {
                 var parts = lengthStr.Split('-');
                 if (parts.Length == 1)
                 {
@@ -100,12 +101,12 @@ namespace Autonomous
             int round = 10;
             if (roundStr != null)
             {
-                    round = int.Parse(roundStr);
+                round = int.Parse(roundStr);
             }
 
             var timeStr = GetArg(args, "-timeAcceleration");
             float time = 1f;
-            if (timeStr!= null)
+            if (timeStr != null)
             {
                 time = float.Parse(timeStr);
             }
@@ -124,11 +125,23 @@ namespace Autonomous
                 GameConstants.PlayerMaxSpeed = float.Parse(playerMaxSpeed) / 3.6f;
             }
 
-            return new GameOptions() {MinLength = minLength, MaxLength = maxLength, Rounds = round, TimeAcceleration = time, MinTraffic = mintraffic, MaxTraffic = maxtraffic, PlayerCollision = playerCollision};
+            var playSounds = GetArg(args, "-sound") != null;
+
+            return new GameOptions()
+            {
+                MinLength = minLength,
+                MaxLength = maxLength,
+                Rounds = round,
+                TimeAcceleration = time,
+                MinTraffic = mintraffic,
+                MaxTraffic = maxtraffic,
+                PlayerCollision = playerCollision,
+                PlaySounds = playSounds
+            };
         }
 
         private static string GetArg(string[] args, string name)
-        {   
+        {
             foreach (var arg in args)
             {
 
@@ -141,10 +154,10 @@ namespace Autonomous
 
         private static void RunInSilentMode(GameOptions options)
         {
-            Random r= new Random();
-            var length = (float) r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
+            Random r = new Random();
+            var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
             var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
-            using (var game = new CarGame(length, traffic, options.PlayerCollision))
+            using (var game = new CarGame(length, traffic, options.PlayerCollision, false))
             {
                 game.InitializeModel();
                 var sw = Stopwatch.StartNew();
@@ -166,7 +179,7 @@ namespace Autonomous
             {
                 var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
                 var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
-                using (var game = new CarGame(length, traffic, options.PlayerCollision))
+                using (var game = new CarGame(length, traffic, options.PlayerCollision, options.PlaySounds))
                 {
                     game.Run();
                 }
@@ -179,7 +192,7 @@ namespace Autonomous
             var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
             var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
 
-            using (var game = new CarGame(length, traffic, options.PlayerCollision))
+            using (var game = new CarGame(length, traffic, options.PlayerCollision, options.PlaySounds))
             {
                 game.Run();
             }

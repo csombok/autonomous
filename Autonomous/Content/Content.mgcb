@@ -586,3 +586,9 @@
 /processorParam:TextureFormat=Compressed
 /build:Cars/mazda/Mazda_RX-8-By_Decan.obj
 
+#begin Sounds/caracross_16bit.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/caracross_16bit.wav
+
