@@ -64,7 +64,7 @@ namespace Autonomous.Impl
             Content.RootDirectory = "Content";
             _agentFactory = new AgentFactory(_gameStateManager);
             _courseObjectFactory = new CourseObjectFactory();
-            _playerFactory = new PlayerFactory();
+            _playerFactory = new PlayerFactory(playerCollision);
             _scoreCsvExporter = new ScoreCsvExporter(ResultFilePath);
             var scoreCsvImporter = new ScoreCsvImporter(ResultFilePath);
             _scoreCalculator = new ScoreCalculator(scoreCsvImporter);

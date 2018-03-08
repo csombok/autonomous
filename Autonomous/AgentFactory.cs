@@ -69,7 +69,7 @@ namespace Autonomous.Impl
         public IEnumerable<GameObject> GenerateInitialCarAgents(float agentDensity)
         {
 
-            float y = 0;
+            float y = 50;
             for (int i = 0; i < 10; i++)
             {
                 y += GetRandomDistance(agentDensity);
@@ -77,7 +77,7 @@ namespace Autonomous.Impl
                 yield return _agentCreators[index](false, y);
             }
 
-            y = 0;
+            y = 100;
             for (int i = 0; i < 10; i++)
             {
                 y += GetRandomDistance(agentDensity);

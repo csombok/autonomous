@@ -13,6 +13,8 @@ namespace Autonomous.Impl
 {
     public class PlayerFactory
     {
+        private readonly bool _playerCollision;
+
         [ImportMany]
         IEnumerable<Lazy<IPlayer, IPlayerData>> _players;
 
@@ -25,8 +27,9 @@ namespace Autonomous.Impl
         private int _carModelIndex = 0;
         private readonly List<Color> _colors;
 
-        public PlayerFactory()
+        public PlayerFactory(bool playerCollision)
         {
+            _playerCollision = playerCollision;
             _colors = new List<Color>
             {   Color.LightCyan,
                 Color.Orange,
@@ -99,7 +102,7 @@ namespace Autonomous.Impl
             {
                 var model = GetNextCar();
                 var x = GameConstants.LaneWidth * GameConstants.PlayerWidth - playerIndex * GameConstants.LaneWidth;
-                var y = playerIndex * 2f;
+                var y = _playerCollision ? playerIndex * GameConstants.PlayerWidth : 0f;
                 string id = Guid.NewGuid().ToString();
                 PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
                 var color = GetColorByIndex(playerIndex);
