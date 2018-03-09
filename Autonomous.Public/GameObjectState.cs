@@ -1,4 +1,6 @@
-﻿namespace Autonomous.Public
+﻿using System;
+
+namespace Autonomous.Public
 {
     /// <summary>
     /// State of the an object in the game (location, speed, etc)
@@ -71,6 +73,16 @@
             return 0.5f * v * v / breakDeceleration;
         }
 
+        public float DistanceFrom(GameObjectState other) => CalculateDistance(this, other);
+
+        private float CalculateDistance(GameObjectState self, GameObjectState objectInFront)
+        {
+            float selfCenterY = self.BoundingBox.CenterY;
+            float otherCenterY = objectInFront.BoundingBox.CenterY;
+
+            float distanceBetweenCars = Math.Abs(selfCenterY - otherCenterY) - self.BoundingBox.Height / 2 - objectInFront.BoundingBox.Height / 2;
+            return distanceBetweenCars;
+        }
 
         // TODO Damage, score
     }
