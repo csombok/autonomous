@@ -35,12 +35,7 @@ namespace Autonomous.SamplePlayer
 
             if (objectInFront != null)
             {
-                float otherDistanceToStop = objectInFront.DistanceToStop;
-                float selfDistancveToStop = self.DistanceToStop;
-
-                float distanceBetweenCars = self.DistanceFrom(objectInFront);
-                float plusSafeDistance = 5;
-                if (distanceBetweenCars < selfDistancveToStop - otherDistanceToStop + plusSafeDistance && self.VY > 0)
+                if (WouldCrash(self, objectInFront))
                     accelerationY = -1;
             }
 
@@ -55,6 +50,16 @@ namespace Autonomous.SamplePlayer
             }
                 
             return new PlayerAction() { MoveLeft = left, MoveRight = right, Acceleration = accelerationY };
+        }
+
+        private static bool WouldCrash(GameObjectState self, GameObjectState objectInFront)
+        {
+            float otherDistanceToStop = objectInFront.DistanceToStop;
+            float selfDistancveToStop = self.DistanceToStop;
+
+            float distanceBetweenCars = self.DistanceFrom(objectInFront);
+            float plusSafeDistance = 5;
+            return distanceBetweenCars < selfDistancveToStop - otherDistanceToStop + plusSafeDistance && self.VY > 0;
         }
 
         private GameObjectState GetClosestObjectInFront(IEnumerable<GameObjectState> objects, GameObjectState self)
