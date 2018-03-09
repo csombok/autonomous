@@ -33,10 +33,9 @@ namespace Autonomous.SamplePlayer
 
             float desiredX = GameConstants.LaneWidth / 2;
 
-            if (objectInFront != null)
+            if (objectInFront != null && self.WouldCrashWith(objectInFront))
             {
-                if (self.WouldCrashWith(objectInFront))
-                    accelerationY = -1;
+                accelerationY = -1;
             }
 
             float centerX = (self.BoundingBox.Left + self.BoundingBox.Right) / 2;
@@ -48,7 +47,7 @@ namespace Autonomous.SamplePlayer
                 else
                     right = true;
             }
-                
+
             return new PlayerAction() { MoveLeft = left, MoveRight = right, Acceleration = accelerationY };
         }
 
