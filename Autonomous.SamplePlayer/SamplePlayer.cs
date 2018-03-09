@@ -38,7 +38,7 @@ namespace Autonomous.SamplePlayer
                 accelerationY = -1;
             }
 
-            float centerX = (self.BoundingBox.Left + self.BoundingBox.Right) / 2;
+            float centerX = self.BoundingBox.CenterX;
 
             if (Math.Abs(desiredX - centerX) > 0.2)
             {
