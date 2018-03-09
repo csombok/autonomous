@@ -35,8 +35,7 @@ namespace Autonomous.SamplePlayer
 
             if (objectInFront != null)
             {
-                float otherSpeed = objectInFront.VY;
-                float otherDistanceToStop = CalculateDistanceToStop(otherSpeed, objectInFront.MaximumDeceleration);
+                float otherDistanceToStop = CalculateDistanceToStop(objectInFront.VY, objectInFront.MaximumDeceleration);
                 float selfDistancveToStop = CalculateDistanceToStop(self.VY, self.MaximumDeceleration);
 
                 float selfCenterY = (self.BoundingBox.Top + self.BoundingBox.Bottom) / 2;
