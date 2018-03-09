@@ -84,6 +84,18 @@ namespace Autonomous.Public
             return distanceBetweenCars;
         }
 
+        public bool WouldCrashWith(GameObjectState other) => WouldCrash(this, other);
+
+        private bool WouldCrash(GameObjectState self, GameObjectState objectInFront)
+        {
+            float otherDistanceToStop = objectInFront.DistanceToStop;
+            float selfDistancveToStop = self.DistanceToStop;
+
+            float distanceBetweenCars = self.DistanceFrom(objectInFront);
+            float plusSafeDistance = 5;
+            return distanceBetweenCars < selfDistancveToStop - otherDistanceToStop + plusSafeDistance && self.VY > 0;
+        }
+
         // TODO Damage, score
     }
 }
