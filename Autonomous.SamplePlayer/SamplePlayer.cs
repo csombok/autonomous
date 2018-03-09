@@ -28,28 +28,12 @@ namespace Autonomous.SamplePlayer
 
             var objectInFront = GetClosestObjectInFront(gameObjects, self);
 
-            float accelerationY = 1;
+            float accelerationY = (objectInFront != null && self.WouldCrashWith(objectInFront)) ? -1 : 1;
+
             bool left = false, right = false;
 
+            float centerX = self.BoundingBox.CenterX;
             float desiredX = GameConstants.LaneWidth / 2;
-
-            if (objectInFront != null)
-            {
-                float otherSpeed = objectInFront.VY;
-                float otherDistanceToStop = CalculateDistanceToStop(otherSpeed, objectInFront.MaximumDeceleration);
-                float selfDistancveToStop = CalculateDistanceToStop(self.VY, self.MaximumDeceleration);
-
-                float selfCenterY = (self.BoundingBox.Top + self.BoundingBox.Bottom) / 2;
-                float otherCenterY = (objectInFront.BoundingBox.Top + objectInFront.BoundingBox.Bottom) / 2;
-
-                float distanceBetweenCars = Math.Abs(selfCenterY - otherCenterY) - self.BoundingBox.Height / 2 - objectInFront.BoundingBox.Height / 2;
-                float plusSafeDistance = 5;
-                if (distanceBetweenCars < selfDistancveToStop - otherDistanceToStop + plusSafeDistance && self.VY > 0)
-                    accelerationY = -1;
-            }
-
-            float centerX = (self.BoundingBox.Left + self.BoundingBox.Right) / 2;
-
             if (Math.Abs(desiredX - centerX) > 0.2)
             {
                 if (desiredX < centerX)
@@ -57,14 +41,8 @@ namespace Autonomous.SamplePlayer
                 else
                     right = true;
             }
-                
-            return new PlayerAction() { MoveLeft = left, MoveRight = right, Acceleration = accelerationY };
-        }
 
-        private float CalculateDistanceToStop(float v, float breakDeceleration)
-        {
-            if (v == 0) return 0f;
-            return 0.5f * v * v / breakDeceleration;
+            return new PlayerAction() { MoveLeft = left, MoveRight = right, Acceleration = accelerationY };
         }
 
         private GameObjectState GetClosestObjectInFront(IEnumerable<GameObjectState> objects, GameObjectState self)

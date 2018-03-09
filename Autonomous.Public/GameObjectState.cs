@@ -1,4 +1,6 @@
-﻿namespace Autonomous.Public
+﻿using System;
+
+namespace Autonomous.Public
 {
     /// <summary>
     /// State of the an object in the game (location, speed, etc)
@@ -62,6 +64,37 @@
             GameObjectType == GameObjectType.Car || GameObjectType == GameObjectType.Player
                 ? GameConstants.PlayerDeceleration
                 : 0;
+
+        public float DistanceToStop => CalculateDistanceToStop(VY, MaximumDeceleration);
+
+        private float CalculateDistanceToStop(float v, float breakDeceleration)
+        {
+            if (v == 0) return 0f;
+            return 0.5f * v * v / breakDeceleration;
+        }
+
+        public float DistanceFrom(GameObjectState other) => CalculateDistance(this, other);
+
+        private float CalculateDistance(GameObjectState self, GameObjectState objectInFront)
+        {
+            float selfCenterY = self.BoundingBox.CenterY;
+            float otherCenterY = objectInFront.BoundingBox.CenterY;
+
+            float distanceBetweenCars = Math.Abs(selfCenterY - otherCenterY) - self.BoundingBox.Height / 2 - objectInFront.BoundingBox.Height / 2;
+            return distanceBetweenCars;
+        }
+
+        public bool WouldCrashWith(GameObjectState other) => WouldCrash(this, other);
+
+        private bool WouldCrash(GameObjectState self, GameObjectState objectInFront)
+        {
+            float otherDistanceToStop = objectInFront.DistanceToStop;
+            float selfDistancveToStop = self.DistanceToStop;
+
+            float distanceBetweenCars = self.DistanceFrom(objectInFront);
+            float plusSafeDistance = 5;
+            return distanceBetweenCars < selfDistancveToStop - otherDistanceToStop + plusSafeDistance && self.VY > 0;
+        }
 
         // TODO Damage, score
     }
