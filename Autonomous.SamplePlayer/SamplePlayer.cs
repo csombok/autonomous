@@ -38,8 +38,8 @@ namespace Autonomous.SamplePlayer
                 float otherDistanceToStop = objectInFront.DistanceToStop;
                 float selfDistancveToStop = self.DistanceToStop;
 
-                float selfCenterY = (self.BoundingBox.Top + self.BoundingBox.Bottom) / 2;
-                float otherCenterY = (objectInFront.BoundingBox.Top + objectInFront.BoundingBox.Bottom) / 2;
+                float selfCenterY = self.BoundingBox.CenterY;
+                float otherCenterY = objectInFront.BoundingBox.CenterY;
 
                 float distanceBetweenCars = Math.Abs(selfCenterY - otherCenterY) - self.BoundingBox.Height / 2 - objectInFront.BoundingBox.Height / 2;
                 float plusSafeDistance = 5;
