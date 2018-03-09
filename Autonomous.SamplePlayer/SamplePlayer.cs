@@ -35,8 +35,8 @@ namespace Autonomous.SamplePlayer
 
             if (objectInFront != null)
             {
-                float otherDistanceToStop = DistanceToStop(objectInFront);
-                float selfDistancveToStop = DistanceToStop(self);
+                float otherDistanceToStop = objectInFront.DistanceToStop;
+                float selfDistancveToStop = self.DistanceToStop;
 
                 float selfCenterY = (self.BoundingBox.Top + self.BoundingBox.Bottom) / 2;
                 float otherCenterY = (objectInFront.BoundingBox.Top + objectInFront.BoundingBox.Bottom) / 2;
@@ -58,17 +58,6 @@ namespace Autonomous.SamplePlayer
             }
                 
             return new PlayerAction() { MoveLeft = left, MoveRight = right, Acceleration = accelerationY };
-        }
-
-        private float DistanceToStop(GameObjectState objectInFront)
-        {
-            return CalculateDistanceToStop(objectInFront.VY, objectInFront.MaximumDeceleration);
-        }
-
-        private float CalculateDistanceToStop(float v, float breakDeceleration)
-        {
-            if (v == 0) return 0f;
-            return 0.5f * v * v / breakDeceleration;
         }
 
         private GameObjectState GetClosestObjectInFront(IEnumerable<GameObjectState> objects, GameObjectState self)

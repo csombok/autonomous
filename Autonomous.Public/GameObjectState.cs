@@ -63,6 +63,15 @@
                 ? GameConstants.PlayerDeceleration
                 : 0;
 
+        public float DistanceToStop => CalculateDistanceToStop(VY, MaximumDeceleration);
+
+        private float CalculateDistanceToStop(float v, float breakDeceleration)
+        {
+            if (v == 0) return 0f;
+            return 0.5f * v * v / breakDeceleration;
+        }
+
+
         // TODO Damage, score
     }
 }
