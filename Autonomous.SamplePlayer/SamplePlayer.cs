@@ -28,15 +28,11 @@ namespace Autonomous.SamplePlayer
 
             var objectInFront = GetClosestObjectInFront(gameObjects, self);
 
-            float accelerationY = 1;
             bool left = false, right = false;
 
             float desiredX = GameConstants.LaneWidth / 2;
 
-            if (objectInFront != null && self.WouldCrashWith(objectInFront))
-            {
-                accelerationY = -1;
-            }
+            float accelerationY = (objectInFront != null && self.WouldCrashWith(objectInFront)) ? -1 : 1;
 
             float centerX = self.BoundingBox.CenterX;
 
