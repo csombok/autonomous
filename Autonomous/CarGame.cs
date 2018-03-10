@@ -388,6 +388,7 @@ namespace Autonomous.Impl
                 {
                     if (viewport.GameObject is Car player)
                     {
+                        _dashboard.DrawDamagedEffect(_graphics.GraphicsDevice, player);
                         DrawPlayerInformation(gameTime, viewPortIndex, player);
                     }
 
@@ -409,6 +410,7 @@ namespace Autonomous.Impl
 
         private void DrawPlayerInformation(GameTime gameTime, int viewPortIndex, Car player)
         {
+
             _dashboard.DrawPlayerName(_graphics.GraphicsDevice, player, viewPortIndex);
             if (player.LastCollision.TotalMilliseconds > 0 
                 && (gameTime.TotalGameTime - player.LastCollision).TotalMilliseconds < 2000)

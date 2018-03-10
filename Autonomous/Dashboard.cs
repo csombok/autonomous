@@ -19,6 +19,7 @@ namespace Autonomous.Impl
         private SpriteBatch _spriteBatch;
         private Texture2D _rect;
         private Vector2 _coor;
+        private Texture2D _brokenGlass;
 
         public Dashboard(ScoreCalculator scoreCalculator, ScoreFormatter scoreFormatter)
         {
@@ -31,6 +32,7 @@ namespace Autonomous.Impl
             _fontSmall = content.Load<SpriteFont>("fonts/FontDashboard.small");
             _fontMedium = content.Load<SpriteFont>("fonts/FontDashboard.medium");
             _fontLarge = content.Load<SpriteFont>("fonts/FontDashboard.large");
+            _brokenGlass = content.Load<Texture2D>("BrokenGlass");
         }
 
         public void DrawText(GraphicsDevice graphics, string text, Color color)
@@ -101,13 +103,32 @@ namespace Autonomous.Impl
         {
             if (_spriteBatch == null)
                 _spriteBatch = new SpriteBatch(graphics);
-                   
+
+
             _spriteBatch.Begin();
 
             string text = $"Camera: {player.PlayerName}";
 
             _spriteBatch.DrawString(_fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 50, 10), player.Color);
             _spriteBatch.DrawString(_fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 49, 11), Color.Black);
+            _spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
+
+        }
+
+        public void DrawDamagedEffect(GraphicsDevice graphics, Car player)
+        {
+            if (player.Damage < 0.8f)
+                return;
+            if (_spriteBatch == null)
+                _spriteBatch = new SpriteBatch(graphics);
+
+
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(_brokenGlass, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.White);
             _spriteBatch.End();
 
             graphics.BlendState = BlendState.Opaque;
