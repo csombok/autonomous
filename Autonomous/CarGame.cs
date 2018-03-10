@@ -157,7 +157,7 @@ namespace Autonomous.Impl
         {
             HandleCommands(gameTime);
             UpdateModel(gameTime);
-            _viewportManager.Viewports.ForEach(vp => vp.Update());
+            _viewportManager.Viewports.ForEach(vp => vp.Update(gameTime));
 
             base.Update(gameTime);
         }

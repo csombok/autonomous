@@ -31,9 +31,16 @@ namespace Autonomous.Impl.Viewports
             stepZ = (cameraSetup.CameraPositionEndZ - cameraSetup.CameraPositionStartZ) / 100;
         }
 
-        protected override void UpdateCore()
+        protected override void UpdateCore(GameTime gameTime)
         {
-            CameraPosition = new Vector3(_gameObject.X, offsetY, -_gameObject.Y + offsetZ);
+            Random r = new Random();
+            bool shakeViewPort = (_gameObject is Car player) && player.LastCollision.TotalMilliseconds > 0
+                                    && (gameTime.TotalGameTime - player.LastCollision).TotalMilliseconds < 200;
+
+            float delta = 1;
+            float shakeX = shakeViewPort ? (float)r.NextDouble() * delta - delta/2 : 0f;
+            float shakeY = shakeViewPort ? (float)r.NextDouble() * delta - delta/2 : 0f;
+            CameraPosition = new Vector3(_gameObject.X+shakeX, offsetY + shakeY, -_gameObject.Y + offsetZ);
             LookAt = new Vector3(0, Math.Min(0, -100 + (offsetZ / 100)), -99999);
 
             CameraOrientation = Vector3.UnitY;

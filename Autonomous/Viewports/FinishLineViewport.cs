@@ -18,7 +18,7 @@ namespace Autonomous.Impl.Viewports
             Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(30), (float)width / height, 0.1f, 500f);
         }
 
-        protected override void UpdateCore()
+        protected override void UpdateCore(GameTime gameTime)
         {
         }
     }

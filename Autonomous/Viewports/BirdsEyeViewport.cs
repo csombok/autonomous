@@ -20,7 +20,7 @@ namespace Autonomous.Impl.Viewports
             Projection = Matrix.CreateOrthographic(w, w*height/width, 0.1f, 500f);
         }
 
-        protected override void UpdateCore()
+        protected override void UpdateCore(GameTime gameTime)
         {
             var firstY = _gameObjects.OrderByDescending(g => g.Y).First().Y;
             CameraPosition = new Vector3(0, 40, -firstY+20);

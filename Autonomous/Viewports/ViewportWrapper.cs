@@ -37,11 +37,11 @@ namespace Autonomous.Impl.Viewports
 
         public bool ShadowEffectEnabled { get; }
 
-        protected abstract void UpdateCore();
+        protected abstract void UpdateCore(GameTime gameTime);
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-            UpdateCore();
+            UpdateCore(gameTime);
             View = Matrix.CreateLookAt(CameraPosition, LookAt, CameraOrientation);            
         }
 
