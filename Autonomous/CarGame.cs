@@ -13,6 +13,19 @@ using Autonomous.Impl.Sounds;
 
 namespace Autonomous.Impl
 {
+    public class GameOptions
+    {
+        public float MinLength { get; set; }
+        public float MaxLength { get; set; }
+        public float MinTraffic { get; set; }
+        public float MaxTraffic { get; set; }
+        public float TimeAcceleration { get; set; }
+        public int Rounds { get; set; }
+        public bool PlayerCollision { get; set; }
+        public bool PlaySounds { get; set; }
+    }
+
+
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
@@ -41,17 +54,20 @@ namespace Autonomous.Impl
         private readonly bool _playerCollision;
         private readonly bool _playSound;
         private readonly CarSoundEffect _carSoundEffect;
+        private float _timeAcceleration;
 
         private const int GameEndTrasholdInMillisec = 3000;
         private const int GameExitTrasholdInMillisec = 8000;
         private const string ResultFilePath = "results.csv";
 
-        public CarGame(float length, float agentDensity, bool playerCollision, bool playSound)
+        public CarGame(float length, float agentDensity, bool playerCollision, bool playSound, float timeAcceleration)
         {
+            _timeAcceleration = timeAcceleration;
             _agentDensity = agentDensity;
             _length = length;
             _playerCollision = playerCollision;
             _playSound = playSound;
+
 
             _graphics = new GraphicsDeviceManager(this)
             {
@@ -149,7 +165,7 @@ namespace Autonomous.Impl
         public void UpdateModel(GameTime gameTime)
         {
             // Hold cars at the start line for 2 sec
-            if (gameTime.TotalGameTime.TotalMilliseconds < 2000) return;
+            if (gameTime.TotalGameTime.TotalMilliseconds < 2000 && _timeAcceleration < 1.01f) return;
 
             var agentObjects = this._gameObjects
                 .Where(go => go.GetType() == typeof(Car) || go.GetType() == typeof(CarAgent) || go.GetType() == typeof(FinishLine)).OrderBy(g => g.Y);
@@ -162,8 +178,9 @@ namespace Autonomous.Impl
             _gameStateManager.GameState = GameStateMapper.GameStateToPublic(internalState);
             _gameStateManager.GameStateCounter++;
 
-
-            if (_slowdown)
+            if (_timeAcceleration > 1.0f)
+                gameTime.ElapsedGameTime = TimeSpan.FromMilliseconds(gameTime.ElapsedGameTime.TotalMilliseconds * _timeAcceleration);
+            else if (_slowdown)
                 gameTime.ElapsedGameTime = TimeSpan.FromMilliseconds(gameTime.ElapsedGameTime.TotalMilliseconds / 5);
 
             _gameObjects.ForEach(go => go.Update(gameTime));

@@ -164,11 +164,11 @@ namespace Autonomous
             Random r = new Random();
             var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
             var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
-            using (var game = new CarGame(length, traffic, options.PlayerCollision, false))
+            using (var game = new CarGame(length, traffic, options.PlayerCollision, false, options.TimeAcceleration))
             {
                 game.InitializeModel();
                 var sw = Stopwatch.StartNew();
-                int lastTick = (int)(sw.Elapsed.TotalMilliseconds * options.TimeAcceleration);
+                int lastTick = (int)sw.Elapsed.TotalMilliseconds;
                 while (!game.Stopped)
                 {
                     int frameStart = (int)(sw.Elapsed.TotalMilliseconds * options.TimeAcceleration);
@@ -186,7 +186,7 @@ namespace Autonomous
             {
                 var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
                 var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
-                using (var game = new CarGame(length, traffic, options.PlayerCollision, options.PlaySounds))
+                using (var game = new CarGame(length, traffic, options.PlayerCollision, options.PlaySounds, options.TimeAcceleration))
                 {
                     game.Run();
                 }
@@ -199,7 +199,7 @@ namespace Autonomous
             var length = (float)r.NextDouble() * (options.MaxLength - options.MinLength) + options.MinLength;
             var traffic = (float)r.NextDouble() * (options.MaxTraffic - options.MinTraffic) + options.MinTraffic;
 
-            using (var game = new CarGame(length, traffic, options.PlayerCollision, options.PlaySounds))
+            using (var game = new CarGame(length, traffic, options.PlayerCollision, options.PlaySounds, options.TimeAcceleration))
             {
                 game.Run();
             }
