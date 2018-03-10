@@ -25,9 +25,9 @@ namespace Autonomous.Impl
         private Model _sedanModel;
         private Model _ambulanceModel;
         private Model _busStopModel;
-        private IGameStateProvider _gameStateProvider;
-        private Random random = new Random();
-        private List<Func<bool, float, CarAgent>> _agentCreators = new List<Func<bool, float, CarAgent>>();
+        private readonly IGameStateProvider _gameStateProvider;
+        private readonly Random _random = new Random();
+        private readonly List<Func<bool, float, CarAgent>> _agentCreators = new List<Func<bool, float, CarAgent>>();
 
         public AgentFactory(IGameStateProvider stateProvider)
         {
@@ -73,7 +73,7 @@ namespace Autonomous.Impl
             for (int i = 0; i < 10; i++)
             {
                 y += GetRandomDistance(agentDensity);
-                var index = random.Next(_agentCreators.Count);
+                var index = _random.Next(_agentCreators.Count);
                 yield return _agentCreators[index](false, y);
             }
 
@@ -81,7 +81,7 @@ namespace Autonomous.Impl
             for (int i = 0; i < 10; i++)
             {
                 y += GetRandomDistance(agentDensity);
-                var index = random.Next(_agentCreators.Count);
+                var index = _random.Next(_agentCreators.Count);
                 yield return _agentCreators[index](true, y);
             }
 
@@ -91,21 +91,20 @@ namespace Autonomous.Impl
         {
             float minDist = 20 + (1 - agentDensity) * 20;
             float maxDist = 60 + (1 - agentDensity) * 60;
-            return (float)random.NextDouble() * (maxDist - minDist) + minDist;
+            return (float)_random.NextDouble() * (maxDist - minDist) + minDist;
         }
 
         public GameObject GenerateRandomAgent(float miny, bool opposite, float agentDensity)
         {
             var y = GetRandomDistance(agentDensity) + miny;
-            var index = random.Next(_agentCreators.Count);
+            var index = _random.Next(_agentCreators.Count);
             return _agentCreators[index](opposite, y);
         }
 
-        const float laneWidth = GameConstants.LaneWidth;
         public CarAgent CreateBarrier(bool opposite, float y)
         {
-            int lane = random.NextDouble() < 0.7 ? 0 : 1;
-            var barrier = new CarAgent(_barrierModel, 90, laneWidth * 0.8f, 0.79f, opposite, GameObjectType.Roadblock, _gameStateProvider, null)
+            int lane = _random.NextDouble() < 0.7 ? 0 : 1;
+            var barrier = new CarAgent(_barrierModel, 90, GameConstants.LaneWidth * 0.8f, 0.79f, opposite, GameObjectType.Roadblock, null)
             {
                 VY = 0,
                 MaxVY = 0,
@@ -121,7 +120,7 @@ namespace Autonomous.Impl
             float width = 2f;
             const float height = 2.77f;
             float x = GameConstants.RoadWidth / 2 + width / 2 + 0.1f;
-            var barrier = new CarAgent(_busStopModel, 270, width, height, opposite, GameObjectType.BusStop, _gameStateProvider, null)
+            var barrier = new CarAgent(_busStopModel, 270, width, height, opposite, GameObjectType.BusStop, null)
             {
                 VY = 0,
                 MaxVY = 0,
@@ -137,7 +136,7 @@ namespace Autonomous.Impl
             const float vanWidth = 2.1f;
             const float height = 3.97f;
 
-            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_vanModel, lane, opposite, y, vanWidth, height, v, 90);
         }
 
@@ -147,7 +146,7 @@ namespace Autonomous.Impl
             const float width = 1.81f;
             const float height = 4.32f;
 
-            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_taxiModel, lane, opposite, y, width, height, v, 180);
         }
 
@@ -157,7 +156,7 @@ namespace Autonomous.Impl
             const float width = 1.82f;
             const float height = 4.4f;
 
-            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_policeModel, lane, opposite, y, width, height, v, 180);
         }
 
@@ -167,7 +166,7 @@ namespace Autonomous.Impl
             const float width = 1.83f;
             const float height = 4.16f;
 
-            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_pickupModel, lane, opposite, y, width, height, v, 180);
         }
 
@@ -177,7 +176,7 @@ namespace Autonomous.Impl
             const float width = 1.79f;
             const float height = 3.79f;
 
-            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_cabrioModel, lane, opposite, y, width, height, v, 180);
         }
 
@@ -187,7 +186,7 @@ namespace Autonomous.Impl
             const float width = 1.8f;
             const float height = 4.27f;
 
-            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_sedanModel, lane, opposite, y, width, height, v, 180);
         }
 
@@ -197,7 +196,7 @@ namespace Autonomous.Impl
             const float width = 2.11f;
             const float height = 6.13f;
 
-            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_ambulanceModel, lane, opposite, y, width, height, v, 180);
         }
 
@@ -206,7 +205,7 @@ namespace Autonomous.Impl
             int lane = 0;
             const float width = 1.45f;
             const float height = 3.06f;
-            float v = ((float)random.NextDouble() * 20 + 70) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 70) / 3.6f;
             return CreateVehicleAgent(_prideModel, lane, opposite, y, width, height, v, 180);
         }
 
@@ -216,7 +215,7 @@ namespace Autonomous.Impl
             const float width = 1.65f;
             const float height = 3.41f;
 
-            float v = ((float)random.NextDouble() * 30 + 70) / 3.6f;
+            float v = ((float)_random.NextDouble() * 30 + 70) / 3.6f;
             return CreateVehicleAgent(_peugeotModel, lane, opposite, y, width, height, v, 0);
         }
 
@@ -225,7 +224,7 @@ namespace Autonomous.Impl
             int lane = 1;
             const float width = 2f;
             const float height = 4.25f;
-            float v = ((float)random.NextDouble() * 20 + 90) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 90) / 3.6f;
             return CreateVehicleAgent(_lamboModel, lane, opposite, y, width, height, v, 180);
         }
 
@@ -234,7 +233,7 @@ namespace Autonomous.Impl
             int lane = 1;
             const float width = 2f;
             const float height = 4.25f;
-            float v = ((float)random.NextDouble() * 20 + 90) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 90) / 3.6f;
             return CreateVehicleAgent(_porshe911Model, lane, opposite, y, width, height, v, 180);
         }
 
@@ -243,17 +242,16 @@ namespace Autonomous.Impl
             int lane = 1;
             const float width = 2f;
             const float height = 4.25f;
-            float v = ((float)random.NextDouble() * 20 + 90) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 90) / 3.6f;
             return CreateVehicleAgent(_porsheModel, lane, opposite, y, width, height, v, 180);
         }
-
 
         public CarAgent CreateBus(bool opposite, float y)
         {
             int lane = 0;
             const float width = 2.6f;
             const float height = 9.35f;
-            float v = ((float)random.NextDouble() * 20 + 50) / 3.6f;
+            float v = ((float)_random.NextDouble() * 20 + 50) / 3.6f;
 
             var drivingStrategy = new BusStrategy(v, lane, _gameStateProvider);
             return CreateVehicleAgent(_busModel, lane, opposite, y, width, height, v, 180, drivingStrategy);
@@ -264,7 +262,7 @@ namespace Autonomous.Impl
             if (drivingStrategy == null)
                 drivingStrategy = new OvertakingStrategy(v, lane, _gameStateProvider);
 
-            var van = new CarAgent(model, rotation, vanWidth, height, opposite, GameObjectType.Car, _gameStateProvider, drivingStrategy)
+            var van = new CarAgent(model, rotation, vanWidth, height, opposite, GameObjectType.Car, drivingStrategy)
             {
                 VY = v,
                 MaxVY = 100f / 3.6f,

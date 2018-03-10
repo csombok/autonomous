@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Autonomous.Impl.GameObjects;
 
 namespace Autonomous.Impl.Scoring
@@ -13,13 +12,16 @@ namespace Autonomous.Impl.Scoring
 
         public ScoreCalculator(ScoreCsvImporter scoreImporter)
         {
-            _scoreImporter = scoreImporter;
+            _scoreImporter = scoreImporter ?? throw new ArgumentNullException(nameof(scoreImporter));
         }
 
         public IEnumerable<PlayerScore> GetPlayerScores(IEnumerable<Car> players, TimeSpan timeElapsed)
         {
-            var sortedPlayers = players.OrderByDescending(car => car.Y);
+            if (players == null) throw new ArgumentNullException(nameof(players));
 
+            var sortedPlayers = players
+                .OrderBy(car => !car.Stopped)
+                .ThenByDescending(car => car.Y);
 
             int position = 1;
             float previousY = -1;
@@ -29,21 +31,20 @@ namespace Autonomous.Impl.Scoring
                 var distance = (int)Math.Round(player.Y);
                 var damageInPercent = (int)Math.Round(player.Damage * 100);
                 var speed = (int)Math.Round(player.VY * 4);
-                
-                var score = player.Stopped || position > 3 
-                    ? 0 
-                    : (int)Math.Pow(2, 4 - position);
+                var score = 0;
 
-                if (!player.Stopped && Math.Abs(player.Y - previousY) < TieGameTrashold)
+                if (!player.Stopped && position <=3)
                 {
-                    score = previousScore;
+                    score = Math.Abs(player.Y - previousY) < TieGameTrashold
+                        ? previousScore
+                        : (int) Math.Pow(2, 4 - position);
                 }
 
                 previousY = player.Y;
                 previousScore = score;
 
-                yield return new PlayerScore(player.PlayerName,
-                    distance, position, damageInPercent, speed, timeElapsed, player.Stopped, score);
+                yield return new PlayerScore(player.PlayerName, distance, position, 
+                    damageInPercent, speed, timeElapsed, player.Stopped, score);
 
                 ++position;
             }

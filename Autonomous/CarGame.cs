@@ -118,7 +118,7 @@ namespace Autonomous.Impl
             _courseObjectFactory.LoadContent(Content);
             _playerFactory.LoadContent(Content);
             _dashboard.LoadContent(Content);
-            if(_playSound) _carSoundEffect.Initialize(Content);
+            if (_playSound) _carSoundEffect.Initialize(Content);
 
             // TEMP
             InitializeModel();
@@ -410,7 +410,8 @@ namespace Autonomous.Impl
         private void DrawPlayerInformation(GameTime gameTime, int viewPortIndex, Car player)
         {
             _dashboard.DrawPlayerName(_graphics.GraphicsDevice, player, viewPortIndex);
-            if (player.HadCollisionIn(gameTime, 2000))
+            if (player.LastCollision.TotalMilliseconds > 0 
+                && (gameTime.TotalGameTime - player.LastCollision).TotalMilliseconds < 2000)
             {
                 _dashboard.DrawText(_graphics.GraphicsDevice, $"BANGGGG!", Color.Red);
             }

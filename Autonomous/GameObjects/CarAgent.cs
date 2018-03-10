@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Autonomous.Impl.Collision;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Autonomous.Impl.Strategies;
 using Autonomous.Public;
 
@@ -13,25 +9,33 @@ namespace Autonomous.Impl.GameObjects
 {
     public class CarAgent : GameObject
     {
-        private IGameStateProvider _gameStateProvider;
-        private IControlStrategy _strategy;
+        private readonly ICollisionStrategy _collisionStrategy;
+        private readonly IControlStrategy _strategy;
 
-        public CarAgent(Model model, float modelRotate, float width, float height, bool opposite, GameObjectType type,  IGameStateProvider gameStateProvider, IControlStrategy drivingStrategy)
+        public CarAgent(Model model, float modelRotate, float width, float height, bool opposite,
+            GameObjectType type, IControlStrategy drivingStrategy, ICollisionStrategy collisionStrategy)
             : base(model, true)
         {
-            _gameStateProvider = gameStateProvider;
             Width = width;
             HardCodedHeight = height;
-            ModelRotate = modelRotate;            
+            ModelRotate = modelRotate;
             OppositeDirection = opposite;
             if (drivingStrategy != null)
             {
                 _strategy = drivingStrategy;
                 _strategy.GameObject = this;
             }
+
+            _collisionStrategy = collisionStrategy;
+
             Type = type;
             Id = Guid.NewGuid().ToString();
         }
+
+        public CarAgent(Model model, float modelRotate, float width, float height, bool opposite,
+            GameObjectType type, IControlStrategy drivingStrategy)
+            : this(model, modelRotate, width, height, opposite, type, drivingStrategy, new BasicCollisionStrategy())
+        { }
 
         public override void Update(GameTime gameTime)
         {
@@ -46,6 +50,11 @@ namespace Autonomous.Impl.GameObjects
             }
 
             base.Update(gameTime);
+        }
+
+        public override void HandleCollision(GameObject other, GameTime gameTime)
+        {
+            _collisionStrategy.HandleCollision(this, other, gameTime);
         }
     }
 }
