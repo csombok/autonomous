@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Autonomous.Public;
 using Autonomous.Impl.Utilities;
 using Autonomous.Impl.Viewports;
@@ -16,7 +10,7 @@ namespace Autonomous.Impl.GameObjects
     public class GameObject
     {
         protected LigthingEffect _defaultLigthing = new LigthingEffect();
-        private readonly bool agentObject;
+        private readonly bool _agentObject;
 
         public float X { get; set; }
 
@@ -38,13 +32,7 @@ namespace Autonomous.Impl.GameObjects
 
         public GameObjectType Type { get; protected set; }
 
-        public RectangleF BoundingBox
-        {
-            get
-            {
-                return new RectangleF(X - Width / 2, Y - Height / 2, Width, Height);
-            }
-        }
+        public RectangleF BoundingBox => new RectangleF(X - Width / 2, Y - Height / 2, Width, Height);
 
         public bool OppositeDirection { get; protected set; }
 
@@ -65,7 +53,7 @@ namespace Autonomous.Impl.GameObjects
         public GameObject(Model model, bool agentObject)
         {
             Model = model;
-            this.agentObject = agentObject;
+            this._agentObject = agentObject;
             MaxVY = 50f / 3.6f;
         }
 
@@ -73,7 +61,7 @@ namespace Autonomous.Impl.GameObjects
 
         public virtual void Update(GameTime gameTime)
         {
-            if (!agentObject) return;
+            if (!_agentObject) return;
 
             float elapsedSeconds = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000f;
             VY += AccelerationY * elapsedSeconds;
@@ -100,9 +88,9 @@ namespace Autonomous.Impl.GameObjects
             float cameraY = -viewport.CameraPosition.Z;
 
             if (viewport is BirdsEyeViewport)
-                return this.Y > cameraY - 200 && this.Y < cameraY + 200;
-            else
-                return this.Y > cameraY - 10 && this.Y < cameraY + 400;
+                return Y > cameraY - 200 && Y < cameraY + 200;
+
+            return Y > cameraY - 10 && Y < cameraY + 400;
         }
 
         public virtual void Draw(TimeSpan elapsed, ViewportWrapper viewport, GraphicsDevice device)
@@ -143,6 +131,7 @@ namespace Autonomous.Impl.GameObjects
         {
             if (viewport is BirdsEyeViewport)
                 return;
+
             // Draw shadow, using the stencil buffer to prevent drawing overlapping polygons
 
             // Clear stencil buffer to zero.
@@ -308,23 +297,6 @@ namespace Autonomous.Impl.GameObjects
 
         public virtual void HandleCollision(GameObject other, GameTime gameTime)
         {
-            if (other == null) return;
-
-            if (this.OppositeDirection == other.OppositeDirection)
-            {
-                if (this.Y <= other.Y)
-                {
-                    this.VY = other.VY * 0.2f;
-                }
-                else
-                {
-                    this.VY += Math.Max(this.MaxVY, this.VY / 3);
-                }
-            }
-            else
-            {
-                this.VY = 0;
-            }
         }
 
 

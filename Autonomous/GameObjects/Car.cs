@@ -1,6 +1,6 @@
 ﻿using System;
+using Autonomous.Impl.Collision;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Autonomous.Public;
 using Microsoft.Xna.Framework;
 
@@ -9,13 +9,13 @@ namespace Autonomous.Impl.GameObjects
     public class Car : GameObject
     {
         private readonly GameStateManager _gameStateManager;
-        private TimeSpan _lastCollision;
-        private int _collisions;
+        private readonly ICollisionStrategy _collisionStrategy;
         public string PlayerName { get; }
 
-        public Car(Model model, string playerId, string playerName, GameStateManager gameStateManager, Color color, float x = 0, float y = 0)
+        public Car(Model model, string playerId, string playerName, ICollisionStrategy collisionStrategy, GameStateManager gameStateManager, Color color, float x = 0, float y = 0)
             : base(model, true)
         {
+            _collisionStrategy = collisionStrategy;
             _gameStateManager = gameStateManager;
             Color = color;
             Model = model;
@@ -31,8 +31,8 @@ namespace Autonomous.Impl.GameObjects
         }
 
         public Color Color { get; }
-        public float Damage { get; private set; } = 0f;
-        public TimeSpan? LastCollision => _lastCollision;
+        public float Damage { get; internal set; } = 0f;
+        public TimeSpan LastCollision => _collisionStrategy.LastCollision;
 
         public override void Update(GameTime gameTime)
         {
@@ -67,33 +67,9 @@ namespace Autonomous.Impl.GameObjects
             }
         }
 
-        public bool HadCollisionIn(GameTime gameTime, double interval)
-        {
-            return _collisions > 0 && (gameTime.TotalGameTime - _lastCollision).TotalMilliseconds < interval;
-        }
-
         public override void HandleCollision(GameObject other, GameTime gameTime)
         {
-            base.HandleCollision(other, gameTime);
-            const double collisionPenalityInterval = 1000;
-            if (!HadCollisionIn(gameTime, collisionPenalityInterval))
-            {
-                Damage = Math.Min((Damage + 0.1f), 1f);                
-                const float speedLossFactor = 3f;
-                var maxSpeed = GameConstants.PlayerMaxSpeed;
-                float speedLoss = (maxSpeed * Damage / speedLossFactor);
-                MaxVY = Math.Abs(Damage - 1f) < 0.0001f ? 0 : maxSpeed - speedLoss;
-
-                if (other == null)
-                {
-                    VY = VY / 2;
-                }
-
-                VY = Math.Min(VY, MaxVY);
-
-                ++_collisions;
-                _lastCollision = gameTime.TotalGameTime;
-            }
+            _collisionStrategy.HandleCollision(this, other, gameTime);
         }
     }
 }

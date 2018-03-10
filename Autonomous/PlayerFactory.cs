@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using Autonomous.Impl.Collision;
 using Microsoft.Xna.Framework;
 
 namespace Autonomous.Impl
@@ -106,10 +107,15 @@ namespace Autonomous.Impl
                 string id = Guid.NewGuid().ToString();
                 PlayerGameLoop.StartGameLoop(player.Value, id, gameStateManager);
                 var color = GetColorByIndex(playerIndex);
-
                 playerIndex++;
-                yield return new Car(model, id, player.Metadata.PlayerName, gameStateManager, color, x, y);                
+                var collisionStrategy = CreatePlayerCollisionStrategy();
+                yield return new Car(model, id, player.Metadata.PlayerName, collisionStrategy, gameStateManager, color, x, y);
             }
+        }
+
+        private static ICollisionStrategy CreatePlayerCollisionStrategy()
+        {
+            return new PlayerCollisionStrategy(new BasicCollisionStrategy(), new BorderCollisionStrategy());
         }
 
         private IEnumerable<Lazy<IPlayer, IPlayerData>> ShuffledPlayers

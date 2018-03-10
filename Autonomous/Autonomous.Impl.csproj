@@ -65,6 +65,10 @@
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />
     <Compile Include="CarGame.cs" />
+    <Compile Include="Collision\BasicCollisionStrategy.cs" />
+    <Compile Include="Collision\BorderCollisionStrategy.cs" />
+    <Compile Include="Collision\ICollisionStrategy.cs" />
+    <Compile Include="Collision\PlayerCollisionStrategy.cs" />
     <Compile Include="Commands\ManualViewportSelectionCommand.cs" />
     <Compile Include="Commands\AutoViewportSelectionCommand.cs" />
     <Compile Include="Commands\ExitCommand.cs" />
