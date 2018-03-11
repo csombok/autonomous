@@ -232,6 +232,10 @@
     <None Include="Content\City\The City.mtl" />
     <None Include="Content\City\The City.obj" />
     <None Include="Content\City\The_City.mtl" />
+    <None Include="Content\fonts\FontDashboard.digit.spritefont" />
+    <None Include="Content\fonts\FontDashboard.large.spritefont" />
+    <None Include="Content\fonts\FontDashboard.medium.spritefont" />
+    <None Include="Content\fonts\FontDashboard.small.spritefont" />
     <None Include="Content\Lambo\Lamborghini_Aventador.mtl" />
     <None Include="Content\Lambo\Lamborghini_Aventador.obj" />
     <None Include="Content\Lambo\workspace.mel" />
@@ -249,7 +253,6 @@
     <Folder Include="Content\Buildings\BuildingB\" />
     <Folder Include="Content\Buildings\GasStation\" />
     <Folder Include="Content\BusStop\textures\" />
-    <Folder Include="Content\fonts\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

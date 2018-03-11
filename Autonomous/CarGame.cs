@@ -372,7 +372,6 @@ namespace Autonomous.Impl
 
             Viewport original = _graphics.GraphicsDevice.Viewport;
 
-            int viewPortIndex = 0;
             foreach (var viewport in _viewportManager.Viewports)
             {
                 _graphics.GraphicsDevice.Viewport = viewport.Viewport;
@@ -389,12 +388,10 @@ namespace Autonomous.Impl
                     if (viewport.GameObject is Car player)
                     {
                         _dashboard.DrawDamagedEffect(_graphics.GraphicsDevice, player);
-                        DrawPlayerInformation(gameTime, viewPortIndex, player);
+                        DrawPlayerInformation(gameTime, player);
                     }
 
                     DrawDashboard(gameTime);
-
-                    ++viewPortIndex;
                 }
             }
 
@@ -408,10 +405,11 @@ namespace Autonomous.Impl
             base.Draw(gameTime);
         }
 
-        private void DrawPlayerInformation(GameTime gameTime, int viewPortIndex, Car player)
+        private void DrawPlayerInformation(GameTime gameTime, Car player)
         {
-
-            _dashboard.DrawPlayerName(_graphics.GraphicsDevice, player, viewPortIndex);
+            _dashboard.DrawPlayerName(_graphics.GraphicsDevice, player);
+            _dashboard.DrawPlayerSpeed(_graphics.GraphicsDevice, player);
+            _dashboard.DrawPlayerDamage(_graphics.GraphicsDevice, player);
             if (player.LastCollision.TotalMilliseconds > 0 
                 && (gameTime.TotalGameTime - player.LastCollision).TotalMilliseconds < 2000)
             {

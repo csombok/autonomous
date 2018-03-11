@@ -16,6 +16,7 @@ namespace Autonomous.Impl
         private SpriteFont _fontSmall;
         private SpriteFont _fontMedium;
         private SpriteFont _fontLarge;
+        private SpriteFont _fontDigit;
         private SpriteBatch _spriteBatch;
         private Texture2D _rect;
         private Vector2 _coor;
@@ -32,6 +33,7 @@ namespace Autonomous.Impl
             _fontSmall = content.Load<SpriteFont>("fonts/FontDashboard.small");
             _fontMedium = content.Load<SpriteFont>("fonts/FontDashboard.medium");
             _fontLarge = content.Load<SpriteFont>("fonts/FontDashboard.large");
+            _fontDigit = content.Load<SpriteFont>("fonts/FontDashboard.digit");
             _brokenGlass = content.Load<Texture2D>("BrokenGlass");
         }
 
@@ -97,9 +99,8 @@ namespace Autonomous.Impl
             graphics.RasterizerState = RasterizerState.CullCounterClockwise;
             graphics.DepthStencilState = DepthStencilState.Default;
         }
-
-
-        public void DrawPlayerName(GraphicsDevice graphics, Car player, int playerIndex)
+        
+        public void DrawPlayerName(GraphicsDevice graphics, Car player)
         {
             if (_spriteBatch == null)
                 _spriteBatch = new SpriteBatch(graphics);
@@ -117,6 +118,39 @@ namespace Autonomous.Impl
             graphics.RasterizerState = RasterizerState.CullCounterClockwise;
             graphics.DepthStencilState = DepthStencilState.Default;
 
+        }
+
+        public void DrawPlayerSpeed(GraphicsDevice graphics, Car player)
+        {
+            if (_spriteBatch == null)
+                _spriteBatch = new SpriteBatch(graphics);
+            
+            _spriteBatch.Begin();
+
+            var speed = $"{(int)(player.VY * 4)} KM/H";
+            _spriteBatch.DrawString(_fontDigit, speed, new Vector2(graphics.Viewport.Width - 120, 30), Color.White);
+            _spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
+        }
+
+        public void DrawPlayerDamage(GraphicsDevice graphics, Car player)
+        {
+            if (_spriteBatch == null)
+                _spriteBatch = new SpriteBatch(graphics);
+
+            _spriteBatch.Begin();
+
+            var speed = $"Damage: {(int)(player.Damage * 100)}%";
+            var color = player.Damage > 0.7 ? Color.Red : Color.LightGreen;
+            _spriteBatch.DrawString(_fontDigit, speed, new Vector2(graphics.Viewport.Width - 120, 10), color);
+            _spriteBatch.End();
+
+            graphics.BlendState = BlendState.Opaque;
+            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.DepthStencilState = DepthStencilState.Default;
         }
 
         public void DrawDamagedEffect(GraphicsDevice graphics, Car player)
