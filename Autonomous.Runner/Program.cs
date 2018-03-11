@@ -18,6 +18,8 @@ namespace Autonomous
         public int Rounds { get; set; }
         public bool PlayerCollision { get; set; }
         public bool PlaySounds { get; set; }
+
+        public bool Quiet { get; set; }
     }
 
     /// <summary>
@@ -56,7 +58,7 @@ namespace Autonomous
         {
             Console.WriteLine("Autonomous -(quiet|tournament) -traffic:<traffic density (0-1)> -length:<course length> -timeAcceleration:<time boost> -playerCollision:(0|1)");
             Console.WriteLine();
-            Console.WriteLine("Autonomous -quiet -timeAcceleration:2      -- starts game in quiet mode time is 2 times faster");
+            Console.WriteLine("Autonomous -quiet:1 -timeAcceleration:2      -- starts game in quiet mode time is 2 times faster");
             Console.WriteLine("Autonomous -tournament -traffic:0.1-0.5 -length:1000-2000  -rounds:5    -- starts game in tournament mode, 5 round, course length is random between 1000 and 2000");
         }
 
@@ -133,6 +135,14 @@ namespace Autonomous
                     playSounds = true;
 
             }
+            bool quiet = false;
+            var quietStr = GetArg(args, "-quiet");
+            if (quietStr != null)
+            {
+                if (quietStr == "1" || quietStr.ToLower() == "true")
+                    quiet = true;
+            }
+
 
             return new GameOptions()
             {
@@ -143,7 +153,8 @@ namespace Autonomous
                 MinTraffic = mintraffic,
                 MaxTraffic = maxtraffic,
                 PlayerCollision = playerCollision,
-                PlaySounds = playSounds
+                PlaySounds = playSounds,
+                Quiet = quiet
             };
         }
 

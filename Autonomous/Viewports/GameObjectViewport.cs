@@ -35,7 +35,7 @@ namespace Autonomous.Impl.Viewports
         {
             Random r = new Random();
             bool shakeViewPort = (_gameObject is Car player) && player.LastCollision.TotalMilliseconds > 0
-                                    && (gameTime.TotalGameTime - player.LastCollision).TotalMilliseconds < 200;
+                                    && (gameTime.TotalGameTime - player.LastCollision).TotalMilliseconds < 200 && !player.Stopped;
 
             float delta = 1;
             float shakeX = shakeViewPort ? (float)r.NextDouble() * delta - delta/2 : 0f;
