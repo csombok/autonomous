@@ -604,3 +604,10 @@
 /processorParam:TextureFormat=Color
 /build:BrokenGlass.png
 
+#begin fonts/FontDashboard.digit.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/FontDashboard.digit.spritefont
+
