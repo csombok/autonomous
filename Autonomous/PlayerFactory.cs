@@ -129,7 +129,12 @@ namespace Autonomous.Impl
 
         private Model GetNextCar()
         {
-            var model = _carModels[_carModelIndex];
+            if (_carModels == null)
+            {
+                _carModelIndex = 0;
+                return null;
+            }
+            var model =  _carModels[_carModelIndex];
             _carModelIndex = (++_carModelIndex) % _carModels.Count;
             return model;
         }
