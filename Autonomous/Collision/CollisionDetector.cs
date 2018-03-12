@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Autonomous.Impl.GameObjects;
 using Microsoft.Xna.Framework;
 
-namespace Autonomous.Impl.GameObjects
+namespace Autonomous.Impl.Collision
 {
     static class CollisionDetector
     {
@@ -21,7 +17,7 @@ namespace Autonomous.Impl.GameObjects
             float x = gameObject.X - gameObject.Width / 2;
             float y = gameObject.Y - gameObject.Height / 2;
 
-            return new Rectangle((int)(x*10000), (int)(y*10000), (int)(gameObject.Width*10000 * 0.95f), (int)(gameObject.Height*10000 * 0.95f));
+            return new Rectangle((int)(x * 10000), (int)(y * 10000), (int)(gameObject.Width * 10000 * 0.95f), (int)(gameObject.Height * 10000 * 0.95f));
         }
     }
 }

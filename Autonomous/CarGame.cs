@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Autonomous.Impl.GameObjects;
 using Autonomous.Impl.Scoring;
 using Autonomous.Impl.Sounds;
+using Autonomous.Impl.Collision;
 
 namespace Autonomous.Impl
 {
