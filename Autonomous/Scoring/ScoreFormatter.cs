@@ -10,7 +10,6 @@
                 ? $"{score.Position}. {score.PlayerName}: STOPPED"
                 : $"{score.Position}. {score.PlayerName}:" +
                    $" {score.Distance}m " +
-                   $" Speed: {score.Speed}km/h" +
                    $" Damage: {score.DamageInPercent}%";
         }
 

@@ -37,19 +37,23 @@ namespace Autonomous.Impl
             _brokenGlass = content.Load<Texture2D>("BrokenGlass");
         }
 
-        public void DrawText(GraphicsDevice graphics, string text, Color color)
+        public void DrawText(GraphicsDevice graphics, string text, Color color, bool begin = true)
         {
             if (_spriteBatch == null)
                 _spriteBatch = new SpriteBatch(graphics);
 
-            _spriteBatch.Begin();
+            if (begin)
+                _spriteBatch.Begin();
 
-            _spriteBatch.DrawString(_fontLarge, text, new Vector2(graphics.Viewport.Width / 2 - 50, graphics.Viewport.Height / 2),  color);
-            _spriteBatch.End();
+            _spriteBatch.DrawString(_fontLarge, text, new Vector2(graphics.Viewport.Width * 0.4f, graphics.Viewport.Height / 2), color);
 
-            graphics.BlendState = BlendState.Opaque;
-            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
-            graphics.DepthStencilState = DepthStencilState.Default;
+            if (begin)
+            {
+                _spriteBatch.End();
+                graphics.BlendState = BlendState.Opaque;
+                graphics.RasterizerState = RasterizerState.CullCounterClockwise;
+                graphics.DepthStencilState = DepthStencilState.Default;
+            }
         }
 
         public void DrawStart(GraphicsDevice graphics)
@@ -99,58 +103,50 @@ namespace Autonomous.Impl
             graphics.RasterizerState = RasterizerState.CullCounterClockwise;
             graphics.DepthStencilState = DepthStencilState.Default;
         }
-        
-        public void DrawPlayerName(GraphicsDevice graphics, Car player)
-        {
-            if (_spriteBatch == null)
-                _spriteBatch = new SpriteBatch(graphics);
 
-
-            _spriteBatch.Begin();
-
-            string text = $"Camera: {player.PlayerName}";
-
-            _spriteBatch.DrawString(_fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 50, 10), player.Color);
-            _spriteBatch.DrawString(_fontMedium, text, new Vector2(graphics.Viewport.Width / 2 - 49, 11), Color.Black);
-            _spriteBatch.End();
-
-            graphics.BlendState = BlendState.Opaque;
-            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
-            graphics.DepthStencilState = DepthStencilState.Default;
-
-        }
-
-        public void DrawPlayerSpeed(GraphicsDevice graphics, Car player)
-        {
-            if (_spriteBatch == null)
-                _spriteBatch = new SpriteBatch(graphics);
-            
-            _spriteBatch.Begin();
-
-            var speed = $"{(int)(player.VY * 4)} KM/H";
-            _spriteBatch.DrawString(_fontDigit, speed, new Vector2(graphics.Viewport.Width - 120, 30), Color.White);
-            _spriteBatch.End();
-
-            graphics.BlendState = BlendState.Opaque;
-            graphics.RasterizerState = RasterizerState.CullCounterClockwise;
-            graphics.DepthStencilState = DepthStencilState.Default;
-        }
-
-        public void DrawPlayerDamage(GraphicsDevice graphics, Car player)
+        public void DrawPlayerStatus(GraphicsDevice graphics, GameTime gameTime, Car player)
         {
             if (_spriteBatch == null)
                 _spriteBatch = new SpriteBatch(graphics);
 
             _spriteBatch.Begin();
 
-            var speed = $"Damage: {(int)(player.Damage * 100)}%";
+            var name = $"{player.PlayerName}";
+            var namePosition = new Vector2(graphics.Viewport.Width * 0.45f, graphics.Viewport.Height * 0.9f);
+            _spriteBatch.DrawString(_fontDigit, name, namePosition, player.Color);
+
+            var speed = $"{(int)(player.VY * 4)} Km/h";
+            var speedPosition = new Vector2(graphics.Viewport.Width - 120, 30);
+            _spriteBatch.DrawString(_fontDigit, speed, speedPosition, Color.White);
+
+            var damage = $"Damage: {(int)(player.Damage * 100)}%";
+            var damagePosition = new Vector2(graphics.Viewport.Width - 120, 10);
             var color = player.Damage > 0.7 ? Color.Red : Color.LightGreen;
-            _spriteBatch.DrawString(_fontDigit, speed, new Vector2(graphics.Viewport.Width - 120, 10), color);
-            _spriteBatch.End();
+            _spriteBatch.DrawString(_fontDigit, damage, damagePosition, color);
 
+            DrawPlayerDamage(graphics, gameTime, player, damage);
+
+            _spriteBatch.End();
             graphics.BlendState = BlendState.Opaque;
             graphics.RasterizerState = RasterizerState.CullCounterClockwise;
             graphics.DepthStencilState = DepthStencilState.Default;
+
+        }
+
+        private void DrawPlayerDamage(GraphicsDevice graphics, GameTime gameTime, Car player, string damage)
+        {
+            if (player.Stopped)
+            {
+                DrawText(graphics, "STOPPED", Color.Red, false);
+            }
+            else
+            {
+                if (player.LastCollision.TotalMilliseconds > 0
+                        && (gameTime.TotalGameTime - player.LastCollision).TotalMilliseconds < 2000)
+                {
+                    DrawText(graphics, damage, Color.Red, false);
+                }
+            }
         }
 
         public void DrawDamagedEffect(GraphicsDevice graphics, Car player)
@@ -178,26 +174,28 @@ namespace Autonomous.Impl
 
             _spriteBatch.Begin();
 
-            const int width = 400;
-            int height = players.Count() * 25 + 25;
-
-            DrawRectangle(graphics, width, height, 0, 0);
+            const int width = 300;
+            const int lineHeight = 20;
+            int lines = players.Count + 1;
+            for (int i = 0; i < lines; i++)
+            {
+                DrawRectangle(graphics, width, lineHeight, 2, i * (lineHeight + 2));
+            }
 
             DrawScores(players, totalGameTime);
 
-            DrawFps(positionY: 5 + players.Count() * 20, fps: fps);
+            DrawFps(positionY: 7 + (lines - 1) * lineHeight, fps: fps);
 
             _spriteBatch.End();
 
             graphics.BlendState = BlendState.Opaque;
             graphics.RasterizerState = RasterizerState.CullCounterClockwise;
             graphics.DepthStencilState = DepthStencilState.Default;
-
         }
 
         private void DrawFps(float positionY, string fps)
         {
-            _spriteBatch.DrawString(_fontSmall, fps, new Vector2(10, positionY), Color.Green);
+            _spriteBatch.DrawString(_fontSmall, fps, new Vector2(10, positionY), Color.White);
         }
 
         private void DrawScores(IList<Car> players, TimeSpan totalGameTime)
@@ -210,7 +208,7 @@ namespace Autonomous.Impl
             foreach (var score in playerScores)
             {
                 var player = players.FirstOrDefault(p =>
-                    p.PlayerName.Equals(score.PlayerName, StringComparison.InvariantCultureIgnoreCase));
+                    p.Id.Equals(score.PlayerId, StringComparison.InvariantCultureIgnoreCase));
 
                 var color = player?.Color ?? Color.Azure;
 
@@ -225,19 +223,16 @@ namespace Autonomous.Impl
 
         private void DrawRectangle(GraphicsDevice graphics, int width, int height, int x, int y)
         {
-            if (_rect == null)
-            {
-                _rect = new Texture2D(graphics, width, height);
-                Color[] data = new Color[width * height];
+            var rect = new Texture2D(graphics, width, height);
+            Color[] data = new Color[width * height];
 
-                _coor = new Vector2(x, y);
+            _coor = new Vector2(x, y);
 
-                for (int j = 0; j < data.Length; ++j)
-                    data[j] = Color.FromNonPremultiplied(0, 0, 0, 100);
+            for (int j = 0; j < data.Length; ++j)
+                data[j] = Color.FromNonPremultiplied(0, 0, 0, 140);
 
-                _rect.SetData(data);
-            }
-            _spriteBatch.Draw(_rect, _coor, Color.Black);
+            rect.SetData(data);
+            _spriteBatch.Draw(rect, _coor, Color.White);
 
         }
 

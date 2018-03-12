@@ -388,7 +388,7 @@ namespace Autonomous.Impl
                     if (viewport.GameObject is Car player)
                     {
                         _dashboard.DrawDamagedEffect(_graphics.GraphicsDevice, player);
-                        DrawPlayerInformation(gameTime, player);
+                        _dashboard.DrawPlayerStatus(_graphics.GraphicsDevice, gameTime, player);
                     }
 
                     DrawDashboard(gameTime);
@@ -403,18 +403,6 @@ namespace Autonomous.Impl
             }
 
             base.Draw(gameTime);
-        }
-
-        private void DrawPlayerInformation(GameTime gameTime, Car player)
-        {
-            _dashboard.DrawPlayerName(_graphics.GraphicsDevice, player);
-            _dashboard.DrawPlayerSpeed(_graphics.GraphicsDevice, player);
-            _dashboard.DrawPlayerDamage(_graphics.GraphicsDevice, player);
-            if (player.LastCollision.TotalMilliseconds > 0 
-                && (gameTime.TotalGameTime - player.LastCollision).TotalMilliseconds < 2000)
-            {
-                _dashboard.DrawText(_graphics.GraphicsDevice, $"BANGGGG!", Color.Red);
-            }
         }
 
         private void DrawDashboard(GameTime gameTime)

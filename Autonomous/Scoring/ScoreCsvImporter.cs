@@ -36,6 +36,7 @@ namespace Autonomous.Impl.Scoring
                                 var parts = line.Split(',');
 
                                 scores.Add(new PlayerScore(
+                                    playerId: null,
                                     playerName: ParseString(parts, 1),
                                     distance: ParseInt(parts, 2),
                                     damageInPercent: ParseInt(parts, 3),

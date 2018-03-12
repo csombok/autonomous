@@ -32,10 +32,10 @@ namespace Autonomous.Impl
         {
             _playerCollision = playerCollision;
             _colors = new List<Color>
-            {   Color.LightCyan,
-                Color.Orange,
+            {   Color.Yellow,
+                Color.Red,
                 Color.LightBlue,
-                Color.LightGreen
+                Color.Blue,                
             };
         }
 

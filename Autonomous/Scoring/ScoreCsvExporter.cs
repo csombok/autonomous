@@ -36,7 +36,7 @@ namespace Autonomous.Impl.Scoring
                           $"{score.PlayerName}," +
                           $"{score.Distance}," +
                           $"{score.DamageInPercent}," +
-                          $"{score.TimeElapsed.TotalMilliseconds}," +
+                          $"{(int)score.TimeElapsed.TotalMilliseconds}," +
                           $"{score.Score}");
             }
 

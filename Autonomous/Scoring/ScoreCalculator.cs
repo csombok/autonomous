@@ -43,7 +43,7 @@ namespace Autonomous.Impl.Scoring
                 previousY = player.Y;
                 previousScore = score;
 
-                yield return new PlayerScore(player.PlayerName, distance, position, 
+                yield return new PlayerScore(player.Id, player.PlayerName, distance, position, 
                     damageInPercent, speed, timeElapsed, player.Stopped, score);
 
                 ++position;
